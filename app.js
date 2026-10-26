@@ -1,12 +1,15 @@
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const w=document.createElement('div');w.className='confetti';const C=['#f7931a','#b35500','#ffd9a6','#17804f','#2a2118'];for(let i=0;i<40;i++){const p=document.createElement('i');p.style.cssText=`left:${Math.random()*100}%;background:${C[i%5]};animation-delay:${Math.random()*.3}s;--x:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg`;w.appendChild(p)}document.body.appendChild(w);setTimeout(()=>w.remove(),2200)}
 const $=id=>document.getElementById(id),enc=new TextEncoder();
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',enc.encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
 // nav
 const chs=[...document.querySelectorAll('.ch')];let cur=0;const seen=new Set();
 chs.forEach((c,i)=>{const s=document.createElement('span');s.title=(i+1)+' '+c.dataset.t;s.innerHTML='<b>'+(i+1)+'</b><i>'+c.dataset.t+'</i>';s.onclick=()=>go(i);$('prog').append(s)});
-function go(i){cur=Math.max(0,Math.min(chs.length-1,i));seen.add(cur);chs.forEach((c,j)=>c.classList.toggle('on',j==cur));[...$('prog').children].forEach((s,j)=>{s.className=j==cur?'on':seen.has(j)?'seen':''});$('prev').disabled=cur==0;$('next').style.visibility=cur==chs.length-1?'hidden':'visible';$('pos').textContent=(cur+1)+' / '+chs.length;scrollTo(0,0)}
-$('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);$('again').onclick=()=>go(0);go(0);
+function go(i){cur=Math.max(0,Math.min(chs.length-1,i));seen.add(cur);if(!$('app').hidden)try{localStorage.setItem('sw-btc',JSON.stringify({cur,seen:[...seen]}))}catch(e){}if(cur==chs.length-1)confetti();chs.forEach((c,j)=>c.classList.toggle('on',j==cur));[...$('prog').children].forEach((s,j)=>{s.className=j==cur?'on':seen.has(j)?'seen':''});$('prev').disabled=cur==0;$('next').style.visibility=cur==chs.length-1?'hidden':'visible';$('pos').textContent=(cur+1)+' / '+chs.length;scrollTo(0,0)}
+$('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);$('again').onclick=()=>go(0);let SAVED;try{SAVED=JSON.parse(localStorage.getItem('sw-btc'))}catch(e){}go(0);
 $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
+(()=>{const d=SAVED;if(!d||!(d.cur>0))return;const r=$('resume');r.hidden=false;r.textContent='▶ 続きから('+chs[d.cur].dataset.t+')';(d.seen||[]).forEach(j=>seen.add(j));r.onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(d.cur)}})();
+(()=>{let n=0;const c=document.querySelector('.hero .coin');c.onclick=()=>{if(++n%5==0){c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');confetti()}}})();
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
 $('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」8章ぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿')+'&url='+encodeURIComponent(U);
 // quizzes
@@ -54,7 +57,7 @@ $('mStop').onclick=()=>stopReq=true;
 $('mGo').onclick=async()=>{if(mining)return;mining=true;stopReq=false;$('mGo').hidden=true;$('mStop').hidden=false;$('diff').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h,found=false;const t0=performance.now();
 const ui=()=>{const s=(performance.now()-t0)/1000;$('mNonce').textContent=nonce;$('mTry').textContent=(nonce+1).toLocaleString();$('mTime').textContent=fmtT(s);if(s>.3){rate=nonce/s;$('mRate').textContent=Math.round(rate).toLocaleString()}};
 while(!stopReq){const tb=performance.now();while(performance.now()-tb<12){h=await sha('ブロック#5 アリス→ボブ'+nonce);if(h.startsWith(z)){found=true;break}nonce++}if(found)break;ui();$('mHash').textContent=h;await new Promise(r=>setTimeout(r))}
-ui();if(found){$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+'<br>見つけた!';$('mHash').className='hash found burst'}else $('mHash').textContent='ストップしました('+(nonce).toLocaleString()+'回ためして、まだ当たりなし)';
+ui();if(found){$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+'<br>見つけた!';$('mHash').className='hash found burst';confetti()}else $('mHash').textContent='ストップしました('+(nonce).toLocaleString()+'回ためして、まだ当たりなし)';
 mining=false;$('mGo').hidden=false;$('mStop').hidden=true;$('diff').disabled=false;dUp()};
 // 4 sig
 let kp,sig,signed;const alg={name:'ECDSA',namedCurve:'P-256'},sa={name:'ECDSA',hash:'SHA-256'};
@@ -86,7 +89,7 @@ function ans(y){clearInterval(t);const right=y===q.ok;if(right)score++;if(q.ok){
 res.push(right);const m=$('gMsg');$('gYes').disabled=$('gNo').disabled=true;m.className='gmsg '+(right?'g':'r');m.textContent=(y===null?'⏰ 時間切れ! ':right?'⭕ せいかい! ':'❌ ざんねん! ')+(q.ok?'正しい取引です。台帳に記録しました。':q.why+'。');
 document.querySelector('.tx').classList.add(right?'pass':'shake');i++;setTimeout(show,1500)}
 function end(){$('gStage').innerHTML='';const e=$('gEnd');e.hidden=false;const rank=score==8?'伝説のノード':score>=6?'頼れるノード':score>=4?'見習いノード':'まだまだこれから';
-e.innerHTML=`<div class="gscore">${score}<small> / 8</small></div><p class="c"><b>${rank}</b></p><div class="note"><b>このゲームでわかったこと</b><br>ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。</div><div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`「ニセ取引を見破れ!」で ${score}/8 点、${rank}でした ₿ #さわってわかるビットコイン`)}&url=${encodeURIComponent(U)}">𝕏 でスコアをシェア</a><button id="gAgain" class="ghost">もう一回あそぶ</button></div>`;$('gAgain').onclick=start}
+if(score>=6)confetti();e.innerHTML=`<div class="gscore">${score}<small> / 8</small></div><p class="c"><b>${rank}</b></p><div class="note"><b>このゲームでわかったこと</b><br>ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。</div><div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`「ニセ取引を見破れ!」で ${score}/8 点、${rank}でした ₿ #さわってわかるビットコイン`)}&url=${encodeURIComponent(U)}">𝕏 でスコアをシェア</a><button id="gAgain" class="ghost">もう一回あそぶ</button></div>`;$('gAgain').onclick=start}
 function start(){B={アリス:5,ボブ:3,キャロル:2};i=0;score=0;spent=null;res=[];$('gEnd').hidden=true;draw();show()}
 B={アリス:5,ボブ:3,キャロル:2};draw();$('gStart').onclick=start})();
 
