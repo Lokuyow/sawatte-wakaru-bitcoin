@@ -135,3 +135,7 @@ $('aGo').onclick=()=>{clearInterval(tm);const p=$('aP').value/100,r=sim(p);let i
 tm=setInterval(()=>{if(i>=r.steps.length){clearInterval(tm);$('aRes').innerHTML=r.ok?'<span style="color:var(--ng)">😈 追い抜きました。二重払い成功…</span>':'<span style="color:var(--ok)">🛡 追いつけず失敗。みんなのチェーンが勝ちました</span>';return}
 const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':(h==0?'🛒':'🧱');(a?$('aX'):$('aH')).appendChild(el);a?x++:h++},180)};
 $('aMany').onclick=()=>{const p=$('aP').value/100;let k=0;for(let i=0;i<100;i++)if(sim(p).ok)k++;$('aRes').innerHTML=`100回中 <b>${k}回</b> 成功(計算力 ${$('aP').value}%)`}})();
+
+// theme
+(()=>{const r=document.documentElement,b=$('theme'),dk=()=>r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme: dark)').matches;const ui=()=>{b.textContent=dk()?'☀️':'🌙'};ui();
+b.onclick=()=>{r.dataset.theme=dk()?'light':'dark';try{localStorage.setItem('sw-theme',r.dataset.theme)}catch(e){}ui()}})();
