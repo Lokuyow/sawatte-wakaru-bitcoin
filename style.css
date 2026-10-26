@@ -120,3 +120,12 @@ button,.btn,.seg button.on,h2 em,.bits .b1{background:#b35500}button:hover,.btn:
 .ch.on{animation:chin .35s ease}@keyframes chin{from{opacity:0;transform:translateY(8px)}}
 #resume{margin-right:8px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+.pool{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.pool span{padding:6px 10px;border-radius:99px;background:#fff;border:1px solid var(--line);font-family:var(--m);font-size:.85rem;transition:all .3s}.pool .me{border:2px solid var(--o);font-weight:700}.pool .in{background:#e3f4ea;border-color:#9fd3b5}.pool .out{opacity:.45}.pool .me.out{opacity:1;background:#fde7e7}
+.curve{width:100%;max-width:520px;display:block;margin:8px 0}.curve path{fill:none;stroke-width:3}.curve .ln0{stroke:var(--line)}.curve .ln1{stroke:var(--o)}.curve circle{fill:var(--od)}.curve .cap{stroke:var(--mut);stroke-dasharray:4 4}.curve text{font-size:10px;fill:var(--mut)}
+.ln{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;align-items:center;margin:12px 0}.lp{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center;display:flex;flex-direction:column}.lp span{font-size:1.8rem}.lp b{font-family:var(--m);font-size:1.05rem}.lp small{color:var(--mut)}
+.lch{text-align:center;border-top:3px dashed var(--line);padding-top:6px}.lch.on{border-top:3px solid var(--o)}.lch span{font-size:1.6rem;display:inline-block}.lch small{display:block;color:var(--mut);font-size:.8rem}.zap{animation:zap .4s ease}@keyframes zap{50%{transform:scale(1.6) rotate(-10deg)}}
+.log{font-size:.85rem;padding-left:1.2em;color:var(--mut)}.crow button{margin-right:6px}
+.rboard{display:grid;gap:8px;margin:10px 0}.rm{display:grid;grid-template-columns:2em 1fr auto;gap:2px 8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 12px}.rm>span:first-child{font-size:1.5rem;grid-row:span 2}.rm small{color:var(--mut);font-family:var(--m)}.rm .blks{letter-spacing:2px}.rm code{font-size:.75rem;color:var(--mut)}
+.tap.pop{animation:pop .15s}@keyframes pop{50%{transform:scale(.92)}}
+.race{display:grid;gap:8px;margin:10px 0}.race small{color:var(--mut)}.row{min-height:30px;display:flex;flex-wrap:wrap;gap:2px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:4px}.row i{font-style:normal;animation:chin .2s}

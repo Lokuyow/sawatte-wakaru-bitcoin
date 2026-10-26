@@ -1,13 +1,13 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>さわってわかるビットコイン</title>
-<meta name="description" content="ハッシュ、マイニング、署名、二重払い、半減期。ビットコインのしくみを8つの体験で、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
+<meta name="description" content="ハッシュ、マイニング、署名、二重払い、半減期。ビットコインのしくみを12の体験で、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
 <meta name="theme-color" content="#f7931a">
-<meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを8つの体験でさわって学ぼう。すべてブラウザの中のシミュレーションです。">
+<meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを12の体験でさわって学ぼう。すべてブラウザの中のシミュレーションです。">
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="ja_JP">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを8つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを12の体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=20261027i"></head><body>
-<div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>8つの体験で、<wbr>しくみを手で覚えよう。</p>
+<link rel="stylesheet" href="style.css?v=20261027j"></head><body>
+<div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>12の体験で、<wbr>しくみを手で覚えよう。</p>
 <button id="resume" class="ghost" hidden></button><button id="start" class="big">はじめる →</button><p class="tiny">すべてブラウザの中のシミュレーションです。本物のビットコインは1円も動かず、ネットにもつながりません。</p></div>
 <div id="app" hidden><header><div class="brand">₿ さわってわかるビットコイン</div><nav id="prog"></nav></header>
 <main>
@@ -64,23 +64,53 @@
 <button id="tDouble">😈 アリスの二重払いを試す</button><ul id="log" class="log"></ul>
 <p class="note">※わかりやすく残高で表していますが、本物は「UTXO(未使用の受け取り)」単位で管理しています。</p></section>
 
-<section class="ch" data-t="発行上限"><h2><em>7</em>2100万枚の上限と半減期</h2>
+<section class="ch" data-t="手数料"><h2><em>7</em>手数料オークション</h2>
+<p>1つのブロックに入る取引の数には限りがあります。マイナーは<b>手数料の高い取引から順に</b>入れていくので、混んでいるときは手数料を多めに払うと早く入れてもらえます。</p>
+<dl class="terms"><div><dt>手数料</dt><dd>取引をブロックに入れてもらうためにマイナーに払うお金。</dd></div><div><dt>メモリプール</dt><dd>まだブロックに入っていない取引の待合室。</dd></div></dl>
+<label>あなたの手数料: <b id="fV">10</b> サトシ<input type="range" id="fee" min="1" max="60" value="10"></label>
+<div class="crow"><button id="fGo">📦 次のブロックを作ってもらう</button></div>
+<p class="note">このブロックに入るのは <b>5件</b> まで。待合室には全部で12件の取引があります。</p>
+<div id="fPool" class="pool"></div><div id="fRes" class="res"></div>
+<p class="note">※実際は、取引のデータの大きさあたりの手数料で比べます。</p></section>
+<section class="ch" data-t="半減期"><h2><em>8</em>半減期と2100万枚の上限</h2>
 <p>ブロックの報酬は最初50BTCで、21万ブロックごとに半分になります。だから合計は2100万BTCの少し手前で止まります。</p><dl class="terms"><div><dt>BTC</dt><dd>ビットコインの単位。いちばん小さい単位は1億分の1BTCで、「1サトシ」と呼びます。</dd></div><div><dt>報酬</dt><dd>ブロックを追加した人がもらえる新しいビットコイン。</dd></div><div><dt>ブロック高さ</dt><dd>最初のブロックから数えて何番目のブロックか。</dd></div></dl>
-<label>ブロック高さ: <b id="hH">0</b><input type="range" id="hgt" min="0" max="7000000" step="10000" value="0"></label>
+<label>ブロック高さ: <b id="hH">0</b>(およそ<b id="hY">2009</b>年)<input type="range" id="hgt" min="0" max="7000000" step="10000" value="0"></label>
 <p>1ブロックの報酬: <b id="hR"></b> BTC(半減 <b id="hN"></b> 回)</p>
-<p>ここまでの発行量: <b id="hS"></b> BTC</p><div class="bar"><div id="hBar"></div></div>
+<p>ここまでの発行量: <b id="hS"></b> BTC</p><svg id="hCurve" class="curve" viewBox="0 0 320 150" role="img" aria-label="発行量のグラフ"></svg><div class="crow"><button id="hPlay" class="ghost">▶ 再生</button></div>
 <p class="note">21万ブロックはおよそ4年(1ブロック約10分)。2024年の4回目の半減期で報酬は3.125BTCになりました。</p></section>
 
-<section class="ch" data-t="ゲーム"><h2><em>★</em>ボーナス: ニセ取引を見破れ!</h2>
+<section class="ch" data-t="ライトニング"><h2><em>9</em>ライトニング: ブロックの外で払う</h2>
+<p>ブロックは約10分に1回しか作られません。そこで、2人の間に「チャンネル」を開いて、その中で何回でも一瞬で支払いをし、最後の結果だけをブロックに記録するしくみがライトニングネットワークです。</p>
+<dl class="terms"><div><dt>チャンネル</dt><dd>2人でお金を預け合う専用の通り道。開くときと閉じるときだけブロックに記録します。</dd></div><div><dt>オンチェーン</dt><dd>ブロックに記録されること。オフチェーンは、記録されないこと。</dd></div></dl>
+<div class="ln"><div class="lp"><span>👩</span>アリス<b id="lA">100,000</b><small>サトシ</small></div><div class="lch" id="lCh"><span id="lBolt">⚡</span><small id="lSt">チャンネルはまだありません</small></div><div class="lp"><span>👨</span>ボブ<b id="lB">0</b><small>サトシ</small></div></div>
+<div class="crow"><button id="lOpen">🔓 チャンネルを開く</button><button id="lPay" disabled>⚡ 100サトシ送る</button><button id="lPay100" class="ghost" disabled>⚡×100 連続で送る</button><button id="lClose" class="ghost" disabled>🔒 チャンネルを閉じる</button></div>
+<div class="mstats"><div><small>オフチェーンの支払い</small><b id="lOff">0</b></div><div><small>ブロックへの記録</small><b id="lOn">0</b></div></div>
+<ol id="lLog" class="log"></ol>
+<p class="take">💡 何百回払っても、ブロックに記録されるのは「開く」と「閉じる」の2回だけ。だから速くて手数料も安くなります。</p></section>
+<section class="ch" data-t="ニセ取引"><h2><em>★</em>ゲーム: ニセ取引を見破れ!</h2>
 <p>あなたは台帳をチェックする「ノード」です。届いた取引を見て、正しければ「承認」、おかしければ「却下」を押してください。1問8秒、全8問です。</p><dl class="terms"><div><dt>ノード</dt><dd>ビットコインの台帳を持って、取引をチェックしているコンピューター。世界中にたくさんあります。</dd></div></dl>
 <div class="gbal" id="gBal"></div>
 <div id="gStage" class="gstage"><button id="gStart">ゲームスタート</button></div>
 <div id="gEnd" class="gend" hidden></div></section>
+<section class="ch" data-t="マイニング競争"><h2><em>★</em>ゲーム: マイニング競争</h2>
+<p>ボタンを連打してナンスを探し、2台のコンピューターと競争しましょう。先に<b>3ブロック</b>見つけたら勝ちです。当たりはハッシュの先頭が「00」になること。</p>
+<div id="rBoard" class="rboard"></div>
+<div class="crow"><button id="rStart">スタート</button><button id="rTap" class="tap" disabled>⛏ 掘る!(連打)</button></div>
+<div id="rRes" class="res"></div>
+<p class="take">💡 たくさん計算した人ほど当たりやすい。でも運もあるので、遅い人がたまに勝つこともあります。</p></section>
+<section class="ch" data-t="51%攻撃"><h2><em>★</em>ゲーム: 51%攻撃に挑戦</h2>
+<p>あなたは悪いマイナーです。お店にビットコインで払ったあと、こっそり「払わなかったことにした」別のチェーンを作り、みんなのチェーンを追い抜けば二重払い成功です。お店は6ブロック待ってから商品を渡します。</p>
+<dl class="terms"><div><dt>51%攻撃</dt><dd>世界全体の計算力の半分以上を持つ人が、取引を取り消せてしまう攻撃。</dd></div></dl>
+<label>あなたの計算力: 全体の <b id="aV">30</b>%<input type="range" id="aP" min="5" max="70" step="5" value="30"></label>
+<div class="race"><div><small>みんなのチェーン</small><div id="aH" class="row"></div></div><div><small>あなたの秘密のチェーン</small><div id="aX" class="row"></div></div></div>
+<div class="crow"><button id="aGo">😈 攻撃してみる</button><button id="aMany" class="ghost">100回試して成功率を見る</button></div>
+<div id="aRes" class="res"></div>
+<p class="take">💡 計算力が半分より少ないと、待てば待つほど追いつけなくなります。だから多くのブロックを待った取引は安心です。</p></section>
 <section class="ch" data-t="まとめ"><div class="trophy">🏆</div><h2 class="c">全部クリア!おつかれさまでした</h2><p>これで、こんなことが説明できるようになりました:</p><ul class="done">
 <li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖のようにつながっている</li><li>マイニングは当たりのナンス探し。だから記録の書きかえはとても大変</li>
-<li>署名で、本人が出した取引だとみんなが確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく</li><li>発行は2100万BTC未満で打ち止め</li></ul>
+<li>署名で、本人が出した取引だとみんなが確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく</li><li>手数料が高い取引から先にブロックに入る</li><li>発行は半減期をくり返して2100万BTC未満で打ち止め</li><li>ライトニングなら、ブロックの外で一瞬で払える</li><li>計算力が半分未満では、過去の取引を取り消せない</li></ul>
 <div class="share"><a id="share" class="btn x" target="_blank" rel="noopener">𝕏 でシェアする</a><button id="again" class="ghost">最初からもう一回</button></div></section>
 </main>
 </main>
 <footer><button id="prev" class="ghost">← もどる</button><span id="pos"></span><button id="next">つぎへ →</button></footer></div>
-<script defer src="app.js?v=20261027i"></script></body></html>
+<script defer src="app.js?v=20261027j"></script></body></html>

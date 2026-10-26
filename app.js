@@ -11,7 +11,7 @@ $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
 (()=>{const d=SAVED;if(!d||!(d.cur>0))return;const r=$('resume');r.hidden=false;r.textContent='▶ 続きから('+chs[d.cur].dataset.t+')';(d.seen||[]).forEach(j=>seen.add(j));r.onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(d.cur)}})();
 (()=>{let n=0;const c=document.querySelector('.hero .coin');c.onclick=()=>{if(++n%5==0){c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');confetti()}}})();
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
-$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」8章ぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿')+'&url='+encodeURIComponent(U);
+$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」9章と3つのゲームをぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿')+'&url='+encodeURIComponent(U);
 // quizzes
 const Q=[['試してみよう: 「。」を1個足したら、ハッシュはどうなる?',['ちょっとだけ変わる','まったく別のものになる','変わらない'],1,'1文字でも変わると、指紋はほぼ全部入れかわります。だから改ざんがすぐバレます。'],
 ['ブロック#1のデータを書きかえたら、こわれるのはどこ?',['ブロック#1だけ','#1より前ぜんぶ','#1の次から後ろぜんぶ'],2,'#1のハッシュが変わるので、それを「前のハッシュ」として持っている#2以降がつながらなくなります。'],
@@ -19,7 +19,7 @@ const Q=[['試してみよう: 「。」を1個足したら、ハッシュはど
 ['署名を確かめるのに必要なのはどれ?',['公開鍵','秘密鍵','パスワード'],0,'確認は公開鍵だけでできます。秘密鍵は署名する本人だけが持っておくものです。'],
 ['アリスが5コインを、ボブとキャロルに同時に5コインずつ送ろうとしたら?',['両方とおる','先に記録された方だけとおる','両方はじかれる'],1,'みんなの台帳で先に記録された方が有効です。2つ目は「もう持っていない」のではじかれます。'],
 ['発行されるビットコインの合計は?',['無限に増える','ぴったり2100万BTCを超える','2100万BTC少し手前で止まる'],2,'報酬が半分ずつになっていくから、合計は2100万BTCにじわじわ近づいて止まります。']];
-Q.push(['秘密鍵が他人に当てられないいちばんの理由は?',['ひみつの計算式で作るから','組み合わせが数えきれないほど多いから','銀行が守っているから'],1,'秘密鍵はただのランダムな数。でも組み合わせが約10の77乗通りもあるので、総当たりでは当てられません。']);const QI=[0,1,2,3,5,6,4];
+Q.push(['秘密鍵が他人に当てられないいちばんの理由は?',['ひみつの計算式で作るから','組み合わせが数えきれないほど多いから','銀行が守っているから'],1,'秘密鍵はただのランダムな数。でも組み合わせが約10の77乗通りもあるので、総当たりでは当てられません。']);Q.push(['混んでいるとき、早くブロックに入れてもらうには?',['手数料を高くする','取引を何回も送る','金額を小さくする'],0,'マイナーは手数料の高い取引から順にブロックに入れます。'],['ライトニングで100回払ったら、ブロックに記録されるのは?',['100回','開く・閉じるの2回だけ','0回'],1,'チャンネルの中の支払いはブロックの外。記録されるのは開くときと閉じるときだけです。']);const QI=['ハッシュ','チェーン','マイニング','署名','台帳','半減期','鍵の強さ','手数料','ライトニング'].map(t=>chs.findIndex(c=>c.dataset.t==t));
 Q.forEach(([q,o,k,e],i)=>{i=QI[i];const d=document.createElement('div');d.className='quiz';d.innerHTML=`<h3>💡 1問クイズ</h3><p>${q}</p><div class="opts">${o.map((x,j)=>`<button data-j="${j}">${x}</button>`).join('')}</div><div class="ans" hidden></div>`;chs[i].append(d);
 d.querySelectorAll('button').forEach(b=>b.onclick=()=>{const ok=+b.dataset.j==k;b.classList.add(ok?'right':'wrong');if(!ok)b.classList.add('shake');else{d.querySelectorAll('button').forEach(x=>x.disabled=x!=b);const a=d.querySelector('.ans');a.hidden=false;a.textContent='⭕ せいかい! '+e}})});
 // hash flip render
@@ -57,7 +57,7 @@ $('mStop').onclick=()=>stopReq=true;
 $('mGo').onclick=async()=>{if(mining)return;mining=true;stopReq=false;$('mGo').hidden=true;$('mStop').hidden=false;$('diff').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h,found=false;const t0=performance.now();
 const ui=()=>{const s=(performance.now()-t0)/1000;$('mNonce').textContent=nonce;$('mTry').textContent=(nonce+1).toLocaleString();$('mTime').textContent=fmtT(s);if(s>.3){rate=nonce/s;$('mRate').textContent=Math.round(rate).toLocaleString()}};
 while(!stopReq){const tb=performance.now();while(performance.now()-tb<12){h=await sha('ブロック#5 アリス→ボブ'+nonce);if(h.startsWith(z)){found=true;break}nonce++}if(found)break;ui();$('mHash').textContent=h;await new Promise(r=>setTimeout(r))}
-ui();if(found){$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+'<br>見つけた!';$('mHash').className='hash found burst';confetti()}else $('mHash').textContent='ストップしました('+(nonce).toLocaleString()+'回ためして、まだ当たりなし)';
+ui();if(found){const s=(performance.now()-t0)/1000;if(s<=.3)$('mRate').textContent=s>.01?Math.round((nonce+1)/s).toLocaleString():'一瞬';$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+'<br>見つけた!';$('mHash').className='hash found burst';confetti()}else $('mHash').textContent='ストップしました('+(nonce).toLocaleString()+'回ためして、まだ当たりなし)';
 mining=false;$('mGo').hidden=false;$('mStop').hidden=true;$('diff').disabled=false;dUp()};
 // 4 sig
 let kp,sig,signed;const alg={name:'ECDSA',namedCurve:'P-256'},sa={name:'ECDSA',hash:'SHA-256'};
@@ -73,8 +73,12 @@ $('tSend').onclick=()=>tx($('tFrom').value,$('tTo').value,+$('tAmt').value);
 $('tDouble').onclick=()=>{const a=bal['アリス'];if(!a){tx('アリス','ボブ',1);return}tx('アリス','ボブ',a);tx('アリス','キャロル',a)};rp();
 // 6 halving
 function hv(){const h=+$('hgt').value,n=Math.floor(h/210000);let r=n<64?Math.floor(5e9/2**n):0,s=0;for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),blocks=i<n?210000:h-i*210000+1;s+=sat*blocks}
-$('hH').textContent=h.toLocaleString();$('hN').textContent=n;$('hR').textContent=(r/1e8).toLocaleString('ja',{maximumFractionDigits:8});$('hS').textContent=(s/1e8).toLocaleString('ja',{maximumFractionDigits:8});$('hBar').style.width=(s/2.1e15*100)+'%'}
+$('hH').textContent=h.toLocaleString();$('hN').textContent=n;$('hR').textContent=(r/1e8).toLocaleString('ja',{maximumFractionDigits:8});$('hS').textContent=(s/1e8).toLocaleString('ja',{maximumFractionDigits:8});drawC(h,s/1e8);$('hY').textContent=Math.round(2009+h*10/525960)}
+function supply(h){let s=0;for(let i=0;i<34;i++){const b=Math.min(210000,Math.max(0,h-i*210000));s+=b*50/2**i}return s}
+function drawC(h,cur){const W=320,H=150,P=24,mx=7e6,x=v=>P+v/mx*(W-P-6),y=v=>H-18-v/21e6*(H-34);let d='';for(let v=0;v<=mx;v+=50000)d+=(v?'L':'M')+x(v).toFixed(1)+' '+y(supply(v)).toFixed(1);
+$('hCurve').innerHTML=`<line x1="${P}" x2="${W-6}" y1="${y(21e6)}" y2="${y(21e6)}" class="cap"/><text x="${W-6}" y="${y(21e6)-4}" text-anchor="end">2100万</text><path d="${d}" class="ln0"/><path d="${d.split('L').filter((_,i)=>i*50000<=h).join('L')}" class="ln1"/><circle cx="${x(h)}" cy="${y(cur)}" r="5"/>${[2009,2050,2100,2140].map(yr=>`<text x="${x((yr-2009)*52596)}" y="${H-4}" text-anchor="middle">${yr}</text>`).join('')}`}
 $('hgt').oninput=hv;hv();
+let hT;$('hPlay').onclick=()=>{clearInterval(hT);const g=$('hgt');if(+g.value>=+g.max)g.value=0;hT=setInterval(()=>{g.value=+g.value+40000;hv();if(+g.value>=+g.max)clearInterval(hT)},30)};
 // bonus game: spot the fake transactions
 (()=>{const N=['アリス','ボブ','キャロル'],E={アリス:'👩',ボブ:'👨',キャロル:'👧'};let B,q,i,score,t,tl,spent,res;
 const draw=()=>$('gBal').innerHTML=N.map(n=>`<div><span>${E[n]}</span>${n}<b>${B[n]}</b></div>`).join('');
@@ -102,3 +106,32 @@ const rows=()=>$('eRows').innerHTML=[8,16,24,32,64,128,256].map(b=>`<div${b==256
 document.querySelectorAll('#eBits button').forEach(btn=>btn.onclick=async()=>{const B=+btn.dataset.b,N=2**B,target=crypto.getRandomValues(new Uint32Array(1))[0]%N;const id=++run;
 document.querySelectorAll('#eBits button').forEach(x=>x.classList.toggle('on',x==btn));$('eComb').innerHTML=big(N);$('eRes').textContent='さがし中…';const t0=performance.now();let k=0;
 while(id==run){const tb=performance.now();while(performance.now()-tb<12){if(k==target)break;k++}const s=(performance.now()-t0)/1000;$('eTry').textContent=(k+1).toLocaleString();$('eTime').textContent=s.toFixed(1)+'秒';if(k==target){if(s>.05){rate=(k+1)/s;rows()}$('eRes').innerHTML=`<span style="color:var(--ok)">🎯 当たり! ${(k+1).toLocaleString()}回目</span>`;break}await new Promise(r=>setTimeout(r))}})})();
+
+// fee auction
+(()=>{let pool;const mk=()=>{pool=Array.from({length:11},()=>({f:1+Math.floor(Math.random()**1.6*50),me:false}))};mk();
+const sh=()=>{$('fV').textContent=$('fee').value;$('fPool').innerHTML=[...pool,{f:+$('fee').value,me:true}].map(t=>`<span class="${t.me?'me':''}">${t.me?'🙋':'📨'} ${t.f}</span>`).join('')};$('fee').oninput=sh;sh();
+$('fGo').onclick=()=>{const all=[...pool,{f:+$('fee').value,me:true}].sort((a,b)=>b.f-a.f||(a.me?1:-1));const inb=all.slice(0,5);const ok=inb.some(t=>t.me);
+$('fPool').innerHTML=all.map((t,i)=>`<span class="${t.me?'me ':''}${i<5?'in':'out'}">${t.me?'🙋':'📨'} ${t.f}</span>`).join('');
+$('fRes').innerHTML=ok?`<span style="color:var(--ok)">✅ ブロックに入りました!</span>`:`<span style="color:var(--ng)">⏳ 入れませんでした。手数料が ${inb[4].f} サトシより高ければ入れました。</span>`;if(ok)confetti();mk()}})();
+// lightning
+(()=>{let A=100000,B=0,open=false,off=0,on=0;const log=t=>{const li=document.createElement('li');li.innerHTML=t;$('lLog').prepend(li)};
+const ui=()=>{$('lA').textContent=A.toLocaleString();$('lB').textContent=B.toLocaleString();$('lOff').textContent=off.toLocaleString();$('lOn').textContent=on;$('lOpen').disabled=open;$('lPay').disabled=$('lPay100').disabled=$('lClose').disabled=!open;$('lCh').classList.toggle('on',open)};
+const pay=n=>{let k=0;while(k<n&&A>=100){A-=100;B+=100;off++;k++}const b=$('lBolt');b.classList.remove('zap');void b.offsetWidth;b.classList.add('zap');$('lSt').textContent=k?`一瞬で${k}回送りました`:'残高が足りません';ui()};
+$('lOpen').onclick=()=>{$('lOpen').disabled=true;$('lSt').textContent='ブロックに記録中…(本物は約10分)';setTimeout(()=>{open=true;on++;log('⛓ ブロックに記録: チャンネルを開く(アリスが100,000サトシ預ける)');$('lSt').textContent='チャンネルが開きました';ui()},900)};
+$('lPay').onclick=()=>pay(1);$('lPay100').onclick=()=>pay(100);
+$('lClose').onclick=()=>{open=false;ui();$('lClose').disabled=true;$('lSt').textContent='ブロックに記録中…';setTimeout(()=>{on++;log(`⛓ ブロックに記録: チャンネルを閉じる(アリス ${A.toLocaleString()} / ボブ ${B.toLocaleString()})`);$('lSt').textContent=`${off}回の支払いが、記録2回ですみました`;ui();off=0;A=A+B;B=0;setTimeout(ui,2500)},900)};ui()})();
+// mining race
+(()=>{const M=[{n:'あなた',e:'🙋'},{n:'コンピューターA',e:'🤖',r:45},{n:'コンピューターB',e:'👾',r:70}];let run=false,tm,nonce=0;
+const draw=()=>$('rBoard').innerHTML=M.map(m=>`<div class="rm"><span>${m.e}</span><b>${m.n}</b><small>${m.t.toLocaleString()}回</small><span class="blks">${'🧱'.repeat(m.b)}${'▫️'.repeat(3-m.b)}</span><code>${m.h||''}</code></div>`).join('');
+const reset=()=>M.forEach(m=>{m.b=0;m.t=0;m.h=''});reset();draw();
+const tryH=async(m,k)=>{for(let i=0;i<k&&run;i++){const h=await sha(m.n+':'+(nonce++));m.t++;m.h=h.slice(0,10);if(h.startsWith('00')){m.b++;m.h='00 見つけた!';if(m.b>=3)return end(m)}}};
+const end=m=>{run=false;clearInterval(tm);$('rTap').disabled=true;$('rStart').disabled=false;$('rStart').textContent='もう一回';draw();$('rRes').innerHTML=m.e=='🙋'?'<span style="color:var(--ok)">🏆 あなたの勝ち!</span>':`<span style="color:var(--ng)">${m.n}の勝ち。もっと連打!</span>`;if(m.e=='🙋')confetti()};
+$('rStart').onclick=()=>{reset();run=true;$('rRes').textContent='';$('rStart').disabled=true;$('rTap').disabled=false;tm=setInterval(()=>{M.slice(1).forEach(m=>tryH(m,Math.round(m.r/10*(0.6+Math.random()*0.8))));draw()},100)};
+$('rTap').onclick=()=>{if(run){tryH(M[0],12);const b=$('rTap');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}}})();
+// 51% attack
+(()=>{const sim=p=>{let h=0,x=0,steps=[];while(steps.length<80){const a=Math.random()<p;a?x++:h++;steps.push(a);if(h>=6&&x>h)return{ok:true,steps};if(h-x>=8)return{ok:false,steps}}return{ok:false,steps}};let tm;
+$('aP').oninput=()=>$('aV').textContent=$('aP').value;
+$('aGo').onclick=()=>{clearInterval(tm);const p=$('aP').value/100,r=sim(p);let i=0,h=0,x=0;$('aRes').textContent='';$('aH').innerHTML=$('aX').innerHTML='';
+tm=setInterval(()=>{if(i>=r.steps.length){clearInterval(tm);$('aRes').innerHTML=r.ok?'<span style="color:var(--ng)">😈 追い抜きました。二重払い成功…</span>':'<span style="color:var(--ok)">🛡 追いつけず失敗。みんなのチェーンが勝ちました</span>';return}
+const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':(h==0?'🛒':'🧱');(a?$('aX'):$('aH')).appendChild(el);a?x++:h++},180)};
+$('aMany').onclick=()=>{const p=$('aP').value/100;let k=0;for(let i=0;i<100;i++)if(sim(p).ok)k++;$('aRes').innerHTML=`100回中 <b>${k}回</b> 成功(計算力 ${$('aP').value}%)`}})();
