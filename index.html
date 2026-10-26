@@ -6,7 +6,7 @@
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=20261027d"></head><body>
+<link rel="stylesheet" href="style.css?v=20261027e"></head><body>
 <div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>7つの体験で、<wbr>しくみを手で覚えよう。</p>
 <button id="start" class="big">はじめる →</button><p class="tiny">すべてブラウザの中のシミュレーションです。本物のビットコインは1円も動かず、ネットにもつながりません。</p></div>
 <div id="app" hidden><header><div class="brand">₿ さわってわかるビットコイン</div><nav id="prog"></nav></header>
@@ -27,9 +27,12 @@
 
 <section class="ch" data-t="マイニング"><h2><em>3</em>マイニング</h2>
 <p>ハッシュが「0」をN個並べて始まるようなナンスを、ひたすら探すゲームです。0を1個増やすと、平均でおよそ16倍たいへんになります。</p>
-<label>むずかしさ: 先頭の0 × <b id="dV">3</b><input type="range" id="diff" min="1" max="5" value="3"></label>
-<div class="hash" id="mHash">まだ掘っていません</div><p class="stats"><span>ナンス <b id="mNonce">0</b></span><span>試した回数 <b id="mTry">0</b></span></p>
-<button id="mGo" class="big">⛏ 掘る!</button><p class="note">本物のビットコインでは0がもっとたくさん必要で、世界中のマシンが競争しています(ここでは雰囲気だけ体験できます)。</p></section>
+<label>むずかしさ: 先頭の0 × <b id="dV">3</b><input type="range" id="diff" min="1" max="7" value="3"></label>
+<p class="mexp">当たりまでの目安: 平均 <b id="mExp">4,096</b> 回</p><p class="warn" id="mWarn" hidden></p>
+<div class="hash" id="mHash">まだ掘っていません</div>
+<div class="mstats"><div><small>試した回数</small><b id="mTry">0</b></div><div><small>速さ(回/秒)</small><b id="mRate">—</b></div><div><small>経過時間</small><b id="mTime">0.0秒</b></div></div>
+<div class="crow"><button id="mGo" class="big">⛏ 掘る!</button><button id="mStop" class="ghost" hidden>■ ストップ</button></div><span id="mNonce" hidden>0</span>
+<p class="note"><b>本物のビットコインでは?</b> 最近のブロックのハッシュは、先頭に0がおよそ19個並んでいます。たとえば2026年10月27日のブロック(高さ973,268)は「0000000000000000000119…」で、0が19個。これを見つけるために、世界中の専用マシンが1秒におよそ10垓回(1のあとに0が21個つく回数)も計算して競争しています。</p></section>
 
 <section class="ch" data-t="署名"><h2><em>4</em>秘密鍵・公開鍵・署名</h2>
 <p>秘密鍵を持っている人だけが署名でき、公開鍵があれば誰でも「本人のものだ」と確認できます。メッセージを1文字でも変えると、確認は失敗します。</p>
@@ -64,4 +67,4 @@
 </main>
 </main>
 <footer><button id="prev" class="ghost">← もどる</button><span id="pos"></span><button id="next">つぎへ →</button></footer></div>
-<script src="app.js?v=20261027d"></script></body></html>
+<script src="app.js?v=20261027e"></script></body></html>

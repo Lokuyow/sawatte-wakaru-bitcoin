@@ -46,11 +46,15 @@ fixing=false;repaired=true;$('cFix').disabled=false;await chain();$('cTake').inn
 $('cReset').onclick=async()=>{repaired=false;data=[...init];await seal();good=await hashes();$('cTake').innerHTML='💡 1か所でも書きかえると、その先のハンコが全部合わなくなる。だから昔の記録はこっそり変えられません。';chain(true)};
 (async()=>{await seal();good=await hashes();chain(true)})();
 // 3 mining (small async batches so the UI stays responsive)
-$('diff').oninput=()=>$('dV').textContent=$('diff').value;let mining=false;
-$('mGo').onclick=async()=>{if(mining)return;mining=true;$('mGo').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h;const t0=performance.now();
-outer:while(true){const tb=performance.now();while(performance.now()-tb<12){h=await sha('ブロック#5 アリス→ボブ'+nonce);if(h.startsWith(z))break outer;nonce++}
-$('mNonce').textContent=nonce.toLocaleString();$('mTry').textContent=(nonce+1).toLocaleString();$('mHash').textContent=h;await new Promise(r=>setTimeout(r))}
-$('mNonce').textContent=nonce.toLocaleString();$('mTry').textContent=(nonce+1).toLocaleString();$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+`<br>見つけた!(${((performance.now()-t0)/1000).toFixed(1)}秒)`;$('mHash').className='hash found burst';mining=false;$('mGo').disabled=false};
+const fmtT=s=>s<60?s.toFixed(1)+'秒':s<3600?Math.floor(s/60)+'分'+Math.floor(s%60)+'秒':(s/3600).toFixed(1)+'時間';let mining=false,stopReq=false,rate=1e5;
+function dUp(){const n=+$('diff').value,e=16**n;$('dV').textContent=n;$('mExp').textContent=e.toLocaleString();const w=$('mWarn');w.hidden=n<5;w.textContent=`⏳ このむずかしさだと、この端末では平均${fmtT(e/rate)}くらいかかりそうです。途中でストップもできます。`}
+$('diff').oninput=dUp;dUp();
+$('mStop').onclick=()=>stopReq=true;
+$('mGo').onclick=async()=>{if(mining)return;mining=true;stopReq=false;$('mGo').hidden=true;$('mStop').hidden=false;$('diff').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h,found=false;const t0=performance.now();
+const ui=()=>{const s=(performance.now()-t0)/1000;$('mNonce').textContent=nonce;$('mTry').textContent=(nonce+1).toLocaleString();$('mTime').textContent=fmtT(s);if(s>.3){rate=nonce/s;$('mRate').textContent=Math.round(rate).toLocaleString()}};
+while(!stopReq){const tb=performance.now();while(performance.now()-tb<12){h=await sha('ブロック#5 アリス→ボブ'+nonce);if(h.startsWith(z)){found=true;break}nonce++}if(found)break;ui();$('mHash').textContent=h;await new Promise(r=>setTimeout(r))}
+ui();if(found){$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+'<br>見つけた!';$('mHash').className='hash found burst'}else $('mHash').textContent='ストップしました('+(nonce).toLocaleString()+'回ためして、まだ当たりなし)';
+mining=false;$('mGo').hidden=false;$('mStop').hidden=true;$('diff').disabled=false;dUp()};
 // 4 sig
 let kp,sig,signed;const alg={name:'ECDSA',namedCurve:'P-256'},sa={name:'ECDSA',hash:'SHA-256'};
 $('sKey').onclick=async()=>{kp=await crypto.subtle.generateKey(alg,true,['sign','verify']);$('sPub').textContent='公開鍵(みんなに見せてOK): '+hex(await crypto.subtle.exportKey('raw',kp.publicKey)).slice(0,48)+'…  秘密鍵: 🔒アリスだけが持っている(表示しません)';sig=null;$('sSig').textContent='';$('sRes').textContent=''};
