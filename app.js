@@ -48,7 +48,7 @@ $('sVer').onclick=async()=>{if(!sig){$('sRes').textContent='先に署名して�
 const ppl=[['アリス','👩'],['ボブ','👨'],['キャロル','👧'],['デイブ','🧔']];let bal={アリス:5,ボブ:2,キャロル:0,デイブ:1};
 function rp(){$('people').innerHTML=ppl.map(([n,e])=>`<div class="p">${e}<div>${n}<br><b>${bal[n]}</b> コイン</div></div>`).join('')}
 ['tFrom','tTo'].forEach((s,k)=>$(s).innerHTML=ppl.map(([n],i)=>`<option ${i==k?'selected':''}>${n}</option>`).join(''));
-function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}: おかしな取引です`}else if(bal[f]<a){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持っていません。却下!`}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=`✅ ${f}→${t} ${a}コイン: みんなで確認してOK。台帳に記録しました`}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]?.classList.add('bump')}
+function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}: おかしな取引です`}else if(bal[f]<a){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持っていません。却下!`}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=`✅ ${f}→${t} ${a}コイン: みんなで確認してOK。台帳に記録しました`}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]&&document.querySelectorAll(".p")[ppl.findIndex(p=>p[0]==f)].classList.add('bump')}
 $('tSend').onclick=()=>tx($('tFrom').value,$('tTo').value,+$('tAmt').value);
 $('tDouble').onclick=()=>{const a=bal['アリス'];if(!a){tx('アリス','ボブ',1);return}tx('アリス','ボブ',a);tx('アリス','キャロル',a)};rp();
 // 6 halving
