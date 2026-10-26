@@ -1,24 +1,24 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>さわってわかるビットコイン</title>
-<meta name="description" content="ハッシュ、マイニング、署名、二重払い、半減期。ビットコインのしくみを7つの体験で、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
+<meta name="description" content="ハッシュ、マイニング、署名、二重払い、半減期。ビットコインのしくみを8つの体験で、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
 <meta name="theme-color" content="#f7931a">
-<meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。すべてブラウザの中のシミュレーションです。">
+<meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを8つの体験でさわって学ぼう。すべてブラウザの中のシミュレーションです。">
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="ja_JP">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを8つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=20261027e"></head><body>
-<div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>7つの体験で、<wbr>しくみを手で覚えよう。</p>
+<link rel="stylesheet" href="style.css?v=20261027g"></head><body>
+<div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>8つの体験で、<wbr>しくみを手で覚えよう。</p>
 <button id="start" class="big">はじめる →</button><p class="tiny">すべてブラウザの中のシミュレーションです。本物のビットコインは1円も動かず、ネットにもつながりません。</p></div>
 <div id="app" hidden><header><div class="brand">₿ さわってわかるビットコイン</div><nav id="prog"></nav></header>
 <main>
 <section class="ch" data-t="ハッシュ"><h2><em>1</em>ハッシュ = データの指紋</h2>
-<p>SHA-256は、どんな文章でも64文字の「指紋」に変える計算です。1文字変えるだけで、指紋はまったく別のものになります。</p>
+<p>SHA-256は、どんな文章でも64文字の「指紋」に変える計算です。1文字変えるだけで、指紋はまったく別のものになります。</p><dl class="terms"><div><dt>ハッシュ</dt><dd>データから作る、決まった長さの「指紋」。元のデータには戻せません。</dd></div><div><dt>SHA-256</dt><dd>ビットコインで使われているハッシュの計算方法の名前。</dd></div></dl>
 <textarea id="hIn">こんにちは ビットコイン</textarea>
 <div class="hash" id="hOut"></div>
 <button id="hTweak">最後の1文字だけ変えてみる</button><div class="hash dim" id="hOut2"></div><p class="note" id="hDiff"></p></section>
 
 <section class="ch" data-t="チェーン"><h2><em>2</em>ブロックとチェーン</h2>
-<div class="analogy"><span>📒</span><p>ブロックチェーンは、<b>ページごとに「前のページの指紋」をハンコで押したノート</b>のようなものです。指紋は1章で見たハッシュ。ここでは先頭6文字を色つきのハンコで表しています。</p></div>
+<div class="analogy"><span>📒</span><p>ブロックチェーンは、<b>ページごとに「前のページの指紋」をハンコで押したノート</b>のようなものです。指紋は1章で見たハッシュ。ここでは先頭6文字を色つきのハンコで表しています。</p></div><dl class="terms"><div><dt>ブロック</dt><dd>取引の記録をまとめた1ページ。これが鎖のようにつながったものがブロックチェーンです。</dd></div></dl>
 <ol class="steps" id="cSteps"><li class="on">① 昔のページ(#1)の中身を書きかえてみよう</li><li>② どこがこわれたか見てみよう</li><li>③ 直すには、そこから先を全部計算しなおす必要があります</li></ol>
 <div id="chain" class="chain2"></div>
 <div class="crow"><button id="cFix" hidden>⛏ 全部計算しなおす</button><button id="cReset" class="ghost">元にもどす</button></div>
@@ -26,7 +26,7 @@
 </section>
 
 <section class="ch" data-t="マイニング"><h2><em>3</em>マイニング</h2>
-<p>ハッシュが「0」をN個並べて始まるようなナンスを、ひたすら探すゲームです。0を1個増やすと、平均でおよそ16倍たいへんになります。</p>
+<p>ハッシュが「0」をN個並べて始まるようなナンスを、ひたすら探すゲームです。0を1個増やすと、平均でおよそ16倍たいへんになります。</p><dl class="terms"><div><dt>ナンス</dt><dd>当たりを探すために変えていく「おまけの数字」。中身にナンスをくっつけてハッシュを計算し、0が並ばなければナンスを変えてやり直します。くじ引きのくじ番号のようなものです。</dd></div><div><dt>マイニング</dt><dd>当たりのナンスを見つけて、新しいブロックを追加する作業。見つけた人は報酬がもらえます。</dd></div><div><dt>むずかしさ</dt><dd>ハッシュの先頭に0がいくつ並べば当たりか。多いほど当たりにくくなります。</dd></div></dl>
 <label>むずかしさ: 先頭の0 × <b id="dV">3</b><input type="range" id="diff" min="1" max="7" value="3"></label>
 <p class="mexp">当たりまでの目安: 平均 <b id="mExp">4,096</b> 回</p><p class="warn" id="mWarn" hidden></p>
 <div class="hash" id="mHash">まだ掘っていません</div>
@@ -35,36 +35,52 @@
 <p class="note"><b>本物のビットコインでは?</b> 最近のブロックのハッシュは、先頭に0がおよそ19個並んでいます。たとえば2026年10月27日のブロック(高さ973,268)は「0000000000000000000119…」で、0が19個。これを見つけるために、世界中の専用マシンが1秒におよそ10垓回(1のあとに0が21個つく回数)も計算して競争しています。</p></section>
 
 <section class="ch" data-t="署名"><h2><em>4</em>秘密鍵・公開鍵・署名</h2>
-<p>秘密鍵を持っている人だけが署名でき、公開鍵があれば誰でも「本人のものだ」と確認できます。メッセージを1文字でも変えると、確認は失敗します。</p>
-<p class="note">※ブラウザの中で使い捨ての鍵をその場で作る練習用デモ(ECDSA P-256)。ビットコイン本体はsecp256k1という別の曲線を使います。あなたの本物の鍵は絶対に入力しないでください。</p>
+<p>秘密鍵を持っている人だけが署名でき、公開鍵があれば誰でも「本人のものだ」と確認できます。メッセージを1文字でも変えると、確認は失敗します。</p><dl class="terms"><div><dt>秘密鍵</dt><dd>自分だけが持つ、署名用のひみつの数字。人に知られるとコインを使われてしまいます。</dd></div><div><dt>公開鍵</dt><dd>秘密鍵から作る、みんなに見せてよい数字。署名が本物かを確かめるのに使います。</dd></div><div><dt>署名</dt><dd>「この取引は本人が出した」と証明するしるし。秘密鍵で作ります。</dd></div></dl>
+<p class="note">※ブラウザの中で使い捨ての鍵をその場で作る練習用デモ(ECDSA P-256という暗号方式)。ビットコイン本体はsecp256k1という別の方式を使います。あなたの本物の鍵は絶対に入力しないでください。</p>
 <button id="sKey">🔑 アリスの鍵ペアを作る</button><div class="hash dim" id="sPub"></div>
 <input id="sMsg" value="アリスはボブに1BTC払います"><button id="sSign">✍ アリスが署名</button><div class="hash dim" id="sSig"></div>
 <input id="sCheck" placeholder="確認するメッセージ(書きかえてみてください)"><button id="sVer">🔍 みんなで確認</button><div id="sRes" class="res"></div></section>
 
-<section class="ch" data-t="台帳"><h2><em>5</em>取引とみんなの台帳</h2>
-<p>取引はみんなが同じ台帳でチェックします。持っていない分のコインや、もう使ったコインを使おうとすると(二重払い)はじかれます。</p>
+<section class="ch" data-t="鍵の強さ"><h2><em>5</em>秘密鍵は「ただの超巨大なくじ」</h2>
+<p>ビットコインの秘密鍵の正体は、<b>256個の0と1を並べたランダムな数</b>です。それだけなのに、だれにも当てられません。理由は「数がとんでもなく多いから」です。</p>
+<dl class="terms"><div><dt>ビット</dt><dd>0か1かを表す最小の単位。コイン1回の表・裏と同じです。</dd></div><div><dt>エントロピー</dt><dd>どれだけ予想しにくいか。ここでは「コインを何回投げたか」と考えればOKです。</dd></div></dl>
+<h3 class="sub3">① 256回コインを投げて、鍵を作ってみよう</h3>
+<div id="eGrid" class="bits"></div>
+<div class="crow"><button id="eFlip">🪙 256回コインを投げる</button></div>
+<p class="note" id="eInfo">組み合わせは 2<sup>256</sup> 通り ≒ <b>10<sup>77</sup></b> 通り。宇宙にある原子の数(およそ10<sup>80</sup>個)に近いほどの数です。</p>
+<h3 class="sub3">② 鍵を当てるゲーム</h3>
+<p>ランダムに選ばれた鍵を、0から順番に全部ためして当ててみましょう。</p>
+<div class="seg" id="eBits"><button data-b="8">8ビット</button><button data-b="16">16ビット</button><button data-b="24">24ビット</button></div>
+<div class="mstats"><div><small>組み合わせ</small><b id="eComb">—</b></div><div><small>ためした回数</small><b id="eTry">0</b></div><div><small>経過時間</small><b id="eTime">0.0秒</b></div></div>
+<div id="eRes" class="res"></div>
+<div class="etable"><div class="eh"><span>鍵の長さ</span><span>この端末で</span><span>世界中のマイニング機械で</span></div><div id="eRows"></div></div>
+<p class="take">💡 256ビットだと、世界中のマイニング機械(1秒に約10<sup>21</sup>回)を全部使っても、宇宙の年齢(約138億年)の<b>10<sup>38</sup>倍以上</b>かかります。だから他人と同じ鍵になることも、まず起こりません。</p>
+<p class="warn">⚠️ ただし「人が考えたランダム」は弱いです。誕生日や好きな言葉から作った鍵は、すぐに当てられてしまいます。鍵は必ずウォレットなどの機械が作る本物の乱数にまかせましょう。そして本物の鍵は、このサイトにもどこにも入力しないでください。</p>
+</section>
+<section class="ch" data-t="台帳"><h2><em>6</em>取引とみんなの台帳</h2>
+<p>取引はみんなが同じ台帳でチェックします。持っていない分のコインや、もう使ったコインを使おうとすると(二重払い)はじかれます。</p><dl class="terms"><div><dt>台帳</dt><dd>だれがだれにいくら送ったかの記録。みんなが同じものを持っています。</dd></div><div><dt>二重払い</dt><dd>同じコインを2回使おうとするズル。</dd></div></dl>
 <div id="people" class="people"></div>
 <div class="row"><select id="tFrom"></select>→<select id="tTo"></select><div class="amt"><input id="tAmt" type="number" value="3" min="1">コイン<button id="tSend">送る</button></div></div>
 <button id="tDouble">😈 アリスの二重払いを試す</button><ul id="log" class="log"></ul>
 <p class="note">※わかりやすく残高で表していますが、本物は「UTXO(未使用の受け取り)」単位で管理しています。</p></section>
 
-<section class="ch" data-t="発行上限"><h2><em>6</em>2100万枚の上限と半減期</h2>
-<p>ブロックの報酬は最初50BTCで、21万ブロックごとに半分になります。だから合計は2100万BTCの少し手前で止まります。</p>
+<section class="ch" data-t="発行上限"><h2><em>7</em>2100万枚の上限と半減期</h2>
+<p>ブロックの報酬は最初50BTCで、21万ブロックごとに半分になります。だから合計は2100万BTCの少し手前で止まります。</p><dl class="terms"><div><dt>BTC</dt><dd>ビットコインの単位。いちばん小さい単位は1億分の1BTCで、「1サトシ」と呼びます。</dd></div><div><dt>報酬</dt><dd>ブロックを追加した人がもらえる新しいビットコイン。</dd></div><div><dt>ブロック高さ</dt><dd>最初のブロックから数えて何番目のブロックか。</dd></div></dl>
 <label>ブロック高さ: <b id="hH">0</b><input type="range" id="hgt" min="0" max="7000000" step="10000" value="0"></label>
 <p>1ブロックの報酬: <b id="hR"></b> BTC(半減 <b id="hN"></b> 回)</p>
 <p>ここまでの発行量: <b id="hS"></b> BTC</p><div class="bar"><div id="hBar"></div></div>
 <p class="note">21万ブロックはおよそ4年(1ブロック約10分)。2024年の4回目の半減期で報酬は3.125BTCになりました。</p></section>
 
 <section class="ch" data-t="ゲーム"><h2><em>★</em>ボーナス: ニセ取引を見破れ!</h2>
-<p>あなたは台帳をチェックする「ノード」です。届いた取引を見て、正しければ「承認」、おかしければ「却下」を押してください。1問8秒、全8問です。</p>
+<p>あなたは台帳をチェックする「ノード」です。届いた取引を見て、正しければ「承認」、おかしければ「却下」を押してください。1問8秒、全8問です。</p><dl class="terms"><div><dt>ノード</dt><dd>ビットコインの台帳を持って、取引をチェックしているコンピューター。世界中にたくさんあります。</dd></div></dl>
 <div class="gbal" id="gBal"></div>
 <div id="gStage" class="gstage"><button id="gStart">ゲームスタート</button></div>
 <div id="gEnd" class="gend" hidden></div></section>
 <section class="ch" data-t="まとめ"><div class="trophy">🏆</div><h2 class="c">全部クリア!おつかれさまでした</h2><p>これで、こんなことが説明できるようになりました:</p><ul class="done">
 <li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖のようにつながっている</li><li>マイニングは当たりのナンス探しで、ずるが割に合わない仕組み</li>
-<li>署名で「本人が出した取引」ってみんな確認できる</li><li>みんなの台帳が二重払いをはじく</li><li>発行は2100万BTC未満で打ち止め</li></ul>
+<li>署名で「本人が出した取引」ってみんな確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく</li><li>発行は2100万BTC未満で打ち止め</li></ul>
 <div class="share"><a id="share" class="btn x" target="_blank" rel="noopener">𝕏 でシェアする</a><button id="again" class="ghost">最初からもう一回</button></div></section>
 </main>
 </main>
 <footer><button id="prev" class="ghost">← もどる</button><span id="pos"></span><button id="next">つぎへ →</button></footer></div>
-<script src="app.js?v=20261027e"></script></body></html>
+<script src="app.js?v=20261027g"></script></body></html>

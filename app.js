@@ -8,15 +8,16 @@ function go(i){cur=Math.max(0,Math.min(chs.length-1,i));seen.add(cur);chs.forEac
 $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);$('again').onclick=()=>go(0);go(0);
 $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
-$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」7章ぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿')+'&url='+encodeURIComponent(U);
+$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」8章ぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿')+'&url='+encodeURIComponent(U);
 // quizzes
 const Q=[['試してみよう: 「。」を1個足したら、ハッシュはどうなる?',['ちょっとだけ変わる','まったく別のものになる','変わらない'],1,'1文字でも変わると、指紋はほぼ全部入れかわります。だから改ざんがすぐバレます。'],
 ['ブロック#1のデータを書きかえたら、こわれるのはどこ?',['ブロック#1だけ','#1より前ぜんぶ','#1の次から後ろぜんぶ'],2,'#1のハッシュが変わるので、それを「前のハッシュ」として持っている#2以降がつながらなくなります。'],
-['むずかしさを3→4にしたら、だいたい何倍たいへん?',['2倍','16倍','4倍'],1,'ハッシュは16進数。先頭の1文字が0になる確率は1/16なので、0を1個増やすと約16倍です。'],
+['むずかしさを3→4にしたら、だいたい何倍たいへん?',['2倍','16倍','4倍'],1,'ハッシュは16進数(0〜9とa〜fの16種類の文字)で書かれています。先頭の1文字が0になる確率は1/16なので、0を1個増やすと約16倍です。'],
 ['署名を確かめるのに必要なのはどれ?',['公開鍵','秘密鍵','パスワード'],0,'確認は公開鍵だけでできます。秘密鍵は署名する本人だけが持っておくものです。'],
 ['アリスが5コインを、ボブとキャロルに同時に5コインずつ送ろうとしたら?',['両方とおる','先に記録された方だけとおる','両方はじかれる'],1,'みんなの台帳で先に記録された方が有効です。2つ目は「もう持っていない」のではじかれます。'],
 ['発行されるビットコインの合計は?',['無限に増える','ぴったり2100万BTCを超える','2100万BTC少し手前で止まる'],2,'報酬が半分ずつになっていくから、合計は2100万BTCにじわじわ近づいて止まります。']];
-Q.forEach(([q,o,k,e],i)=>{const d=document.createElement('div');d.className='quiz';d.innerHTML=`<h3>💡 1問クイズ</h3><p>${q}</p><div class="opts">${o.map((x,j)=>`<button data-j="${j}">${x}</button>`).join('')}</div><div class="ans" hidden></div>`;chs[i].append(d);
+Q.push(['秘密鍵が他人に当てられないいちばんの理由は?',['ひみつの計算式で作るから','組み合わせが数えきれないほど多いから','銀行が守っているから'],1,'秘密鍵はただのランダムな数。でも組み合わせが約10の77乗通りもあるので、総当たりでは当てられません。']);const QI=[0,1,2,3,5,6,4];
+Q.forEach(([q,o,k,e],i)=>{i=QI[i];const d=document.createElement('div');d.className='quiz';d.innerHTML=`<h3>💡 1問クイズ</h3><p>${q}</p><div class="opts">${o.map((x,j)=>`<button data-j="${j}">${x}</button>`).join('')}</div><div class="ans" hidden></div>`;chs[i].append(d);
 d.querySelectorAll('button').forEach(b=>b.onclick=()=>{const ok=+b.dataset.j==k;b.classList.add(ok?'right':'wrong');if(!ok)b.classList.add('shake');else{d.querySelectorAll('button').forEach(x=>x.disabled=x!=b);const a=d.querySelector('.ans');a.hidden=false;a.textContent='⭕ せいかい! '+e}})});
 // hash flip render
 function flipTo(el,h,old){el.innerHTML=[...h].map((c,i)=>`<span${old&&old[i]!=c?' class="flip"':''}>${c}</span>`).join('')}
@@ -88,3 +89,13 @@ function end(){$('gStage').innerHTML='';const e=$('gEnd');e.hidden=false;const r
 e.innerHTML=`<div class="gscore">${score}<small> / 8</small></div><p class="c"><b>${rank}</b></p><div class="note"><b>このゲームでわかったこと</b><br>ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。</div><div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`「ニセ取引を見破れ!」で ${score}/8 点、${rank}でした ₿ #さわってわかるビットコイン`)}&url=${encodeURIComponent(U)}">𝕏 でスコアをシェア</a><button id="gAgain" class="ghost">もう一回あそぶ</button></div>`;$('gAgain').onclick=start}
 function start(){B={アリス:5,ボブ:3,キャロル:2};i=0;score=0;spent=null;res=[];$('gEnd').hidden=true;draw();show()}
 B={アリス:5,ボブ:3,キャロル:2};draw();$('gStart').onclick=start})();
+
+// entropy chapter
+(()=>{const g=$('eGrid');const flip=()=>{const r=crypto.getRandomValues(new Uint8Array(32));let bits='';r.forEach(x=>bits+=x.toString(2).padStart(8,'0'));g.innerHTML=[...bits].map((b,i)=>`<span class="b${b}" style="animation-delay:${i*3}ms">${b}</span>`).join('');g.classList.add('on')};
+flip();$('eFlip').onclick=flip;
+let rate=5e6,run=0;const big=(n)=>{const e=Math.floor(Math.log10(n));return e<6?Math.round(n).toLocaleString():`約10<sup>${e}</sup>`};
+const dur=s=>{const y=s/31557600;if(s<1)return '一瞬';if(s<60)return Math.round(s)+'秒';if(s<3600)return Math.round(s/60)+'分';if(s<86400)return Math.round(s/3600)+'時間';if(y<1)return Math.round(s/86400)+'日';if(y<1e4)return Math.round(y).toLocaleString()+'年';const u=y/1.38e10;return u<1?big(y)+'年':`宇宙の年齢の${big(u)}倍`};
+const rows=()=>$('eRows').innerHTML=[8,16,24,32,64,128,256].map(b=>`<div${b==256?' class="hl"':''}><span>${b}ビット</span><span>${dur(2**b/2/rate)}</span><span>${dur(2**b/2/1e21)}</span></div>`).join('');rows();
+document.querySelectorAll('#eBits button').forEach(btn=>btn.onclick=async()=>{const B=+btn.dataset.b,N=2**B,target=crypto.getRandomValues(new Uint32Array(1))[0]%N;const id=++run;
+document.querySelectorAll('#eBits button').forEach(x=>x.classList.toggle('on',x==btn));$('eComb').innerHTML=big(N);$('eRes').textContent='さがし中…';const t0=performance.now();let k=0;
+while(id==run){const tb=performance.now();while(performance.now()-tb<12){if(k==target)break;k++}const s=(performance.now()-t0)/1000;$('eTry').textContent=(k+1).toLocaleString();$('eTime').textContent=s.toFixed(1)+'秒';if(k==target){if(s>.05){rate=(k+1)/s;rows()}$('eRes').innerHTML=`<span style="color:var(--ok)">🎯 当たり! ${(k+1).toLocaleString()}回目</span>`;break}await new Promise(r=>setTimeout(r))}})})();
