@@ -2,54 +2,54 @@
 <title>さわってわかるビットコイン</title>
 <meta name="description" content="ハッシュ、マイニング、署名、二重払い、半減期。ビットコインのしくみを7つの体験で、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
 <meta name="theme-color" content="#f7931a">
-<meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。ぜんぶブラウザの中のシミュレーション。">
+<meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。すべてブラウザの中のシミュレーションです。">
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css"></head><body>
-<div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はナシ。<br>7つの体験で、<wbr>しくみを手で覚えよう。</p>
-<button id="start" class="big">はじめる →</button><p class="tiny">ぜんぶブラウザの中のシミュレーションやで。本物のビットコインは1円も動かへんし、ネットにもつながらへん。</p></div>
+<div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>7つの体験で、<wbr>しくみを手で覚えよう。</p>
+<button id="start" class="big">はじめる →</button><p class="tiny">すべてブラウザの中のシミュレーションです。本物のビットコインは1円も動かず、ネットにもつながりません。</p></div>
 <div id="app" hidden><header><div class="brand">₿ さわってわかるビットコイン</div><nav id="prog"></nav></header>
 <main>
 <section class="ch" data-t="ハッシュ"><h2><em>1</em>ハッシュ = データの指紋</h2>
-<p>SHA-256は、どんな文章でも64文字の「指紋」に変える計算や。1文字変えるだけで指紋はまるっきり別モンになるで。</p>
+<p>SHA-256は、どんな文章でも64文字の「指紋」に変える計算です。1文字変えるだけで、指紋はまったく別のものになります。</p>
 <textarea id="hIn">こんにちは ビットコイン</textarea>
 <div class="hash" id="hOut"></div>
 <button id="hTweak">最後の1文字だけ変えてみる</button><div class="hash dim" id="hOut2"></div><p class="note" id="hDiff"></p></section>
 
 <section class="ch" data-t="チェーン"><h2><em>2</em>ブロックとチェーン</h2>
-<p>各ブロックは「ひとつ前のブロックのハッシュ」を持ってる。昔のデータを書きかえると、それ以降のつながりが全部こわれるんや。</p>
+<p>各ブロックは「ひとつ前のブロックのハッシュ」を持っています。昔のデータを書きかえると、それ以降のつながりが全部こわれます。</p>
 <div id="chain" class="chain"></div><button id="cReset" class="ghost">元にもどす</button></section>
 
 <section class="ch" data-t="マイニング"><h2><em>3</em>マイニング</h2>
-<p>ハッシュが「0」をN個並べて始まるナンスをひたすら探すゲームや。0を1個増やすと、平均でだいたい16倍たいへんになるで。</p>
+<p>ハッシュが「0」をN個並べて始まるようなナンスを、ひたすら探すゲームです。0を1個増やすと、平均でおよそ16倍たいへんになります。</p>
 <label>むずかしさ: 先頭の0 × <b id="dV">3</b><input type="range" id="diff" min="1" max="5" value="3"></label>
-<div class="hash" id="mHash">まだ掘ってへん</div><p class="stats"><span>ナンス <b id="mNonce">0</b></span><span>試した回数 <b id="mTry">0</b></span></p>
-<button id="mGo" class="big">⛏ 掘る!</button><p class="note">本物のビットコインは0がもっといっぱい要るし、世界中のマシンが競争してるで(ここは雰囲気だけ)。</p></section>
+<div class="hash" id="mHash">まだ掘っていません</div><p class="stats"><span>ナンス <b id="mNonce">0</b></span><span>試した回数 <b id="mTry">0</b></span></p>
+<button id="mGo" class="big">⛏ 掘る!</button><p class="note">本物のビットコインでは0がもっとたくさん必要で、世界中のマシンが競争しています(ここでは雰囲気だけ体験できます)。</p></section>
 
 <section class="ch" data-t="署名"><h2><em>4</em>秘密鍵・公開鍵・署名</h2>
-<p>秘密鍵を持ってる人だけが署名できて、公開鍵があれば誰でも「本人のや」って確認できる。メッセージを1文字でもいじると確認は失敗するで。</p>
-<p class="note">※ブラウザの中で使い捨ての鍵をその場で作る練習用デモ(ECDSA P-256)。ビットコイン本体はsecp256k1という別の曲線を使う。あなたの鍵は絶対入力せんといてな。</p>
+<p>秘密鍵を持っている人だけが署名でき、公開鍵があれば誰でも「本人のものだ」と確認できます。メッセージを1文字でも変えると、確認は失敗します。</p>
+<p class="note">※ブラウザの中で使い捨ての鍵をその場で作る練習用デモ(ECDSA P-256)。ビットコイン本体はsecp256k1という別の曲線を使います。あなたの本物の鍵は絶対に入力しないでください。</p>
 <button id="sKey">🔑 アリスの鍵ペアを作る</button><div class="hash dim" id="sPub"></div>
 <input id="sMsg" value="アリスはボブに1BTC払います"><button id="sSign">✍ アリスが署名</button><div class="hash dim" id="sSig"></div>
-<input id="sCheck" placeholder="確認するメッセージ(いじってみて)"><button id="sVer">🔍 みんなで確認</button><div id="sRes" class="res"></div></section>
+<input id="sCheck" placeholder="確認するメッセージ(書きかえてみてください)"><button id="sVer">🔍 みんなで確認</button><div id="sRes" class="res"></div></section>
 
 <section class="ch" data-t="台帳"><h2><em>5</em>取引とみんなの台帳</h2>
-<p>取引はみんなが同じ台帳でチェックする。持ってない分のコインや、もう使ったコインを使おうとすると(二重払い)はじかれるんや。</p>
+<p>取引はみんなが同じ台帳でチェックします。持っていない分のコインや、もう使ったコインを使おうとすると(二重払い)はじかれます。</p>
 <div id="people" class="people"></div>
 <div class="row"><select id="tFrom"></select>→<select id="tTo"></select><div class="amt"><input id="tAmt" type="number" value="3" min="1">コイン<button id="tSend">送る</button></div></div>
 <button id="tDouble">😈 アリスの二重払いを試す</button><ul id="log" class="log"></ul>
-<p class="note">※わかりやすく残高で表してるけど、本物は「UTXO(未使用の受け取り)」単位で管理してるで。</p></section>
+<p class="note">※わかりやすく残高で表していますが、本物は「UTXO(未使用の受け取り)」単位で管理しています。</p></section>
 
 <section class="ch" data-t="発行上限"><h2><em>6</em>2100万枚の上限と半減期</h2>
-<p>ブロックの報酬は最初50BTCで、21万ブロックごとに半分になる。だから合計は2100万BTCちょっと手前で止まるんや。</p>
+<p>ブロックの報酬は最初50BTCで、21万ブロックごとに半分になります。だから合計は2100万BTCの少し手前で止まります。</p>
 <label>ブロック高さ: <b id="hH">0</b><input type="range" id="hgt" min="0" max="7000000" step="10000" value="0"></label>
 <p>1ブロックの報酬: <b id="hR"></b> BTC(半減 <b id="hN"></b> 回)</p>
 <p>ここまでの発行量: <b id="hS"></b> BTC</p><div class="bar"><div id="hBar"></div></div>
-<p class="note">21万ブロックはおよそ4年(1ブロック約10分)。2024年の4回目の半減期で報酬は3.125BTCになったで。</p></section>
+<p class="note">21万ブロックはおよそ4年(1ブロック約10分)。2024年の4回目の半減期で報酬は3.125BTCになりました。</p></section>
 
-<section class="ch" data-t="まとめ"><div class="trophy">🏆</div><h2 class="c">ぜんぶクリア!おつかれさん</h2><p>これでキミはこう説明できる:</p><ul class="done">
-<li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖みたいにつながってる</li><li>マイニングは当たりのナンス探しで、ずるが割に合わん仕組み</li>
+<section class="ch" data-t="まとめ"><div class="trophy">🏆</div><h2 class="c">全部クリア!おつかれさまでした</h2><p>これで、こんなことが説明できるようになりました:</p><ul class="done">
+<li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖のようにつながっている</li><li>マイニングは当たりのナンス探しで、ずるが割に合わない仕組み</li>
 <li>署名で「本人が出した取引」ってみんな確認できる</li><li>みんなの台帳が二重払いをはじく</li><li>発行は2100万BTC未満で打ち止め</li></ul>
 <div class="share"><a id="share" class="btn x" target="_blank" rel="noopener">𝕏 でシェアする</a><button id="again" class="ghost">最初からもう一回</button></div></section>
 </main>

@@ -8,20 +8,20 @@ function go(i){cur=Math.max(0,Math.min(chs.length-1,i));seen.add(cur);chs.forEac
 $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);$('again').onclick=()=>go(0);go(0);
 $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
-$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」7章ぜんぶクリアした!ハッシュもマイニングも署名も、さわったら意外とわかる ₿')+'&url='+encodeURIComponent(U);
+$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('「さわってわかるビットコイン」7章ぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿')+'&url='+encodeURIComponent(U);
 // quizzes
-const Q=[['ちょっと試してみよ: 「。」を1個足したら、ハッシュはどうなる?',['ちょっとだけ変わる','まるっきり別モンになる','変わらへん'],1,'1文字でも変わると、指紋はほぼ全部入れかわる。だから改ざんがすぐバレるんや。'],
-['ブロック#1のデータを書きかえたら、こわれるのはどこ?',['ブロック#1だけ','#1より前ぜんぶ','#1の次から後ろぜんぶ'],2,'#1のハッシュが変わるから、それを「前のハッシュ」として持ってる#2以降がつながらんくなる。'],
-['むずかしさを3→4にしたら、だいたい何倍たいへん?',['2倍','16倍','4倍'],1,'ハッシュは16進数。先頭の1文字が0になる確率は1/16やから、0を1個増やすと約16倍。'],
-['署名を確かめるのに必要なのはどれ?',['公開鍵','秘密鍵','パスワード'],0,'確認は公開鍵だけでできる。秘密鍵は署名する本人だけが持っとくもんや。'],
-['アリスが5コインを、ボブとキャロルに同時に5コインずつ送ろうとしたら?',['両方とおる','先に記録された方だけとおる','両方はじかれる'],1,'みんなの台帳で先に記録された方が有効。2つ目は「もう持ってへん」ではじかれる。'],
-['発行されるビットコインの合計は?',['無限に増える','ぴったり2100万BTCを超える','2100万BTCちょっと手前で止まる'],2,'報酬が半分ずつになっていくから、合計は2100万BTCにじわじわ近づいて止まるんや。']];
+const Q=[['試してみよう: 「。」を1個足したら、ハッシュはどうなる?',['ちょっとだけ変わる','まったく別のものになる','変わらない'],1,'1文字でも変わると、指紋はほぼ全部入れかわります。だから改ざんがすぐバレます。'],
+['ブロック#1のデータを書きかえたら、こわれるのはどこ?',['ブロック#1だけ','#1より前ぜんぶ','#1の次から後ろぜんぶ'],2,'#1のハッシュが変わるので、それを「前のハッシュ」として持っている#2以降がつながらなくなります。'],
+['むずかしさを3→4にしたら、だいたい何倍たいへん?',['2倍','16倍','4倍'],1,'ハッシュは16進数。先頭の1文字が0になる確率は1/16なので、0を1個増やすと約16倍です。'],
+['署名を確かめるのに必要なのはどれ?',['公開鍵','秘密鍵','パスワード'],0,'確認は公開鍵だけでできます。秘密鍵は署名する本人だけが持っておくものです。'],
+['アリスが5コインを、ボブとキャロルに同時に5コインずつ送ろうとしたら?',['両方とおる','先に記録された方だけとおる','両方はじかれる'],1,'みんなの台帳で先に記録された方が有効です。2つ目は「もう持っていない」のではじかれます。'],
+['発行されるビットコインの合計は?',['無限に増える','ぴったり2100万BTCを超える','2100万BTC少し手前で止まる'],2,'報酬が半分ずつになっていくから、合計は2100万BTCにじわじわ近づいて止まります。']];
 Q.forEach(([q,o,k,e],i)=>{const d=document.createElement('div');d.className='quiz';d.innerHTML=`<h3>💡 1問クイズ</h3><p>${q}</p><div class="opts">${o.map((x,j)=>`<button data-j="${j}">${x}</button>`).join('')}</div><div class="ans" hidden></div>`;chs[i].append(d);
 d.querySelectorAll('button').forEach(b=>b.onclick=()=>{const ok=+b.dataset.j==k;b.classList.add(ok?'right':'wrong');if(!ok)b.classList.add('shake');else{d.querySelectorAll('button').forEach(x=>x.disabled=x!=b);const a=d.querySelector('.ans');a.hidden=false;a.textContent='⭕ せいかい! '+e}})});
 // hash flip render
 function flipTo(el,h,old){el.innerHTML=[...h].map((c,i)=>`<span${old&&old[i]!=c?' class="flip"':''}>${c}</span>`).join('')}
 // 1 hash
-let lastH='';async function h1(){const t=$('hIn').value;const a=await sha(t);flipTo($('hOut'),a,lastH);lastH=a;const t2=t.slice(0,-1)+(t.slice(-1)=='ン'?'ソ':'ン');const b=await sha(t2);$('hOut2').innerHTML=[...b].map((c,i)=>c==a[i]?c:'<i>'+c+'</i>').join('');let d=0;for(let i=0;i<64;i++)if(a[i]!=b[i])d++;$('hDiff').textContent=`↑「${t2}」のハッシュ(緑が変わった文字): 64文字中 ${d}文字ちがう!`}
+let lastH='';async function h1(){const t=$('hIn').value;const a=await sha(t);flipTo($('hOut'),a,lastH);lastH=a;const t2=t.slice(0,-1)+(t.slice(-1)=='ン'?'ソ':'ン');const b=await sha(t2);$('hOut2').innerHTML=[...b].map((c,i)=>c==a[i]?c:'<i>'+c+'</i>').join('');let d=0;for(let i=0;i<64;i++)if(a[i]!=b[i])d++;$('hDiff').textContent=`↑「${t2}」のハッシュ(緑が変わった文字): 64文字中 ${d}文字ちがいます!`}
 $('hIn').oninput=h1;$('hTweak').onclick=()=>{const t=$('hIn').value;$('hIn').value=t.slice(0,-1)+(t.slice(-1)=='ン'?'ソ':'ン');h1()};h1();
 // 2 chain: each block stores the ORIGINAL prev hash; editing changes its own hash
 const init=['アリス→ボブ 2コイン','ボブ→キャロル 1コイン','キャロル→デイブ 1コイン','デイブ→アリス 3コイン'];let data=[...init],good=[];
@@ -31,7 +31,7 @@ if(build){el.innerHTML='';data.forEach((d,i)=>el.insertAdjacentHTML('beforeend',
 let broken=false;hs.forEach((h,i)=>{const b=$('b'+i),was=b.className;const edited=h!==good[i]&&!broken;const bad=broken;
 b.className='blk'+(edited?' edit':bad?' bad':'');if(b.className!=was&&b.className!='blk')b.classList.add('shake');
 b.querySelector('.pv').textContent=(i?good[i-1]:Z).slice(0,16)+'…';b.querySelector('.hh').textContent=h.slice(0,16)+'…';
-b.querySelector('.st').textContent=edited?'✏️ 書きかえた → ハッシュが変わった':bad?'❌ 前のハッシュと合わへん!':'✅ つながってる';if(h!==good[i])broken=true});}
+b.querySelector('.st').textContent=edited?'✏️ 書きかえた → ハッシュが変わった':bad?'❌ 前のハッシュと合いません!':'✅ つながっている';if(h!==good[i])broken=true});}
 $('cReset').onclick=()=>{data=[...init];chain(true)};chain(true);
 // 3 mining (small async batches so the UI stays responsive)
 $('diff').oninput=()=>$('dV').textContent=$('diff').value;let mining=false;
@@ -41,14 +41,14 @@ $('mNonce').textContent=nonce.toLocaleString();$('mTry').textContent=(nonce+1).t
 $('mNonce').textContent=nonce.toLocaleString();$('mTry').textContent=(nonce+1).toLocaleString();$('mHash').innerHTML='<i>'+z+'</i>'+h.slice(n)+`<br>見つけた!(${((performance.now()-t0)/1000).toFixed(1)}秒)`;$('mHash').className='hash found burst';mining=false;$('mGo').disabled=false};
 // 4 sig
 let kp,sig,signed;const alg={name:'ECDSA',namedCurve:'P-256'},sa={name:'ECDSA',hash:'SHA-256'};
-$('sKey').onclick=async()=>{kp=await crypto.subtle.generateKey(alg,true,['sign','verify']);$('sPub').textContent='公開鍵(みんなに見せてOK): '+hex(await crypto.subtle.exportKey('raw',kp.publicKey)).slice(0,48)+'…  秘密鍵: 🔒アリスだけが持ってる(表示せえへん)';sig=null;$('sSig').textContent='';$('sRes').textContent=''};
+$('sKey').onclick=async()=>{kp=await crypto.subtle.generateKey(alg,true,['sign','verify']);$('sPub').textContent='公開鍵(みんなに見せてOK): '+hex(await crypto.subtle.exportKey('raw',kp.publicKey)).slice(0,48)+'…  秘密鍵: 🔒アリスだけが持っている(表示しません)';sig=null;$('sSig').textContent='';$('sRes').textContent=''};
 $('sSign').onclick=async()=>{if(!kp)await $('sKey').onclick();signed=$('sMsg').value;sig=await crypto.subtle.sign(sa,kp.privateKey,enc.encode(signed));$('sSig').textContent='署名: '+hex(sig).slice(0,48)+'…';$('sCheck').value=signed;$('sRes').textContent=''};
-$('sVer').onclick=async()=>{if(!sig){$('sRes').textContent='先に署名してな';return}const ok=await crypto.subtle.verify(sa,kp.publicKey,sig,enc.encode($('sCheck').value));$('sRes').innerHTML=ok?'<span style="color:var(--ok)">✅ 本物!アリスの署名や</span>':'<span style="color:var(--ng)">❌ 確認失敗!中身がいじられとる</span>'};
+$('sVer').onclick=async()=>{if(!sig){$('sRes').textContent='先に署名してください';return}const ok=await crypto.subtle.verify(sa,kp.publicKey,sig,enc.encode($('sCheck').value));$('sRes').innerHTML=ok?'<span style="color:var(--ok)">✅ 本物!アリスの署名です</span>':'<span style="color:var(--ng)">❌ 確認失敗!中身が書きかえられています</span>'};
 // 5 ledger
 const ppl=[['アリス','👩'],['ボブ','👨'],['キャロル','👧'],['デイブ','🧔']];let bal={アリス:5,ボブ:2,キャロル:0,デイブ:1};
 function rp(){$('people').innerHTML=ppl.map(([n,e])=>`<div class="p">${e}<div>${n}<br><b>${bal[n]}</b> コイン</div></div>`).join('')}
 ['tFrom','tTo'].forEach((s,k)=>$(s).innerHTML=ppl.map(([n],i)=>`<option ${i==k?'selected':''}>${n}</option>`).join(''));
-function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}: おかしな取引や`}else if(bal[f]<a){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持ってへん。却下!`}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=`✅ ${f}→${t} ${a}コイン: みんなで確認してOK、台帳に記録`}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]?.classList.add('bump')}
+function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}: おかしな取引です`}else if(bal[f]<a){li.className='ng';li.textContent=`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持っていません。却下!`}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=`✅ ${f}→${t} ${a}コイン: みんなで確認してOK。台帳に記録しました`}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]?.classList.add('bump')}
 $('tSend').onclick=()=>tx($('tFrom').value,$('tTo').value,+$('tAmt').value);
 $('tDouble').onclick=()=>{const a=bal['アリス'];if(!a){tx('アリス','ボブ',1);return}tx('アリス','ボブ',a);tx('アリス','キャロル',a)};rp();
 // 6 halving
