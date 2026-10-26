@@ -6,7 +6,7 @@
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを8つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=20261027g"></head><body>
+<link rel="stylesheet" href="style.css?v=20261027h"></head><body>
 <div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>8つの体験で、<wbr>しくみを手で覚えよう。</p>
 <button id="start" class="big">はじめる →</button><p class="tiny">すべてブラウザの中のシミュレーションです。本物のビットコインは1円も動かず、ネットにもつながりません。</p></div>
 <div id="app" hidden><header><div class="brand">₿ さわってわかるビットコイン</div><nav id="prog"></nav></header>
@@ -35,7 +35,7 @@
 <p class="note"><b>本物のビットコインでは?</b> 最近のブロックのハッシュは、先頭に0がおよそ19個並んでいます。たとえば2026年10月27日のブロック(高さ973,268)は「0000000000000000000119…」で、0が19個。これを見つけるために、世界中の専用マシンが1秒におよそ10垓回(1のあとに0が21個つく回数)も計算して競争しています。</p></section>
 
 <section class="ch" data-t="署名"><h2><em>4</em>秘密鍵・公開鍵・署名</h2>
-<p>秘密鍵を持っている人だけが署名でき、公開鍵があれば誰でも「本人のものだ」と確認できます。メッセージを1文字でも変えると、確認は失敗します。</p><dl class="terms"><div><dt>秘密鍵</dt><dd>自分だけが持つ、署名用のひみつの数字。人に知られるとコインを使われてしまいます。</dd></div><div><dt>公開鍵</dt><dd>秘密鍵から作る、みんなに見せてよい数字。署名が本物かを確かめるのに使います。</dd></div><div><dt>署名</dt><dd>「この取引は本人が出した」と証明するしるし。秘密鍵で作ります。</dd></div></dl>
+<p>秘密鍵を持っている人だけが署名でき、公開鍵があればだれでも「本人のものだ」と確認できます。メッセージを1文字でも変えると、確認は失敗します。</p><dl class="terms"><div><dt>秘密鍵</dt><dd>自分だけが持つ、署名用のひみつの数字。人に知られるとコインを使われてしまいます。</dd></div><div><dt>公開鍵</dt><dd>秘密鍵から作る、みんなに見せてよい数字。署名が本物かを確かめるのに使います。</dd></div><div><dt>署名</dt><dd>「この取引は本人が出した」と証明するしるし。秘密鍵で作ります。</dd></div></dl>
 <p class="note">※ブラウザの中で使い捨ての鍵をその場で作る練習用デモ(ECDSA P-256という暗号方式)。ビットコイン本体はsecp256k1という別の方式を使います。あなたの本物の鍵は絶対に入力しないでください。</p>
 <button id="sKey">🔑 アリスの鍵ペアを作る</button><div class="hash dim" id="sPub"></div>
 <input id="sMsg" value="アリスはボブに1BTC払います"><button id="sSign">✍ アリスが署名</button><div class="hash dim" id="sSig"></div>
@@ -49,7 +49,7 @@
 <div class="crow"><button id="eFlip">🪙 256回コインを投げる</button></div>
 <p class="note" id="eInfo">組み合わせは 2<sup>256</sup> 通り ≒ <b>10<sup>77</sup></b> 通り。宇宙にある原子の数(およそ10<sup>80</sup>個)に近いほどの数です。</p>
 <h3 class="sub3">② 鍵を当てるゲーム</h3>
-<p>ランダムに選ばれた鍵を、0から順番に全部ためして当ててみましょう。</p>
+<p>ランダムに選ばれた鍵を、0から順番に全部ためして当ててみましょう。24ビットは、端末によっては数十秒かかります。</p>
 <div class="seg" id="eBits"><button data-b="8">8ビット</button><button data-b="16">16ビット</button><button data-b="24">24ビット</button></div>
 <div class="mstats"><div><small>組み合わせ</small><b id="eComb">—</b></div><div><small>ためした回数</small><b id="eTry">0</b></div><div><small>経過時間</small><b id="eTime">0.0秒</b></div></div>
 <div id="eRes" class="res"></div>
@@ -77,10 +77,10 @@
 <div id="gStage" class="gstage"><button id="gStart">ゲームスタート</button></div>
 <div id="gEnd" class="gend" hidden></div></section>
 <section class="ch" data-t="まとめ"><div class="trophy">🏆</div><h2 class="c">全部クリア!おつかれさまでした</h2><p>これで、こんなことが説明できるようになりました:</p><ul class="done">
-<li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖のようにつながっている</li><li>マイニングは当たりのナンス探しで、ずるが割に合わない仕組み</li>
-<li>署名で「本人が出した取引」ってみんな確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく</li><li>発行は2100万BTC未満で打ち止め</li></ul>
+<li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖のようにつながっている</li><li>マイニングは当たりのナンス探し。だから記録の書きかえはとても大変</li>
+<li>署名で、本人が出した取引だとみんなが確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく</li><li>発行は2100万BTC未満で打ち止め</li></ul>
 <div class="share"><a id="share" class="btn x" target="_blank" rel="noopener">𝕏 でシェアする</a><button id="again" class="ghost">最初からもう一回</button></div></section>
 </main>
 </main>
 <footer><button id="prev" class="ghost">← もどる</button><span id="pos"></span><button id="next">つぎへ →</button></footer></div>
-<script src="app.js?v=20261027g"></script></body></html>
+<script src="app.js?v=20261027h"></script></body></html>
