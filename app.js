@@ -23,16 +23,28 @@ function flipTo(el,h,old){el.innerHTML=[...h].map((c,i)=>`<span${old&&old[i]!=c?
 // 1 hash
 let lastH='';async function h1(){const t=$('hIn').value;const a=await sha(t);flipTo($('hOut'),a,lastH);lastH=a;const t2=t.slice(0,-1)+(t.slice(-1)=='ン'?'ソ':'ン');const b=await sha(t2);$('hOut2').innerHTML=[...b].map((c,i)=>c==a[i]?c:'<i>'+c+'</i>').join('');let d=0;for(let i=0;i<64;i++)if(a[i]!=b[i])d++;$('hDiff').textContent=`↑「${t2}」のハッシュ(緑が変わった文字): 64文字中 ${d}文字ちがいます!`}
 $('hIn').oninput=h1;$('hTweak').onclick=()=>{const t=$('hIn').value;$('hIn').value=t.slice(0,-1)+(t.slice(-1)=='ン'?'ソ':'ン');h1()};h1();
-// 2 chain: each block stores the ORIGINAL prev hash; editing changes its own hash
-const init=['アリス→ボブ 2コイン','ボブ→キャロル 1コイン','キャロル→デイブ 1コイン','デイブ→アリス 3コイン'];let data=[...init],good=[];
-const Z='0'.repeat(64);
-async function chain(build){const el=$('chain');const hs=[];for(let i=0;i<data.length;i++)hs.push(await sha(i+(i?good[i-1]||hs[i-1]:Z)+data[i]));if(!good.length)good=[...hs];
-if(build){el.innerHTML='';data.forEach((d,i)=>el.insertAdjacentHTML('beforeend',`<div class="blk" id="b${i}"><b>ブロック #${i}</b><br>データ:<input data-i="${i}">前のハッシュ:<div class="hash pv"></div>このハッシュ:<div class="hash hh"></div><div class="st"></div></div>`));el.querySelectorAll('input').forEach(n=>{n.value=data[n.dataset.i];n.oninput=()=>{data[n.dataset.i]=n.value;chain()}})}
-let broken=false;hs.forEach((h,i)=>{const b=$('b'+i),was=b.className;const edited=h!==good[i]&&!broken;const bad=broken;
-b.className='blk'+(edited?' edit':bad?' bad':'');if(b.className!=was&&b.className!='blk')b.classList.add('shake');
-b.querySelector('.pv').textContent=(i?good[i-1]:Z).slice(0,16)+'…';b.querySelector('.hh').textContent=h.slice(0,16)+'…';
-b.querySelector('.st').textContent=edited?'✏️ 書きかえた → ハッシュが変わった':bad?'❌ 前のハッシュと合いません!':'✅ つながっている';if(h!==good[i])broken=true});}
-$('cReset').onclick=()=>{data=[...init];chain(true)};chain(true);
+// 2 chain (notebook analogy)
+const init=['アリス→ボブ 2コイン','ボブ→キャロル 1コイン','キャロル→デイブ 1コイン','デイブ→アリス 3コイン'];let data=[...init],prevs=[],fixing=false;const Z='0'.repeat(64);
+const fp=h=>`<span class="fp" style="--c:hsl(${parseInt(h.slice(0,4),16)%360} 70% 45%)">${h.slice(0,6)}</span>`;
+async function hashes(){const hs=[];for(let i=0;i<data.length;i++)hs.push(await sha(i+prevs[i]+data[i]));return hs}
+async function seal(){prevs=[Z];for(let i=0;i<data.length;i++){const h=await sha(i+prevs[i]+data[i]);prevs.push(h)}prevs.length=data.length}
+let good=[],repaired=false;
+async function chain(build){const el=$('chain');const hs=await hashes();
+if(build){el.innerHTML=data.map((d,i)=>`${i?`<div class="link" id="l${i}"><span>↓</span><small>指紋を引きつぐ</small></div>`:''}<div class="blk" id="b${i}"><div class="bh"><b>ページ #${i}</b><span class="st"></span></div><input data-i="${i}" aria-label="ページ${i}の中身"><div class="fps"><div><small>前のページの指紋</small><span class="pv"></span></div><div><small>このページの指紋</small><span class="hh"></span></div></div></div>`).join('');
+el.querySelectorAll('input').forEach(n=>{n.value=data[n.dataset.i];n.oninput=()=>{repaired=false;data[n.dataset.i]=n.value;chain()}})}
+let broken=-1;hs.forEach((h,i)=>{if(broken<0&&h!==good[i])broken=i});
+hs.forEach((h,i)=>{const b=$('b'+i),was=b.className;const st=broken<0||i<broken?'':i==broken?'edit':'bad';
+b.className='blk'+(st?' '+st:'');if(st&&was!=b.className){b.style.animationDelay=(i-broken)*0.15+'s';b.classList.add('shake')}
+b.querySelector('.pv').innerHTML=i?fp(prevs[i]):'<span class="fp z">なし</span>';b.querySelector('.hh').innerHTML=fp(h);
+b.querySelector('.st').textContent=st=='edit'?'✏️ 書きかえた':st=='bad'?'❌ ハンコが合わない':'✅ OK';
+if(i){const l=$('l'+i),bad=broken>=0&&i>broken;l.className='link'+(bad?' bad':'');l.querySelector('span').textContent=bad?'≠':'↓';l.querySelector('small').textContent=bad?(i==broken+1?'前の指紋と一致しない!':'その先も信用できない'):'指紋を引きつぐ'}});
+const li=[...$('cSteps').children];const step=fixing?2:broken<0?(repaired?3:0):1;li.forEach((x,j)=>x.className=j<step?'done':j==step?'on':'');
+$('cFix').hidden=broken<0;}
+$('cFix').onclick=async()=>{fixing=true;$('cFix').disabled=true;const hs=await hashes();let from=hs.findIndex((h,i)=>h!==good[i]);
+for(let i=from;i<data.length;i++){$('b'+i).querySelector('.st').textContent='⛏ 計算中…';await new Promise(r=>setTimeout(r,500));prevs[i]=i?await sha((i-1)+prevs[i-1]+data[i-1]):Z;good[i]=await sha(i+prevs[i]+data[i]);await chain()}
+fixing=false;repaired=true;$('cFix').disabled=false;await chain();$('cTake').innerHTML='💡 直せました。でも本物のビットコインでは、1ページごとに大量のマイニングが必要です。そのうえ世界中が先へ先へと書き足しているので、追いついて全部やり直すのは現実的ではありません。'};
+$('cReset').onclick=async()=>{repaired=false;data=[...init];await seal();good=await hashes();$('cTake').innerHTML='💡 1か所でも書きかえると、その先のハンコが全部合わなくなる。だから昔の記録はこっそり変えられません。';chain(true)};
+(async()=>{await seal();good=await hashes();chain(true)})();
 // 3 mining (small async batches so the UI stays responsive)
 $('diff').oninput=()=>$('dV').textContent=$('diff').value;let mining=false;
 $('mGo').onclick=async()=>{if(mining)return;mining=true;$('mGo').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h;const t0=performance.now();

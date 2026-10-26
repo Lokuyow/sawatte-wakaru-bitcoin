@@ -6,7 +6,7 @@
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="さわってわかるビットコイン"><meta name="twitter:description" content="ビットコインのしくみを7つの体験でさわって学ぼう。"><meta name="twitter:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=20261027c"></head><body>
+<link rel="stylesheet" href="style.css?v=20261027d"></head><body>
 <div id="hero" class="hero"><div class="coin">₿</div><h1>さわってわかる<br>ビットコイン</h1><p>むずかしい数式はなし。<br>7つの体験で、<wbr>しくみを手で覚えよう。</p>
 <button id="start" class="big">はじめる →</button><p class="tiny">すべてブラウザの中のシミュレーションです。本物のビットコインは1円も動かず、ネットにもつながりません。</p></div>
 <div id="app" hidden><header><div class="brand">₿ さわってわかるビットコイン</div><nav id="prog"></nav></header>
@@ -18,8 +18,12 @@
 <button id="hTweak">最後の1文字だけ変えてみる</button><div class="hash dim" id="hOut2"></div><p class="note" id="hDiff"></p></section>
 
 <section class="ch" data-t="チェーン"><h2><em>2</em>ブロックとチェーン</h2>
-<p>各ブロックは「ひとつ前のブロックのハッシュ」を持っています。昔のデータを書きかえると、それ以降のつながりが全部こわれます。</p>
-<div id="chain" class="chain"></div><button id="cReset" class="ghost">元にもどす</button></section>
+<div class="analogy"><span>📒</span><p>ブロックチェーンは、<b>ページごとに「前のページの指紋」をハンコで押したノート</b>のようなものです。指紋は1章で見たハッシュ。ここでは先頭6文字を色つきのハンコで表しています。</p></div>
+<ol class="steps" id="cSteps"><li class="on">① 昔のページ(#1)の中身を書きかえてみよう</li><li>② どこがこわれたか見てみよう</li><li>③ 直すには、そこから先を全部計算しなおす必要があります</li></ol>
+<div id="chain" class="chain2"></div>
+<div class="crow"><button id="cFix" hidden>⛏ 全部計算しなおす</button><button id="cReset" class="ghost">元にもどす</button></div>
+<p class="take" id="cTake">💡 1か所でも書きかえると、その先のハンコが全部合わなくなる。だから昔の記録はこっそり変えられません。</p>
+</section>
 
 <section class="ch" data-t="マイニング"><h2><em>3</em>マイニング</h2>
 <p>ハッシュが「0」をN個並べて始まるようなナンスを、ひたすら探すゲームです。0を1個増やすと、平均でおよそ16倍たいへんになります。</p>
@@ -60,4 +64,4 @@
 </main>
 </main>
 <footer><button id="prev" class="ghost">← もどる</button><span id="pos"></span><button id="next">つぎへ →</button></footer></div>
-<script src="app.js?v=20261027c"></script></body></html>
+<script src="app.js?v=20261027d"></script></body></html>
