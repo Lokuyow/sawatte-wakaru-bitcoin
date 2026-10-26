@@ -3,7 +3,7 @@ async function sha(s){const b=await crypto.subtle.digest('SHA-256',enc.encode(s)
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
 // nav
 const chs=[...document.querySelectorAll('.ch')];let cur=0;const seen=new Set();
-chs.forEach((c,i)=>{const s=document.createElement('span');s.title=(i+1)+' '+c.dataset.t;s.onclick=()=>go(i);$('prog').append(s)});
+chs.forEach((c,i)=>{const s=document.createElement('span');s.title=(i+1)+' '+c.dataset.t;s.innerHTML='<b>'+(i+1)+'</b><i>'+c.dataset.t+'</i>';s.onclick=()=>go(i);$('prog').append(s)});
 function go(i){cur=Math.max(0,Math.min(chs.length-1,i));seen.add(cur);chs.forEach((c,j)=>c.classList.toggle('on',j==cur));[...$('prog').children].forEach((s,j)=>{s.className=j==cur?'on':seen.has(j)?'seen':''});$('prev').disabled=cur==0;$('next').style.visibility=cur==chs.length-1?'hidden':'visible';$('pos').textContent=(cur+1)+' / '+chs.length;scrollTo(0,0)}
 $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);$('again').onclick=()=>go(0);go(0);
 $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
@@ -55,3 +55,20 @@ $('tDouble').onclick=()=>{const a=bal['アリス'];if(!a){tx('アリス','ボブ
 function hv(){const h=+$('hgt').value,n=Math.floor(h/210000);let r=n<64?Math.floor(5e9/2**n):0,s=0;for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),blocks=i<n?210000:h-i*210000+1;s+=sat*blocks}
 $('hH').textContent=h.toLocaleString();$('hN').textContent=n;$('hR').textContent=(r/1e8).toLocaleString('ja',{maximumFractionDigits:8});$('hS').textContent=(s/1e8).toLocaleString('ja',{maximumFractionDigits:8});$('hBar').style.width=(s/2.1e15*100)+'%'}
 $('hgt').oninput=hv;hv();
+// bonus game: spot the fake transactions
+(()=>{const N=['アリス','ボブ','キャロル'],E={アリス:'👩',ボブ:'👨',キャロル:'👧'};let B,q,i,score,t,tl,spent,res;
+const draw=()=>$('gBal').innerHTML=N.map(n=>`<div><span>${E[n]}</span>${n}<b>${B[n]}</b></div>`).join('');
+function mk(){const r=Math.random(),f=N[Math.floor(Math.random()*3)],to=N.filter(x=>x!=f)[Math.floor(Math.random()*2)];
+if(r<.45&&B[f]>0)return{f,to,a:1+Math.floor(Math.random()*B[f]),sig:true,ok:true};
+if(r<.65)return{f,to,a:B[f]+1+Math.floor(Math.random()*3),sig:true,ok:false,why:`${f}は${B[f]}コインしか持っていません`};
+if(r<.82&&spent)return{...spent,to:N.find(x=>x!=spent.f&&x!=spent.to),sig:true,ok:false,dbl:true,why:'さっき使ったのと同じコインです(二重払い)'};
+const a=Math.max(1,Math.min(B[f],2));return{f,to,a,sig:false,ok:false,why:'署名が公開鍵と一致しません'}}
+function show(){if(i>=8)return end();q=mk();tl=8;$('gStage').innerHTML=`<div class="gq">${i+1} / 8 ・ スコア ${score}</div><div class="tx"><div class="tx-m">${E[q.f]} ${q.f} → ${E[q.to]} ${q.to}</div><div class="tx-a">${q.a} コイン</div><div class="tx-s">署名チェック: ${q.sig?'<span class="g">✓ 一致</span>':'<span class="r">✗ 不一致</span>'}${q.dbl?'<br><small>使うコイン: さっきと同じ「コイン#'+q.id+'」</small>':'<br><small>使うコイン: 新しい「コイン#'+(q.id=100+i)+'」</small>'}</div><div class="timer"><div id="gT"></div></div></div><div class="gbtn"><button id="gNo" class="no">✗ 却下</button><button id="gYes" class="yes">✓ 承認</button></div><div id="gMsg" class="gmsg"></div>`;
+$('gYes').onclick=()=>ans(true);$('gNo').onclick=()=>ans(false);clearInterval(t);t=setInterval(()=>{tl-=.1;const g=$('gT');if(g)g.style.width=tl/8*100+'%';if(tl<=0)ans(null)},100)}
+function ans(y){clearInterval(t);const right=y===q.ok;if(right)score++;if(q.ok){B[q.f]-=q.a;B[q.to]+=q.a;spent={...q}}draw();
+res.push(right);const m=$('gMsg');$('gYes').disabled=$('gNo').disabled=true;m.className='gmsg '+(right?'g':'r');m.textContent=(y===null?'⏰ 時間切れ! ':right?'⭕ せいかい! ':'❌ ざんねん! ')+(q.ok?'正しい取引です。台帳に記録しました。':q.why+'。');
+document.querySelector('.tx').classList.add(right?'pass':'shake');i++;setTimeout(show,1500)}
+function end(){$('gStage').innerHTML='';const e=$('gEnd');e.hidden=false;const rank=score==8?'伝説のノード':score>=6?'頼れるノード':score>=4?'見習いノード':'まだまだこれから';
+e.innerHTML=`<div class="gscore">${score}<small> / 8</small></div><p class="c"><b>${rank}</b></p><div class="note"><b>このゲームでわかったこと</b><br>ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。</div><div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`「ニセ取引を見破れ!」で ${score}/8 点、${rank}でした ₿ #さわってわかるビットコイン`)}&url=${encodeURIComponent(U)}">𝕏 でスコアをシェア</a><button id="gAgain" class="ghost">もう一回あそぶ</button></div>`;$('gAgain').onclick=start}
+function start(){B={アリス:5,ボブ:3,キャロル:2};i=0;score=0;spent=null;res=[];$('gEnd').hidden=true;draw();show()}
+B={アリス:5,ボブ:3,キャロル:2};draw();$('gStart').onclick=start})();
