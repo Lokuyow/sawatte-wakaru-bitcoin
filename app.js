@@ -231,10 +231,7 @@ new MutationObserver(ms=>{for(const m of ms){const t=m.target.nodeType==1?m.targ
 }}).observe(document.querySelector('main')||document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class'],attributeOldValue:true});
 document.addEventListener('input',e=>{const r=e.target;if(r.type!='range')return;const v=r.closest('label')?.querySelector('b');if(v&&!RM){v.classList.remove('vb');void v.offsetWidth;v.classList.add('vb')}});
 document.addEventListener('click',e=>{const q=e.target.closest('.quiz button,.opts button,[data-ok]');if(q&&q.classList.contains('ok'))burst(q,8)});
-/* halving pile */
-let hr=0;const draw=()=>{const n=Math.max(1,Math.round(32/2**hr));$('tCoins').innerHTML='<i></i>'.repeat(n);const r=50/2**hr;$('tR').textContent=r>=0.001?+r.toFixed(r<1?8:3)+'':r.toExponential(1);$('tN').textContent=hr?(EN_?`halving #${hr}`:`${hr}回目の半減`):L('タップで半減','Tap to halve')};
 const EN_=document.documentElement.lang=='en';
-if($('tPile')){draw();$('tPile').onclick=()=>{hr=hr>=32?0:hr+1;draw();const p=$('tPile');p.classList.remove('pp');void p.offsetWidth;p.classList.add('pp');buzz(10);if(hr==32)$('tN').textContent=L('最後はほぼ0に','Almost zero at the end')}}
 /* sats split */
 let sp=0;const U=[1,10,100,1e3,1e4,1e5,1e6,1e7,1e8];
 if($('tCoin')){$('tCoin').onclick=()=>{const c=$('tCoin');sp=sp>=8?0:sp+1;const n=U[sp];c.classList.remove('pp');void c.offsetWidth;c.classList.add('pp');buzz(8);
