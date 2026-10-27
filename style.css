@@ -545,3 +545,22 @@ h2 em{font-size:.66em}
 @media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:#f7931a;--btnh:#e8850c;--onb:#13202b}}
 :root[data-theme=light]{--btn:#f7931a;--btnh:#e8850c;--onb:#13202b}
 .bc{white-space:normal;overflow:visible;font-size:.85rem;line-height:1.35}
+/* score card */
+.scard{margin:12px auto 4px;max-width:340px;text-align:center;border:1.5px solid var(--line2);border-radius:20px;padding:18px 16px;background:var(--card);animation:hwPop .45s}
+.scard>small{display:block;font-size:.75rem;color:var(--mut);letter-spacing:.06em}
+.sbig{display:block;font-size:2.2rem;line-height:1.2;color:var(--od);font-variant-numeric:tabular-nums}.sbig small{font-size:.9rem;color:var(--mut)}
+.srank{display:inline-block;margin:6px 0;padding:4px 12px;border-radius:99px;background:var(--tint);font-weight:800;font-size:.9rem}
+.ssub{display:block;font-size:.75rem;color:var(--mut);margin-top:4px}
+.sshare{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}.sshare>*{margin:0;font-size:.85rem;padding:8px 16px;min-height:0}
+.sx{background:#0f1419!important;color:#fff!important}
+@media(prefers-reduced-motion:reduce){.scard{animation:none}}
+/* score card */
+.scard{margin:12px auto 4px;max-width:340px;text-align:center;border:1.5px solid var(--line2);border-radius:20px;padding:18px 16px;background:var(--card);animation:hwPop .45s}
+.scard>small{display:block;font-size:.75rem;color:var(--mut);letter-spacing:.06em}
+.sbig{display:block;font-size:2.2rem;line-height:1.2;color:var(--od);font-variant-numeric:tabular-nums}.sbig small{font-size:.9rem;color:var(--mut)}
+.srank{display:inline-block;margin:6px 0;padding:4px 12px;border-radius:99px;background:var(--tint);font-weight:800;font-size:.9rem}
+.ssub{display:block;font-size:.75rem;color:var(--mut);margin-top:4px}
+.sshare{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}.sshare>*{margin:0;font-size:.85rem;padding:8px 16px;min-height:0}
+.sx{background:#0f1419!important;color:#fff!important}
+@media(prefers-reduced-motion:reduce){.scard{animation:none}}
+.sx{box-shadow:inset 0 0 0 1.5px var(--line2)!important}
