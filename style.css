@@ -710,3 +710,5 @@ p,li,dd,summary,small,.q,h3{text-wrap:pretty}
 @media(max-width:500px){.fdb{display:grid;grid-template-columns:1fr 1fr}.fdb>*{width:100%;justify-content:center;white-space:nowrap;font-size:.85rem;padding-left:6px;padding-right:6px}}
 @media(prefers-reduced-motion:reduce){.fspk{animation:none;opacity:.8;transform:translate(-50%,-50%)}.fdone{animation:none}}
 .fpp{gap:.3em}.fpp b{line-height:1.25;margin:0}.fpp code{margin-top:.3em!important;padding:.15em .5em;border-radius:999px;background:var(--card);border:1px solid var(--line2);line-height:1.3!important;white-space:nowrap}
+details.more.myth>summary{text-align:left;justify-content:flex-start}
+#fDesc{text-wrap:pretty}:lang(ja) #fDesc{word-break:auto-phrase}
