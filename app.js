@@ -44,9 +44,12 @@ const rng=(a,b)=>{a=[...a];b=[...b];let s=0;while(s<a.length&&s<b.length&&a[s]==
 const bz=p=>window.__bz&&__bz(p),bu=(e,n)=>window.__bu&&__bu(e,n);
 async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;
 const [s,e,n]=prevT==null?[0,0,0]:rng(prevT,t);$('hwIn').innerHTML=ch.map((c,i)=>`<span class="${prevT!=null&&i>=s&&i<e?'chg':''}" style="--d:${i*40}ms">${esc(c==' '?'\u00a0':c)}</span>`).join('')||'&nbsp;';
-const M=$('hwM'),fl=$('hwFl');if(anim&&!RM){fl.innerHTML=ch.slice(0,10).map((c,i)=>`<span style="--d:${i*45}ms">${esc(c)}</span>`).join('');M.classList.remove('go');void M.offsetWidth;M.classList.add('go');await new Promise(r=>setTimeout(r,520));if(my!=seq)return}
+const M=$('hwM'),fl=$('hwFl');if(anim&&!RM){const cs=ch.slice(0,10);fl.innerHTML=cs.map((c,i)=>`<span style="--d:${i*30}ms">${esc(c)}</span>`).join('');
+const mx=$('hwMx');let fr='';cs.forEach((c,i)=>{for(const k of [0,1]){const a=Math.random()*360,r=14+Math.random()*16;fr+=`<span class="${k?'b':'t'}" style="--a:${a}deg;--r:${r}px;--d:${280+i*20}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<10;i++)fr+=`<i style="--a:${Math.random()*360}deg;--r:${10+Math.random()*22}px;--d:${300+i*25}ms;--s:${i%2?1:-1}"></i>`;mx.innerHTML=fr;
+M.classList.remove('go');void M.offsetWidth;M.classList.add('go');window.__bz&&__bz([6,30,6,30,6]);await new Promise(r=>setTimeout(r,640));if(my!=seq)return}
 const same=prevH&&prevH!=h;$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
-$('hwG1').innerHTML=grid(h);$('hwH1').innerHTML=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');
+$('hwG1').innerHTML=grid(h);const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
+if(anim&&!RM){const t0=performance.now(),X='0123456789abcdef';await new Promise(res=>{const f=()=>{if(my!=seq)return res();const k=Math.floor((performance.now()-t0)/380*64);if(k>=64){H1.innerHTML=fin;return res()}H1.innerHTML=[...h].map((c,i)=>i<k?c:`<i class="rn">${X[Math.random()*16|0]}</i>`).join('');requestAnimationFrame(f)};f()});if(my!=seq)return}else H1.innerHTML=fin;
 const O=document.querySelector('.hwO');O.classList.toggle('one',!prevH);const C=document.querySelector('.hwC.now');if(anim&&!RM){C.classList.remove('st');void C.offsetWidth;C.classList.add('st')}
 let d=0;if(prevH)for(let i=0;i<64;i++)if(h[i]!=prevH[i])d++;
 $('hwR').innerHTML=!prevH||prevH==h?'':(n<=1?L(`1文字変えただけで、指紋がまるごと変わる <b>${d}/64</b>`,`Change 1 character and the whole fingerprint changes <b>${d}/64</b>`):L(`${n}文字の変更で、指紋がまるごと変わる <b>${d}/64</b>`,`${n} characters changed, the whole fingerprint changes <b>${d}/64</b>`));

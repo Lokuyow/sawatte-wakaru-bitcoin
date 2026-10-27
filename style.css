@@ -498,3 +498,17 @@ h2 em{font-size:.66em}
 .brC.pop{animation:hwPop .4s}
 .brB,#brB{font-size:.85rem}
 .brR{font-size:.9rem;font-weight:700;color:var(--ng);min-height:1.4em;text-align:center}
+/* hash mixer */
+.hwM{width:170px;height:78px;overflow:visible}
+.hwM b{position:absolute;bottom:5px;font-size:.66rem;letter-spacing:.06em}
+.hwBl{position:absolute;top:8px;left:50%;width:40px;height:40px;margin-left:-20px;fill:none;stroke:var(--mut);stroke-width:1.6;stroke-linecap:round;opacity:.7}
+.hwM.go .hwBl{animation:hwSpin .7s cubic-bezier(.5,0,.5,1);stroke:var(--o);opacity:1}
+@keyframes hwSpin{to{transform:rotate(1080deg)}}
+.hwMx{position:absolute;left:50%;top:28px;width:0;height:0;pointer-events:none}
+.hwMx span,.hwMx i{position:absolute;left:0;top:0;opacity:0;font-weight:800;font-size:.9rem;color:var(--o);transform:translate(-50%,-50%)}
+.hwMx span.t{clip-path:inset(0 0 52% 0)}.hwMx span.b{clip-path:inset(48% 0 0 0)}
+.hwMx i{width:4px;height:4px;border-radius:1px;background:var(--line2)}
+.hwM.go .hwMx span,.hwM.go .hwMx i{animation:hwMix .42s var(--d) ease-in-out forwards}
+@keyframes hwMix{0%{opacity:1;transform:translate(-50%,-50%) rotate(0) translateX(0)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--a) + 540deg*var(--s))) translateX(var(--r)) scale(.4)}}
+.hwM.go .hwFl span{animation-duration:.3s}
+.hwH i.rn{color:var(--line2);font-weight:400}
