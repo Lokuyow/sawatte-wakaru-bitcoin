@@ -402,3 +402,23 @@ h2 em{display:inline-grid;place-items:center;line-height:1;font-variant-numeric:
 .ic,.ic:only-child,:is(button,summary,h2,h3,a,b,.note,nav) .ic:not(:only-child){margin:0 .45em 0 0}
 .ic-r,.ic-down,.ic-up,.ic-r:only-child{margin:0 0 0 .45em}
 [aria-label]>.ic:only-child,.net .ic,#iView .ic,[role=img] .ic,[role=img].ic,.idle .ic,.seal .ic,.toy .ic,.coin .ic{margin:0}
+/* type scale */
+h2{font-size:1.6rem;line-height:1.35;font-weight:800;letter-spacing:.01em;gap:12px;margin-bottom:18px}
+@media(min-width:1024px){h2{font-size:1.95rem}}
+h2 em{width:auto;height:auto;min-width:2.9em;padding:.42em .7em;border-radius:999px;font-size:.62em;font-weight:800;line-height:1;letter-spacing:.04em;font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+main p{line-height:1.85}
+.stg h3{font-size:.78rem;letter-spacing:.08em;font-weight:700;margin:20px 0 6px}
+.terms dt{font-size:.92rem;font-weight:700}
+.terms dd{font-size:.84rem;line-height:1.65;color:var(--mut)}
+.why{font-size:.95rem}
+details.more .cap,.cap{font-size:.78rem}
+.res{font-size:1.2rem;font-weight:800;letter-spacing:.01em}
+#hH,#hR,#hS,#hY,#hN{font-size:1.3em;font-weight:800;letter-spacing:.01em}
+.lead1{font-size:1.12rem}
+.terms dt,.terms dd{font-size:inherit;line-height:inherit}.terms div{font-size:.84rem}
+h2{font-size:1.45rem;text-wrap:balance;word-break:auto-phrase}
+@media(min-width:600px){h2{font-size:1.7rem}}
+@media(min-width:1024px){h2{font-size:1.95rem}}
+h2 em{font-size:.66em}
+#hY{font-size:1em;min-width:0}#hH{min-width:0}
+#hH{margin-right:.5em}
