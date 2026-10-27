@@ -46,15 +46,15 @@ const showIn=()=>{const t=inp.value,ch=[...t],[s,e,n]=prevT==null?[0,0,0]:rng(pr
 $('hwGo').innerHTML='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="3"/><path d="M20 17C18 9 22 4 27 6M23 20c8-2 13 2 11 7M20 23c2 8-2 13-7 11M17 20C9 22 4 18 6 13"/></svg><span>'+L('ハッシュする','Hash it')+'</span>';
 async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;const n=showIn();$('hwGo').classList.remove('pls');
 const M=$('hwM'),fl=$('hwFl');if(anim&&!RM){const cs=ch.slice(0,14);fl.innerHTML=cs.map((c,i)=>`<span style="--d:${i*25}ms">${esc(c)}</span>`).join('');
-const mx=$('hwMx');let fr='';cs.forEach((c,i)=>{for(const k of [0,1,2]){const a=Math.random()*360,r=34+Math.random()*46;fr+=`<span class="p${k}" style="--a:${a}deg;--r:${r}px;--d:${240+i*14}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<28;i++)fr+=`<i style="--a:${Math.random()*360}deg;--r:${30+Math.random()*60}px;--d:${260+i*12}ms;--s:${i%2?1:-1}"></i>`;mx.innerHTML=fr;
-M.classList.remove('go');void M.offsetWidth;M.classList.add('go');window.__bz&&__bz([8,25,8,25,8,25,8]);await new Promise(r=>setTimeout(r,680));if(my!=seq)return}
+const mx=$('hwMx');let fr='';cs.forEach((c,i)=>{for(const k of [0,1,2]){const a=Math.random()*360,r=50+Math.random()*80;fr+=`<span class="p${k}" style="--a:${a}deg;--r:${r}px;--d:${240+i*14}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<48;i++)fr+=`<i style="--a:${Math.random()*360}deg;--r:${40+Math.random()*110}px;--d:${260+i*12}ms;--s:${i%2?1:-1}"></i>`;mx.innerHTML=fr;
+const G=$('hwGo'),W=$('hw');[M,G,W].forEach(e=>e.classList.remove('go','boom'));void M.offsetWidth;M.classList.add('go');G.classList.add('go');W.classList.add('boom');window.__bz&&__bz([30,20,12,20,12,20,12,20,40]);await new Promise(r=>setTimeout(r,680));if(my!=seq)return}
 const same=prevH&&prevH!=h;$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
-$('hwG1').innerHTML=grid(h);const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
+$('hwG1').innerHTML=grid(h);if(anim&&!RM)$('hwG1').querySelectorAll('i').forEach((e,i)=>{e.style.animationDelay=(i*9)+'ms';e.classList.add("hpp")});const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
 if(anim&&!RM){const t0=performance.now(),X='0123456789abcdef';await new Promise(res=>{const f=()=>{if(my!=seq)return res();const k=Math.floor((performance.now()-t0)/380*64);if(k>=64){H1.innerHTML=fin;return res()}H1.innerHTML=[...h].map((c,i)=>i<k?c:`<i class="rn">${X[Math.random()*16|0]}</i>`).join('');requestAnimationFrame(f)};f()});if(my!=seq)return}else H1.innerHTML=fin;
 const O=document.querySelector('.hwO');O.classList.toggle('one',!prevH);const C=document.querySelector('.hwC.now');if(anim&&!RM){C.classList.remove('st');void C.offsetWidth;C.classList.add('st')}
 let d=0;if(prevH)for(let i=0;i<64;i++)if(h[i]!=prevH[i])d++;
 $('hwR').innerHTML=!prevH||prevH==h?'':(n<=1?L(`1文字変えただけで、指紋がまるごと変わる <b>${d}/64</b>`,`Change 1 character and the whole fingerprint changes <b>${d}/64</b>`):L(`${n}文字の変更で、指紋がまるごと変わる <b>${d}/64</b>`,`${n} characters changed, the whole fingerprint changes <b>${d}/64</b>`));
-if(anim&&prevH!=h){bz([20,40,30]);bu(C,18);bu(M,14)}if(prevH!=h){prevT=t;prevH=h}}
+if(anim&&prevH!=h){bz([40,30,20,30,60]);bu(C,26);bu(M,22)}if(prevH!=h){prevT=t;prevH=h}}
 inp.oninput=showIn;$('hwGo').onclick=()=>run(true);
 $('hwP').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(inp.value==b.dataset.p)return;inp.value=b.dataset.p;showIn();window.__bz&&__bz(8)};
 prevT=null;run(false)})();
@@ -115,12 +115,17 @@ q('#sgFk').onclick=async()=>{if(busy)return;busy=true;amount=1;amt.textContent='
 q('#sgRe').onclick=reset;reset()})();
 // 5 ledger
 const ppl=[['アリス','👩'],['ボブ','👨'],['キャロル','👧'],['デイブ','🧔']];let bal={アリス:5,ボブ:2,キャロル:0,デイブ:1};
-let tF=-1,tA=1;const tHint=()=>{$('tHint').textContent=tF<0?L('送る人をタップ','Tap who sends'):L(`${nm(ppl[tF][0])}から → 受け取る人をタップ`,`From ${nm(ppl[tF][0])} → tap who receives`)};
-function rp(){$('people').innerHTML=ppl.map(([n,e],i)=>`<button type="button" class="p${i==tF?' fr':''}" data-i="${i}">${e}<div>${nm(n)}<br><b>${bal[n]}</b> ${L('コイン','coins')}</div></button>`).join('');tHint()}
-$('tAmtC').innerHTML=[1,3,5].map(a=>`<button type="button" class="ghost${a==tA?' on':''}" data-a="${a}">${a} ${L('コイン','coins')}</button>`).join('');
-$('tAmtC').onclick=e=>{const b=e.target.closest('button');if(!b)return;tA=+b.dataset.a;$('tAmtC').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==b));window.__bz&&__bz(8)};
-const fly=(f,t,a)=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const P=$('people').children,A=P[f].getBoundingClientRect(),B=P[t].getBoundingClientRect(),c=document.createElement('div');c.className='tFly';c.textContent=a;c.style.left=A.left+A.width/2+'px';c.style.top=A.top+A.height/2+'px';document.body.appendChild(c);requestAnimationFrame(()=>{c.style.transform=`translate(${B.left-A.left}px,${B.top-A.top}px)`});setTimeout(()=>c.remove(),560)};
-$('people').onclick=e=>{const b=e.target.closest('button.p');if(!b)return;const i=+b.dataset.i;window.__bz&&__bz(8);if(tF<0||tF==i){tF=tF==i?-1:i;rp();return}const f=tF,ok=bal[ppl[f][0]]>=tA;tF=-1;if(ok)fly(f,i,tA);setTimeout(()=>{tx(ppl[f][0],ppl[i][0],tA);const P=$('people').children;if(ok){P[i].classList.add('got');window.__bu&&__bu(P[i],10);window.__bz&&__bz(15)}else window.__bz&&__bz(60)},ok?480:0)};
+let tF=-1,tT=-1,tA=1;const tHint=()=>{$('tHint').textContent=tF<0?L('左で送る人を選ぶ','Pick who sends (left)'):tT<0?L('右で受け取る人を選ぶ','Pick who receives (right)'):L(`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA}コイン`,`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA} coin${tA>1?'s':''}`);$('tSend').disabled=tF<0||tT<0;$('tSend').classList.toggle('pls',tF>=0&&tT>=0)};
+{const P=$('people');P.className='people tx2';P.innerHTML=`<div class="tCol" id="tL"></div><div class="tMid"><svg class="tArr" viewBox="0 0 40 24" aria-hidden="true"><path d="M4 12h30M26 5l8 7-8 7"/></svg><div id="tMidA"></div><button type="button" id="tSend">${L('送る','Send')}</button></div><div class="tCol" id="tR"></div><svg class="tLn" id="tLn" aria-hidden="true"><line id="tLnL"/></svg>`;$('tMidA').appendChild($('tAmtC'))}
+const row=(s,sel,dis)=>ppl.map(([n,e],i)=>`<button type="button" class="p${i==sel?' fr':''}" data-s="${s}" data-i="${i}"${i==dis?' disabled':''}><span class="pe">${e}</span><span class="pn">${nm(n)}</span><b>${bal[n]}</b></button>`).join('');
+function line(){const l=$('tLnL'),P=$('people');if(tF<0||tT<0){l.style.opacity=0;return}const R=P.getBoundingClientRect(),a=$('tL').children[tF+1].getBoundingClientRect(),b=$('tR').children[tT+1].getBoundingClientRect();l.setAttribute('x1',a.right-R.left);l.setAttribute('y1',a.top+a.height/2-R.top);l.setAttribute('x2',b.left-R.left);l.setAttribute('y2',b.top+b.height/2-R.top);l.style.opacity=1}
+function rp(){$('tL').innerHTML=`<small>${L('送る人','Sender')}</small>`+row('L',tF,tT);$('tR').innerHTML=`<small>${L('受け取る人','Receiver')}</small>`+row('R',tT,tF);tHint();line()}
+addEventListener('resize',()=>line());
+$('tAmtC').innerHTML=[1,3,5].map(a=>`<button type="button" class="ghost${a==tA?' on':''}" data-a="${a}">${a} ${L('コイン',a>1?'coins':'coin')}</button>`).join('');
+$('tAmtC').onclick=e=>{const b=e.target.closest('button');if(!b)return;tA=+b.dataset.a;$('tAmtC').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==b));window.__bz&&__bz(8);tHint()};
+const fly=(A,B,a)=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;A=A.getBoundingClientRect();B=B.getBoundingClientRect();const c=document.createElement('div');c.className='tFly';c.textContent=a;c.style.left=A.left+A.width/2+'px';c.style.top=A.top+A.height/2+'px';document.body.appendChild(c);requestAnimationFrame(()=>{c.style.transform=`translate(${B.left-A.left}px,${B.top-A.top}px)`});setTimeout(()=>c.remove(),560)};
+$('people').onclick=e=>{const b=e.target.closest('button.p');if(!b||b.disabled)return;const i=+b.dataset.i;window.__bz&&__bz(8);if(b.dataset.s=='L')tF=tF==i?-1:i;else tT=tT==i?-1:i;rp()};
+$('tSend').onclick=()=>{if(tF<0||tT<0)return;const f=tF,t=tT,ok=bal[ppl[f][0]]>=tA,A=$('tL').children[f+1],B=$('tR').children[t+1];if(ok)fly(A,B,tA);setTimeout(()=>{tT=-1;tx(ppl[f][0],ppl[t][0],tA);rp();const r=$('tR').children[t+1],l=$('tL').children[f+1];if(ok){r.classList.add('got');window.__bu&&__bu(r,10);window.__bz&&__bz(15)}else{l.classList.add('ng');window.__bz&&__bz(60)}},ok?480:0)};
 function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=L(`❌ ${f}→${t} ${a}: おかしな取引です`,`❌ ${nm(f)}→${nm(t)} ${a}: invalid transaction`)}else if(bal[f]<a){li.className='ng';li.textContent=L(`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持っていません。却下!`,`❌ ${nm(f)}→${nm(t)} ${a} coins: the ledger shows ${nm(f)} has only ${bal[f]}. Rejected!`)}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=L(`✅ ${f}→${t} ${a}コイン: みんなで確認してOK。台帳に記録しました`,`✅ ${nm(f)}→${nm(t)} ${a} coins: verified by everyone and recorded`)}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]&&document.querySelectorAll(".p")[ppl.findIndex(p=>p[0]==f)].classList.add('bump')}
 $('tDouble').onclick=()=>{const a=bal['アリス'];if(!a){tx('アリス','ボブ',1);return}tx('アリス','ボブ',a);tx('アリス','キャロル',a)};rp();
 // 6 halving
@@ -242,7 +247,7 @@ const build=()=>{S.innerHTML=`<div class="fsn">
 <div class="fo fp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
 <div class="fo fkey" id="fK"><small>${L('秘密鍵','Private key')}</small><code id="fKc"></code></div>
 <div class="fo fpub" id="fPub"><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span>${L('アドレス','Address')}</span><small>${L('一方通行','one-way')}</small></div>
-${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:50%"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
+${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:54%"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
 <div class="fo fmp" id="fMp"><small>${L('メンプール','Mempool')}</small><i></i><i></i><i></i></div>
 <div class="fo fch fc1" id="fC1">#1</div><div class="fo fch fc2" id="fC2">#2</div>
 <div class="fo fblk" id="fBk"><small id="fBn">${L('新しいブロック','New block')}</small><code id="fNn"></code></div>
@@ -252,19 +257,19 @@ ${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:50%"><svg
 const P=(id,x,y,o=1,s=1)=>{const e=$(id);if(x!=null){e.style.left=x+'%';e.style.top=y+'%'}e.style.opacity=o;e.style.transform=`translate(-50%,-50%) scale(${s})`};
 const TX=L('アリス → ボブ 0.01 BTC','Alice → Bob 0.01 BTC');
 const pose=k=>{if(!S.querySelector('.fsn'))build();const F=S.firstChild;F.className='fsn s'+k;
-P('fA',12,14);P('fB',88,14);$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
-P('fK',12,36,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
-P('fPub',55,36,k==1?1:0);
-P('fS',k<=3?50:k==4?50:k==5?20:k==6?41:87,k<=3?16:k==4?50:k==5?80:66,k>=2?(k>=7?0:1):0,k>=6?.6:1);
+P('fA',18,17);P('fB',82,17);$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
+P('fK',15,33,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
+P('fPub',62,33,k==1?1:0);
+P('fS',k<=3?50:k==4?50:k==5?20:k==6?41:87,k<=3?20:k==4?54:k==5?83:66,k>=2?(k>=7?0:1):0,k>=6?.6:1);
 const st=$('fSt');if(k==2&&!RM){let n=0;st.textContent='';const ty=()=>{st.textContent=TX.slice(0,++n);if(n<TX.length)at(60,ty)};at(400,ty)}else st.textContent=TX;
 $('fSe').classList.toggle('on',k>=3);
 NX.forEach((x,i)=>{const e=$('fN'+i);e.classList.remove('ok','led');if(k>=4){if(k==4&&!RM)at(700+Math.abs(i-2.5)*350,()=>{e.classList.add('ok');window.__bz&&__bz(6)});else e.classList.add('ok')}if(k>=8){if(RM)e.classList.add('led');else at(1800+i*200,()=>e.classList.add('led'))}});
-P('fMp',20,80,k==5?1:k>5?.25:0);
-P('fC1',58,80,k>=6?1:0);P('fC2',72,80,k>=6?1:0);
-P('fBk',k>=7?87:41,80,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
+P('fMp',17,84,k==5?1:k>5?.25:0);
+P('fC1',50,85,k>=6?1:0);P('fC2',63,85,k>=6?1:0);
+P('fBk',k>=7?83:39,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
 const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
 $('fBn').textContent=k>=7?'#3':L('新しいブロック','New block');
-const cf=$('fCf');P('fCf',72,67,k>=8?1:0);if(k>=8){let n=0;const up=()=>{cf.textContent=L(`承認 ${n}/6`,`${n}/6 confirmations`);cf.classList.toggle('ok',n>=6);if(n++<6&&!RM)at(500,up);else if(n<=6){n=6;up()}};up();at(RM?0:900,()=>{const b=$('fB');b.classList.remove('got');void b.offsetWidth;b.classList.add('got');window.__bu&&__bu(b,12);window.__bz&&__bz(20)})}};
+const cf=$('fCf');P('fCf',63,70,k>=8?1:0);if(k>=8){let n=0;const up=()=>{cf.textContent=L(`承認 ${n}/6`,`${n}/6 confirmations`);cf.classList.toggle('ok',n>=6);if(n++<6&&!RM)at(500,up);else if(n<=6){n=6;up()}};up();at(RM?0:900,()=>{const b=$('fB');b.classList.remove('got');void b.offsetWidth;b.classList.add('got');window.__bu&&__bu(b,12);window.__bz&&__bz(20)})}};
 const set=n=>{clr();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
 if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
 const l=L2[k];pose(k);rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
