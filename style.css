@@ -227,3 +227,5 @@ nav .ph{all:unset;box-sizing:border-box;cursor:pointer}nav .ph:focus-visible,nav
 @media(min-width:760px){.games{grid-template-columns:repeat(3,1fr)}.games .rm0{flex-direction:column;align-items:flex-start}}
 .stg .road{grid-template-columns:repeat(3,minmax(0,1fr))}.stg .rm0{padding:9px 10px}.stg h3 em+em,.stg h3 em{margin-right:2px}
 @media(max-width:759px){.games .rm0{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center}.games .rm0 span{grid-row:span 2}.stg .rm0 small{font-size:.7rem}}
+
+.mark .tp{animation:press 2.8s ease-in-out infinite}.mark .rg{animation:ring 2.8s ease-out infinite;transform-origin:50px 52px;opacity:0}@keyframes press{0%,38%,62%,100%{transform:none}46%,52%{transform:translateY(7px)}}@keyframes ring{0%,44%{transform:scale(.8);opacity:0}52%{opacity:.6}90%,100%{transform:scale(1.08);opacity:0}}@media(prefers-reduced-motion:reduce){.mark .rg{opacity:.35}}
