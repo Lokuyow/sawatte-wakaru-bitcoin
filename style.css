@@ -542,8 +542,8 @@ h2 em{font-size:.66em}
 .bed{font-size:.8rem;padding:5px 12px;min-height:0;margin:0}
 @media (prefers-reduced-motion:reduce){.bmx.go svg,.bc.chg{animation:none}}
 /* vivid light accent */
-@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:#f7931a;--btnh:#e8850c;--onb:#fff}}
-:root[data-theme=light]{--btn:#f7931a;--btnh:#e8850c;--onb:#fff}
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:#C4650A;--btnh:#B85F0A;--onb:#fff}}
+:root[data-theme=light]{--btn:#C4650A;--btnh:#B85F0A;--onb:#fff}
 .bc{white-space:normal;overflow:visible;font-size:.85rem;line-height:1.35}
 /* score card */
 .scard{margin:12px auto 4px;max-width:340px;text-align:center;border:1.5px solid var(--line2);border-radius:20px;padding:18px 16px;background:var(--card);animation:hwPop .45s}
@@ -653,3 +653,5 @@ h2 em{font-size:.66em}
 .tFoot .tHint{margin:0;font-size:.85rem;min-height:1.3em;text-align:center}
 .tFoot #tDouble{font-size:.8rem;padding:6px 14px;min-height:0;margin:0}
 .tFoot #tDouble svg{width:1.1em;height:1.1em}
+button:not(.ghost):not(:disabled):active{filter:brightness(.92)}
+button.on,button.ghost.on{background:var(--btn)}
