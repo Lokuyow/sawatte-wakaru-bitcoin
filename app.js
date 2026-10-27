@@ -83,23 +83,50 @@ function drawC(h,cur){const W=320,H=150,P=24,mx=7e6,x=v=>P+v/mx*(W-P-6),y=v=>H-1
 $('hCurve').innerHTML=`<line x1="${P}" x2="${W-6}" y1="${y(21e6)}" y2="${y(21e6)}" class="cap"/><text x="${W-6}" y="${y(21e6)-4}" text-anchor="end">2100万</text><path d="${d}" class="ln0"/><path d="${d.split('L').filter((_,i)=>i*50000<=h).join('L')}" class="ln1"/><circle cx="${x(h)}" cy="${y(cur)}" r="5"/>${[2009,2050,2100,2140].map(yr=>`<text x="${x((yr-2009)*52596)}" y="${H-4}" text-anchor="middle">${yr}</text>`).join('')}`}
 $('hgt').oninput=hv;hv();
 let hT;$('hPlay').onclick=()=>{clearInterval(hT);const g=$('hgt');if(+g.value>=+g.max)g.value=0;hT=setInterval(()=>{g.value=+g.value+40000;hv();if(+g.value>=+g.max)clearInterval(hT)},30)};
-// bonus game: spot the fake transactions
-(()=>{const N=['アリス','ボブ','キャロル'],E={アリス:'👩',ボブ:'👨',キャロル:'👧'};let B,q,i,score,t,tl,spent,res;
-const draw=()=>$('gBal').innerHTML=N.map(n=>`<div><span>${E[n]}</span>${nm(n)}<b>${B[n]}</b></div>`).join('');
-function mk(){const r=Math.random(),f=N[Math.floor(Math.random()*3)],to=N.filter(x=>x!=f)[Math.floor(Math.random()*2)];
-if(r<.45&&B[f]>0)return{f,to,a:1+Math.floor(Math.random()*B[f]),sig:true,ok:true};
-if(r<.65)return{f,to,a:B[f]+1+Math.floor(Math.random()*3),sig:true,ok:false,why:L(`${f}は${B[f]}コインしか持っていません`,`${nm(f)} has only ${B[f]} coins`)};
-if(r<.82&&spent)return{...spent,to:N.find(x=>x!=spent.f&&x!=spent.to),sig:true,ok:false,dbl:true,why:L('さっき使ったのと同じコインです(二重払い)','This coin was already spent (double spend)')};
-const a=Math.max(1,Math.min(B[f],2));return{f,to,a,sig:false,ok:false,why:L('署名が公開鍵と一致しません','The signature doesn’t match the public key')}}
-function show(){if(i>=8)return end();q=mk();tl=8;$('gStage').innerHTML=`<div class="gq">${i+1} / 8 ${L('・','·')} ${L('スコア','Score')} ${score}</div><div class="tx"><div class="tx-m">${E[q.f]} ${nm(q.f)} → ${E[q.to]} ${nm(q.to)}</div><div class="tx-a">${q.a} ${L('コイン','coins')}</div><div class="tx-s">${L('署名チェック:','Signature:')} ${q.sig?'<span class="g">✓ 一致</span>':'<span class="r">✗ 不一致</span>'}${q.dbl?'<br><small>'+L('使うコイン: さっきと同じ「コイン#'+q.id+'」','Coin used: the same “coin #'+q.id+'” as before')+'</small>':'<br><small>'+L('使うコイン: 新しい「コイン#'+(q.id=100+i)+'」','Coin used: new “coin #'+(q.id=100+i)+'”')+'</small>'}</div><div class="timer"><div id="gT"></div></div></div><div class="gbtn"><button id="gNo" class="no">✗ 却下</button><button id="gYes" class="yes">✓ 承認</button></div><div id="gMsg" class="gmsg"></div>`;
-$('gYes').onclick=()=>ans(true);$('gNo').onclick=()=>ans(false);clearInterval(t);t=setInterval(()=>{tl-=.1;const g=$('gT');if(g)g.style.width=tl/8*100+'%';if(tl<=0)ans(null)},100)}
-function ans(y){clearInterval(t);const right=y===q.ok;if(right)score++;if(q.ok){B[q.f]-=q.a;B[q.to]+=q.a;spent={...q}}draw();
-res.push(right);const m=$('gMsg');$('gYes').disabled=$('gNo').disabled=true;m.className='gmsg '+(right?'g':'r');m.textContent=(y===null?L('⏰ 時間切れ! ','⏰ Time’s up! '):right?L('⭕ せいかい! ','⭕ Correct! '):L('❌ ざんねん! ','❌ Wrong! '))+(q.ok?L('正しい取引です。台帳に記録しました。','It was valid. Recorded in the ledger.'):q.why+L('。','.'));
-document.querySelector('.tx').classList.add(right?'pass':'shake');i++;setTimeout(show,1500)}
-function end(){$('gStage').innerHTML='';const e=$('gEnd');e.hidden=false;const rank=EN?(score==8?'Legendary node':score>=6?'Reliable node':score>=4?'Apprentice node':'Keep practicing'):score==8?'伝説のノード':score>=6?'頼れるノード':score>=4?'見習いノード':'まだまだこれから';
-if(score>=6)confetti();e.innerHTML=`<div class="gscore">${score}<small> / 8</small></div><p class="c"><b>${rank}</b></p><div class="note"><b>このゲームでわかったこと</b><br>ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。</div><div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(L(`「ニセ取引を見破れ!」で ${score}/8 点、${rank}でした ₿ #さわってわかるビットコイン`,`I scored ${score}/8 in “Spot the fake transactions!” — ${rank} ₿`))}&url=${encodeURIComponent(U)}">${L('𝕏 でスコアをシェア','Share score on 𝕏')}</a><button id="gAgain" class="ghost">もう一回あそぶ</button></div>`;$('gAgain').onclick=start}
-function start(){B={アリス:5,ボブ:3,キャロル:2};i=0;score=0;spent=null;res=[];$('gEnd').hidden=true;draw();show()}
-B={アリス:5,ボブ:3,キャロル:2};draw();$('gStart').onclick=start})();
+// bonus game: spot the fake transactions (3 levels, one new rule per level)
+(()=>{const N=['アリス','ボブ','キャロル'],E={アリス:'👩',ボブ:'👨',キャロル:'👧'},SL={アリス:'🌸',ボブ:'⭐',キャロル:'🍀'},FAKE=['👾','🐙','🦝'],PER=4,TOT=12;
+const LV=[{i:'💰',t:L('残高チェック','Balance check'),r:L('持っている以上のコインは送れません。財布の中身と金額をくらべよう!','You can’t send more coins than you have. Compare the wallet with the amount!'),s:10},
+{i:'🖋️',t:L('ハンコチェック','Seal check'),r:L('取引には本人のハンコ(本物では「署名」)が必要。上の見本とちがうハンコはニセモノ!','Every transaction needs the owner’s seal (a “signature” in real Bitcoin). A seal that doesn’t match the sample is fake!'),s:9},
+{i:'🪙',t:L('二重払いチェック','Double-spend check'),r:L('コインには番号があります。もう使ったコイン(✕印)をもう一度使うのはズル!','Coins have numbers. Using a coin that was already spent (marked ✕) again is cheating!'),s:9}];
+const MO=[L('ランチ代','lunch'),L('本代','books'),L('おこづかい','allowance'),L('誕生日プレゼント','birthday gift'),L('割り勘','split bill'),L('ぜったい本物です','100% real, trust me'),L('いそいで!!','hurry!!'),L('ジュース代','juice')];
+let W,S,lv,k,q,score,combo,best,ok,hist,t,tl,busy,started=false;const R=a=>a[Math.floor(Math.random()*a.length)],sh=a=>a.sort(()=>Math.random()-.5);
+const chip=(c,x)=>`<i class="cn${x?' used':''}">${lv>=2?c:''}</i>`;
+function draw(){$('gBal').innerHTML=N.map(n=>`<div class="gw${q&&q.f==n?' on':''}"><div class="gwh"><span>${E[n]}</span>${nm(n)}${started&&lv>=1?`<span class="hk mini" title="${L('ハンコ見本','seal sample')}">${SL[n]}</span>`:''}<b>${W[n].length}</b></div><div class="cns">${W[n].map(c=>chip(c)).join('')}${started&&lv>=2?S[n].map(c=>chip(c,1)).join(''):''}</div></div>`).join('')}
+function mk(bad){const has=N.filter(n=>W[n].length);let pool=bad=='dbl'?N.filter(n=>S[n].length):has;if(!pool.length){bad=null;pool=has}const f=R(pool),to=R(N.filter(x=>x!=f)),b=W[f].length;
+let c={f,to,seal:SL[f],memo:R(MO),bad};
+if(bad=='bal'){c.a=b+1+Math.floor(Math.random()*2);c.coins=[...W[f],...Array.from({length:c.a-b},()=>'?')];c.why=L(`${f}は${b}コインしか持っていないのに、${c.a}コイン送ろうとしています`,`${nm(f)} has only ${b} coins but tries to send ${c.a}`)}
+else if(bad=='seal'){c.a=1+Math.floor(Math.random()*Math.min(b,2));c.coins=W[f].slice(0,c.a);c.seal=R(Math.random()<.5?FAKE:N.filter(x=>x!=f).map(x=>SL[x]));c.why=L(`ハンコが${f}の見本(${SL[f]})とちがいます。ニセモノです`,`The seal doesn’t match ${nm(f)}’s sample (${SL[f]}). It’s a fake`)}
+else if(bad=='dbl'){const u=R(S[f]);c.coins=W[f].length?[W[f][0],u]:[u];c.a=c.coins.length;c.why=L(`コイン${u}は${f}がもう使ったコインです(二重払い)`,`Coin ${u} was already spent by ${nm(f)} (double spend)`)}
+else{c.a=1+Math.floor(Math.random()*Math.min(b,3));c.coins=W[f].slice(0,c.a);c.why=L('残高もハンコもコインもOK。台帳に記録しました','Balance, seal and coins all check out. Recorded in the ledger')}
+return c}
+function intro(){clearInterval(t);const v=LV[lv];q=null;draw();$('gStage').innerHTML=`<div class="glv"><div class="glv-n">${L('レベル','Level')} ${lv+1} / 3</div><div class="glv-i">${v.i}</div><h3>${v.t}</h3><p>${v.r}</p>${lv?`<p class="glv-s">${L('前のレベルのルールも続きます。','Earlier rules still apply.')}</p>`:''}<button id="gGo">${L('スタート ▶','Start ▶')}</button></div>`;$('gGo').onclick=()=>{plan();next()};$('gGo').focus()}
+let P;function plan(){const ng=[['bal','bal'],['seal','seal','bal'],['dbl','dbl','seal']][lv];P=sh([...ng,...Array(PER-ng.length).fill(null)]);k=0}
+function next(){if(k>=PER){lv++;return lv>2?end():intro()}q=mk(P[k]);busy=false;draw();const v=LV[lv];tl=v.s;
+const amt=lv>=2?`<div class="tx-c">${q.coins.map(c=>`<i class="cn big">${c}</i>`).join('')}</div>`:`<div class="tx-a">🪙 × ${q.a}</div>`;
+$('gStage').innerHTML=`<div class="ghud"><span>${v.i} Lv${lv+1}</span><span>${k+1} / ${PER}</span><span id="gCombo" class="gcombo">${combo>1?'🔥'+combo:''}</span><span class="gpt">${score}<small>pt</small></span></div><div class="timer"><div id="gT"></div></div>
+<div class="tx2" id="gCard"><div class="tx-who">${E[q.f]} ${nm(q.f)} <span class="arr">→</span> ${E[q.to]} ${nm(q.to)}</div>${amt}<div class="tx-memo">📝 ${q.memo}</div>${lv>=1?`<div class="tx-seal">${L('ハンコ','Seal')} <span class="hk">${q.seal}</span></div>`:''}<div id="gFx" class="gfx"></div></div>
+<div class="gbtn"><button id="gNo" class="no">❌ ${L('ニセモノ','Fake')}</button><button id="gYes" class="yes">⭕ ${L('OK','OK')}</button></div><div id="gMsg" class="gmsg"><span class="mut">${L('← → キーやスワイプでも答えられます','You can also use ← → keys or swipe')}</span></div>`;
+$('gYes').onclick=()=>ans(true);$('gNo').onclick=()=>ans(false);swipe($('gCard'));
+t=setInterval(()=>{tl-=.1;const g=$('gT');if(g)g.style.width=Math.max(0,tl/v.s*100)+'%';if(tl<=0)ans(null)},100)}
+function swipe(el){let x0=null;el.onpointerdown=e=>{x0=e.clientX;el.setPointerCapture(e.pointerId)};el.onpointermove=e=>{if(x0!=null&&!busy)el.style.transform=`translateX(${(e.clientX-x0)*.6}px) rotate(${(e.clientX-x0)/40}deg)`};
+el.onpointerup=el.onpointercancel=e=>{if(x0==null)return;const d=e.clientX-x0;x0=null;el.style.transform='';if(Math.abs(d)>70)ans(d>0)}}
+function ans(y){if(busy)return;busy=true;clearInterval(t);const valid=!q.bad,right=y===valid;
+if(right){combo++;best=Math.max(best,combo);ok++;score+=100+(combo-1)*20}else combo=0;hist[lv].push(right);
+if(valid){const mv=W[q.f].splice(0,q.a);W[q.to].push(...mv);S[q.f].push(...mv)}
+const fx=$('gFx');fx.textContent=valid?L('承認','OK'):L('却下','FAKE');fx.className='gfx on '+(valid?'g':'r');
+$('gCard').classList.add(right?'pass':'shake','done');$('gYes').disabled=$('gNo').disabled=true;draw();
+const c=$('gCombo');if(c){c.textContent=combo>1?'🔥'+combo:'';if(combo>1)c.classList.add('pop')}
+const m=$('gMsg');m.className='gmsg '+(right?'g':'r');m.textContent=(y===null?L('⏰ 時間切れ! ','⏰ Time’s up! '):right?(combo>2?L(`⭕ ${combo}連続! `,`⭕ ${combo} in a row! `):L('⭕ せいかい! ','⭕ Correct! ')):L('😵 おしい! ','😵 Oops! '))+q.why+L('。','.');
+k++;setTimeout(next,right?1300:2400)}
+function end(){started=false;q=null;draw();$('gStage').innerHTML='';const e=$('gEnd');e.hidden=false;
+const rank=ok>=11?L('🏆 伝説のノード','🏆 Legendary node'):ok>=9?L('🛡️ 頼れるノード','🛡️ Reliable node'):ok>=6?L('🔰 見習いノード','🔰 Apprentice node'):L('🙈 だまされがちノード','🙈 Easily-fooled node');
+if(ok>=9)confetti();e.innerHTML=`<div class="gscore">${score}<small> pt</small></div><p class="c"><b>${rank}</b></p><div class="gsum"><div><b>${ok}</b><small>/ ${TOT}</small><span>${L('正解','correct')}</span></div><div><b>🔥${best}</b><span>${L('最大コンボ','best combo')}</span></div></div>
+<div class="glvs">${LV.map((v,j)=>`<div><span>${v.i} ${v.t}</span><span>${hist[j].map(x=>x?'⭕':'❌').join('')}</span></div>`).join('')}</div>
+<div class="note"><b>${L('このゲームでわかったこと','What this game showed')}</b><br>${L('ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。','In Bitcoin, nodes all over the world check every transaction just like you did: “Is the balance enough?”, “Is the signature the owner’s?”, “Is the same coin being spent twice?” A transaction that fails even one check never gets into a block, no matter who sent it.')}</div>
+<div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(L(`「ニセ取引を見破れ!」で ${score}点(${ok}/${TOT}問正解)、${rank}でした ₿ #さわってわかるビットコイン`,`I scored ${score} pts (${ok}/${TOT}) in “Spot the fake transactions!” — ${rank} ₿`))}&url=${encodeURIComponent(U)}">${L('𝕏 でスコアをシェア','Share score on 𝕏')}</a><button id="gAgain" class="ghost">${L('もう一回あそぶ','Play again')}</button></div>`;$('gAgain').onclick=start}
+function start(){W={アリス:[1,2,3,4,5],ボブ:[6,7,8],キャロル:[9,10]};S={アリス:[],ボブ:[],キャロル:[]};lv=0;score=0;combo=0;best=0;ok=0;hist=[[],[],[]];started=true;$('gEnd').hidden=true;intro()}
+document.addEventListener('keydown',e=>{if(!$('gYes')||busy||e.target.matches('input,textarea'))return;if(e.key=='ArrowRight'){e.preventDefault();ans(true)}if(e.key=='ArrowLeft'){e.preventDefault();ans(false)}});
+W={アリス:[1,2,3,4,5],ボブ:[6,7,8],キャロル:[9,10]};S={アリス:[],ボブ:[],キャロル:[]};lv=0;draw();$('gStart').onclick=start})();
 
 // entropy chapter
 (()=>{const g=$('eGrid');const flip=()=>{const r=crypto.getRandomValues(new Uint8Array(32));let bits='';r.forEach(x=>bits+=x.toString(2).padStart(8,'0'));g.innerHTML=[...bits].map((b,i)=>`<span class="b${b}" style="animation-delay:${i*3}ms">${b}</span>`).join('');g.classList.add('on')};
