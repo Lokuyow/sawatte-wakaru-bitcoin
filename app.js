@@ -216,3 +216,28 @@ document.querySelectorAll('.rm0').forEach(b=>b.onclick=()=>go(chs.findIndex(c=>c
 const u=()=>{const[e,r]=E[+s.value];$('hmE').textContent=e;$('hmR').style.width=r+'%';$('hmF').style.width=(100-r)+'%';$('hmR').textContent=r>12?L('報酬','Reward')+' '+r+'%':'';$('hmF').textContent=100-r>12?L('手数料','Fees')+' '+(100-r)+'%':''};s.oninput=u;u()}
 const y=$('ymY');if(y){const u=()=>{const v=Math.max(0,Math.min(1e7,+y.value||0)),sat=Math.round(v*10);$('ymS').textContent=sat.toLocaleString();$('ymB').textContent=(sat/1e8).toFixed(8);$('ymP').style.width=Math.max(.5,sat/1e8*100)+'%'};y.oninput=u;u()}
 const qo=$('qOut');if(qo){const st=f=>{$('qNow').className=f?'ghost':'on';$('qFut').className=f?'on':'ghost';qo.innerHTML=f?`<span class="qi">🛠️</span><b>${L('対策を準備中','Preparing countermeasures')}</b><small>${L('もし十分に強い量子コンピュータができたら、今の署名は弱くなるおそれがあります。そのため、量子に強い新しい署名への切りかえが話し合われています。','If a strong enough quantum computer is ever built, today’s signatures could become weaker. That’s why a switch to quantum-resistant signatures is being discussed.')}</small>`:`<span class="qi">🛡️</span><b>${L('鍵は安全','Keys are safe')}</b><small>${L('今の量子コンピュータは、ビットコインの鍵を破れる力にはまだほど遠いです。','Today’s quantum computers are still far from able to break Bitcoin keys.')}</small>`};$('qNow').onclick=()=>st(0);$('qFut').onclick=()=>st(1);st(0)}})();
+/* feel + toys */
+(()=>{const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,$=id=>document.getElementById(id);
+const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b||RM)return;const r=b.getBoundingClientRect(),s=document.createElement('i'),d=Math.max(r.width,r.height);s.className='rip';const cs=getComputedStyle(b);if(cs.position=='static')b.classList.add('rps');b.classList.add('rpo');s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(s);setTimeout(()=>{s.remove();if(!b.querySelector('.rip'))b.classList.remove('rpo','rps')},600)},{passive:true});
+function burst(el,n=10){if(RM||!el)return;const r=el.getBoundingClientRect();if(!r.width)return;const w=document.createElement('div');w.className='spark';w.style.cssText=`left:${r.left+r.width/2}px;top:${r.top+Math.min(r.height,60)/2}px`;for(let i=0;i<n;i++){const p=document.createElement('i'),a=Math.PI*2*i/n+Math.random()*.4,d=28+Math.random()*26;p.style.setProperty('--x',Math.cos(a)*d+'px');p.style.setProperty('--y',Math.sin(a)*d+'px');w.appendChild(p)}document.body.appendChild(w);setTimeout(()=>w.remove(),700)}
+window.__burst=burst;
+const seen=new WeakMap();
+new MutationObserver(ms=>{for(const m of ms){const t=m.target.nodeType==1?m.target:m.target.parentElement;if(!t)continue;const A=m.type=='attributes';
+ const res=A?null:t.closest('.res,.qres,#eRes');if(res){const x=res.textContent;if(seen.get(res)===x)continue;seen.set(res,x);if(/✅|⭕|正解|成功|Correct|Success|found|見つかった/.test(x)){burst(res);buzz(12);res.classList.remove('pp');void res.offsetWidth;res.classList.add('pp')}else if(/❌|失敗|Wrong|fail/i.test(x))buzz([8,40,8])}
+ const hs=A?null:t.closest('.hash,.hh,.pv,#mHash');if(hs&&!RM){hs.classList.remove('roll');void hs.offsetWidth;hs.classList.add('roll')}
+ if(A&&t.classList.contains('blk')&&(m.oldValue||'').includes('bad')!=t.classList.contains('bad')){const was=(m.oldValue||'').includes('bad'),is=t.classList.contains('bad');if(is&&!was){buzz(15);t.classList.remove('snap');void t.offsetWidth;t.classList.add('crack')}else if(was&&!is){t.classList.remove('crack');void t.offsetWidth;t.classList.add('snap')}}
+}}).observe(document.querySelector('main')||document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class'],attributeOldValue:true});
+document.addEventListener('input',e=>{const r=e.target;if(r.type!='range')return;const v=r.closest('label')?.querySelector('b');if(v&&!RM){v.classList.remove('vb');void v.offsetWidth;v.classList.add('vb')}});
+document.addEventListener('click',e=>{const q=e.target.closest('.quiz button,.opts button,[data-ok]');if(q&&q.classList.contains('ok'))burst(q,8)});
+/* halving pile */
+let hr=0;const draw=()=>{const n=Math.max(1,Math.round(32/2**hr));$('tCoins').innerHTML='<i></i>'.repeat(n);const r=50/2**hr;$('tR').textContent=r>=0.001?+r.toFixed(r<1?8:3)+'':r.toExponential(1);$('tN').textContent=hr?(EN_?`halving #${hr}`:`${hr}回目の半減`):L('タップで半減','Tap to halve')};
+const EN_=document.documentElement.lang=='en';
+if($('tPile')){draw();$('tPile').onclick=()=>{hr=hr>=32?0:hr+1;draw();const p=$('tPile');p.classList.remove('pp');void p.offsetWidth;p.classList.add('pp');buzz(10);if(hr==32)$('tN').textContent=L('最後はほぼ0に','Almost zero at the end')}}
+/* sats split */
+let sp=0;const U=[1,10,100,1e3,1e4,1e5,1e6,1e7,1e8];
+if($('tCoin')){$('tCoin').onclick=()=>{const c=$('tCoin');sp=sp>=8?0:sp+1;const n=U[sp];c.classList.remove('pp');void c.offsetWidth;c.classList.add('pp');buzz(8);
+ $('tS').textContent=sp==0?'1 BTC':(EN_&&n==1e8?'100,000,000 pieces × 1 sat':EN_?`${n.toLocaleString('en')} pieces × ${(1e8/n).toLocaleString('en')} sats`:`${n.toLocaleString('ja')}個 × ${(1e8/n).toLocaleString('ja')}サトシ`);
+ if(sp==8){$('tSn').textContent=L('もう分けられない!1BTC = 1億サトシ','Can’t split further! 1 BTC = 100 million sats');burst(c,14)}else $('tSn').textContent=L('コインをタップして分けてみよう','Tap the coin to split it');
+ c.style.setProperty('--n',Math.min(sp,6))}}
+})();
