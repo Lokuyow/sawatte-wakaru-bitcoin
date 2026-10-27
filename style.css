@@ -373,3 +373,12 @@ button.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px 
 button .ic,.btn .ic,a .ic,h2 .ic,h3 .ic,b .ic,summary .ic,.res .ic{color:inherit}
 .ic-ok,.ic-o{color:var(--ok)}.ic-x{color:var(--ng)}.ic-tip,.ic-trophy,.ic-flame,.ic-zap{color:var(--o)}
 .ic:only-child{margin:0}
+/* r-h: sizes, badges, hover contrast */
+.ic{width:1.25em;height:1.25em;vertical-align:-.25em}
+.ic[role=img]{width:1.6em;height:1.6em;vertical-align:-.4em}
+.idle .ic,.seal .ic,.toy .ic,.coin .ic{width:2em;height:2em}
+h2 em{display:inline-grid;place-items:center;line-height:1;font-variant-numeric:tabular-nums;text-box:trim-both cap alphabetic}@media(min-width:1024px){nav span b,.pt .ph b{display:inline-grid;place-items:center;line-height:1;font-variant-numeric:tabular-nums;text-box:trim-both cap alphabetic}}
+.seg button:not([aria-pressed=true]):hover,.ghost:hover,button.ghost:hover,.tools button:hover,.spd button:hover,.theme:hover{background:var(--soft);color:var(--ink)}
+.ic{stroke-width:2.1}.ic[role=img]{stroke-width:1.65}.idle .ic,.seal .ic,.toy .ic,.coin .ic{stroke-width:1.3}
+#ripL{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999;contain:strict}#ripL .rip{position:absolute}
+#ripL .rip{margin:0;border:0;background:currentColor;opacity:.18;transform:scale(0);animation:rip .6s ease-out forwards}
