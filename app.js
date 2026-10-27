@@ -149,7 +149,7 @@ let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-g
 // big-picture flow show: one stage, one scene per step
 (()=>{const f=$('flow');if(!f)return;const L2=[...f.children],S=$('fStage'),ti=$('fTitle'),de=$('fDesc'),mo=$('fMore'),pb=$('fPlay');let k=-1,T=null,tm=[];
 const t=x=>window.T?window.T(x):x,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const at=(ms,fn)=>tm.push(setTimeout(fn,RM?0:ms)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
+let SP=1.5;const rate=()=>{if(!RM)S.getAnimations({subtree:true}).forEach(x=>x.playbackRate=1/SP)};const at=(ms,fn)=>tm.push(setTimeout(()=>{fn();rate()},RM?0:ms*SP)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
 const hx=n=>[...Array(n)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
 const slip=(c='')=>`<div class="slip ${c}"><small>${t('取引')}</small><b>${t('アリス → ボブ')}</b><span class="amt">0.01 BTC</span></div>`;
 const sc=[
@@ -164,13 +164,13 @@ const sc=[
 ()=>{S.innerHTML=`<div class="sc9"><div class="stack" id="stk"></div><div class="side"><div class="conf">${t('承認')} <b id="cf">0</b>/6</div><div class="wal">👛 ${t('ボブの残高')}<b id="wb">0.000 BTC</b></div></div></div>`;let n=0;const st=()=>{n++;const d=document.createElement('div');d.className='sb'+(n==1?' me':'');d.textContent=n==1?t('あなたの取引入り'):'+1';$('stk').prepend(d);$('cf').textContent=n;if(n==1)$('wb').textContent='0.010 BTC';if(n==6)S.querySelector('.conf').classList.add('ok');else if(!RM)at(380,st)};if(RM)while(n<6)st();else at(300,st)}];
 const set=n=>{clr();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
 if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
-const l=L2[k];sc[k]();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
-if(k>=L2.length-1&&T){stop();at(3400,()=>{ti.textContent=t('✅ これで支払い完了!全部の章がつながりました');window.confetti&&confetti()})}};
-const D=[2800,3400,3400,3200,3200,3400,3800,3200];
-const stop=()=>{clearTimeout(T);T=null;pb.textContent=t('▶ 再生')};
-const tick=()=>{T=setTimeout(()=>{set(k+1);if(T)tick()},D[k]||3200)};
+const l=L2[k];sc[k]();rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
+if(k>=L2.length-1&&T){const d=dw();stop();bar(d);tm.push(setTimeout(()=>{ti.textContent=t('✅ これで支払い完了!全部の章がつながりました');window.confetti&&confetti()},d))}};
+const A=[.8,2.4,1.8,2.1,2.4,1.8,1.9,.9,2.3],dw=()=>RM?4000:Math.max(SP>1?6000:4500,A[k]*1000*SP+(SP>1?4500:3000)),fb=$('fBar'),bar=d=>{fb.style.transition='none';fb.style.width='0';if(d){fb.offsetWidth;fb.style.transition=`width ${d}ms linear`;fb.style.width='100%'}};
+const stop=()=>{clearTimeout(T);T=null;pb.textContent=t('▶ 再生');bar(0)};
+const tick=()=>{const d=dw();bar(d);T=setTimeout(()=>{set(k+1);if(T)tick()},d)};
 pb.onclick=()=>{if(T)return stop();if(k>=L2.length-1)k=-1;pb.textContent=t('⏸ 停止');T=1;set(k+1);if(T)tick()};
-$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};
+$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};document.querySelectorAll('#fSpd button').forEach(b=>b.onclick=()=>{SP=+b.dataset.s;document.querySelectorAll('#fSpd button').forEach(x=>x.setAttribute('aria-pressed',x==b));if(T){clearTimeout(T);tick()}});
 L2.forEach((l,i)=>{l.onclick=e=>{e.preventDefault();stop();set(i)}});set(-1)})();
 
 // intro
