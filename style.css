@@ -382,3 +382,11 @@ h2 em{display:inline-grid;place-items:center;line-height:1;font-variant-numeric:
 .ic{stroke-width:2.1}.ic[role=img]{stroke-width:1.65}.idle .ic,.seal .ic,.toy .ic,.coin .ic{stroke-width:1.3}
 #ripL{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999;contain:strict}#ripL .rip{position:absolute}
 #ripL .rip{margin:0;border:0;background:currentColor;opacity:.18;transform:scale(0);animation:rip .6s ease-out forwards}
+#hDot{transition:none!important;will-change:transform}#hClipR{transition:none!important}
+#hH,#hY,#hR,#hN,#hS{display:inline-block;font-variant-numeric:tabular-nums;text-align:left;transition:none!important;animation:none}
+#hH{min-width:9ch}#hY{min-width:4ch}#hR{min-width:10ch;transform-origin:right center}#hN{min-width:2ch}#hS{min-width:15ch}
+#hCurve{contain:layout paint}.hplaying #ripL{display:none}
+.curve .hMk{stroke:var(--o);stroke-width:1;stroke-dasharray:2 3;opacity:.45}
+.curve .hBadge rect{fill:var(--card);stroke:var(--o);stroke-width:1.5}
+.curve .hBadge text{font-size:11px;font-weight:700;fill:var(--ink)}
+#hR,#hN,#hS{display:inline;min-width:0}
