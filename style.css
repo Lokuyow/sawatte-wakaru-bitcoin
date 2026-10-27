@@ -1,4 +1,4 @@
-:root{--accent:#E8650A;--accent2:#F58A3C;--o:var(--accent);--od:#9a5200;--bg:#fffaf3;--ink:#2a2118;--mut:#7a6650;--line:#f1e2cc;--ok:#17804f;--ng:#d93b40;--r:16px;--f:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",system-ui,sans-serif;--m:ui-monospace,"SFMono-Regular",Menlo,monospace;--card:#fff;--soft:#fff3e2;--glow:#ffd9a6;--ngbg:#fff1f1;--okbg:#eefaf3;--okline:#a8dcc0;--ngline:#f3b0b2;--line2:#f3c48a;--btn:#b35500;--btnh:#9a4a00;--hdr:rgba(255,250,243,.92);color-scheme:light}}
+:root{--accent:#E07800;--accent2:#F59A2E;--o:var(--accent);--od:#9A5600;--bg:#fffaf3;--ink:#2a2118;--mut:#7a6650;--line:#f1e2cc;--ok:#17804f;--ng:#d93b40;--r:16px;--f:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",system-ui,sans-serif;--m:ui-monospace,"SFMono-Regular",Menlo,monospace;--card:#fff;--soft:#fff3e2;--glow:#ffd9a6;--ngbg:#fff1f1;--okbg:#eefaf3;--okline:#a8dcc0;--ngline:#f3b0b2;--line2:#f3c48a;--btn:#E07800;--btnh:#C46A00;--hdr:rgba(255,250,243,.92);color-scheme:light}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;font-family:var(--f);background:var(--bg);color:var(--ink);line-height:1.75;font-size:16px}
 [hidden]{display:none!important}
@@ -339,7 +339,7 @@ input[type=range]:active::-moz-range-thumb{box-shadow:0 0 0 8px color-mix(in srg
 @media(prefers-reduced-motion:reduce){button,button:active{transition:none;transform:none}.rip,.spark,.roll,.vb,.crack,.snap{animation:none!important}}
 .rpo{overflow:hidden}.rpo.rps{position:relative}
 /* ===== minimal palette ===== */
-:root{--bg:#fafaf8;--card:#ffffff;--soft:#f3f2ef;--line:#e6e4df;--line2:#d9d6cf;--ink:#1f1d1a;--mut:#6b665e;--accent:#E8650A;--accent2:#F58A3C;--o:var(--accent);--od:#a85400;--btn:#a85400;--btnh:#8c4600;--ok:#1f7a4d;--ng:#c43a3f;--okbg:#ffffff;--ngbg:#ffffff;--okline:#1f7a4d;--ngline:#c43a3f;--glow:transparent;--hashbg:#f3f2ef;--hashfg:#1f1d1a;--hdr:rgba(250,250,248,.92);--onb:#ffffff;--okh:#196640;--ngh:#a83035;--tint:color-mix(in srgb,var(--accent) 12%,transparent)}
+:root{--bg:#fafaf8;--card:#ffffff;--soft:#f3f2ef;--line:#e6e4df;--line2:#d9d6cf;--ink:#1f1d1a;--mut:#6b665e;--accent:#E07800;--accent2:#F59A2E;--o:var(--accent);--od:#9A5600;--btn:#E07800;--btnh:#C46A00;--ok:#1f7a4d;--ng:#c43a3f;--okbg:#ffffff;--ngbg:#ffffff;--okline:#1f7a4d;--ngline:#c43a3f;--glow:transparent;--hashbg:#f3f2ef;--hashfg:#1f1d1a;--hdr:rgba(250,250,248,.92);--onb:#ffffff;--okh:#196640;--ngh:#a83035;--tint:color-mix(in srgb,var(--accent) 12%,transparent)}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111214;--card:#18191c;--soft:#202226;--line:#2c2e33;--line2:#3a3d43;--ink:#e9e8e5;--mut:#9b988f;--accent:#f2a03d;--accent2:#f5b35f;--o:var(--accent);--od:#f2a03d;--btn:#f2a03d;--btnh:#f5b35f;--ok:#5fbf8f;--ng:#e5797d;--okbg:#18191c;--ngbg:#18191c;--okline:#5fbf8f;--ngline:#e5797d;--hashbg:#0d0e10;--hashfg:#e9e8e5;--hdr:rgba(17,18,20,.88);--onb:#111214;--okh:#6fcb9c;--ngh:#ec8a8e;--tint:rgba(242,160,61,.14)}}
 :root[data-theme=dark]{--bg:#111214;--card:#18191c;--soft:#202226;--line:#2c2e33;--line2:#3a3d43;--ink:#e9e8e5;--mut:#9b988f;--accent:#f2a03d;--accent2:#f5b35f;--o:var(--accent);--od:#f2a03d;--btn:#f2a03d;--btnh:#f5b35f;--ok:#5fbf8f;--ng:#e5797d;--okbg:#18191c;--ngbg:#18191c;--okline:#5fbf8f;--ngline:#e5797d;--hashbg:#0d0e10;--hashfg:#e9e8e5;--hdr:rgba(17,18,20,.88);--onb:#111214;--okh:#6fcb9c;--ngh:#ec8a8e;--tint:rgba(242,160,61,.14)}
 button,.btn{background:var(--btn)}button:hover,.btn:hover{background:var(--btnh)}
@@ -542,8 +542,8 @@ h2 em{font-size:.66em}
 .bed{font-size:.8rem;padding:5px 12px;min-height:0;margin:0}
 @media (prefers-reduced-motion:reduce){.bmx.go svg,.bc.chg{animation:none}}
 /* vivid light accent */
-@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:var(--accent);--btnh:#DA5E00;--onb:#fff}}
-:root[data-theme=light]{--btn:var(--accent);--btnh:#DA5E00;--onb:#fff}
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:var(--accent);--btnh:#C46A00;--onb:#fff}}
+:root[data-theme=light]{--btn:var(--accent);--btnh:#C46A00;--onb:#fff}
 .bc{white-space:normal;overflow:visible;font-size:.85rem;line-height:1.35}
 /* score card */
 .scard{margin:12px auto 4px;max-width:340px;text-align:center;border:1.5px solid var(--line2);border-radius:20px;padding:18px 16px;background:var(--card);animation:hwPop .45s}

@@ -1,6 +1,6 @@
 const EN=document.documentElement.lang=='en',L=(j,e)=>EN?e:j,NM={アリス:'Alice',ボブ:'Bob',キャロル:'Carol',デイブ:'Dave'},nm=n=>EN?NM[n]||n:n;
 if(EN){document.getElementById('hIn').value='Hello'}
-function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const w=document.createElement('div');w.className='confetti';const _cs=getComputedStyle(document.documentElement),C=[_cs.getPropertyValue('--accent').trim()||'#E8650A',_cs.getPropertyValue('--btnh').trim()||'#DA5E00','#ffd9a6','#17804f','#2a2118'];for(let i=0;i<40;i++){const p=document.createElement('i');p.style.cssText=`left:${Math.random()*100}%;background:${C[i%5]};animation-delay:${Math.random()*.3}s;--x:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg`;w.appendChild(p)}document.body.appendChild(w);setTimeout(()=>w.remove(),2200)}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const w=document.createElement('div');w.className='confetti';const _cs=getComputedStyle(document.documentElement),C=[_cs.getPropertyValue('--accent').trim()||'#E07800',_cs.getPropertyValue('--btnh').trim()||'#C46A00','#ffd9a6','#17804f','#2a2118'];for(let i=0;i<40;i++){const p=document.createElement('i');p.style.cssText=`left:${Math.random()*100}%;background:${C[i%5]};animation-delay:${Math.random()*.3}s;--x:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg`;w.appendChild(p)}document.body.appendChild(w);setTimeout(()=>w.remove(),2200)}
 const $=id=>document.getElementById(id),enc=new TextEncoder();
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',enc.encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
@@ -375,7 +375,7 @@ setTimeout(()=>{walk(document.body);const SK={contains:n=>{const e=n.nodeType==1
 
 /* intro network animation */
 (()=>{const cv=document.getElementById('netC');if(!cv)return;const cx=cv.getContext('2d');const RM=matchMedia('(prefers-reduced-motion: reduce)');let W=0,H=0,dpr=1,N=[],B=[],P=null,S=[],run=false,raf=0,lastT=0,hop=0;
-const col=()=>{const g=getComputedStyle(document.documentElement);const v=n=>g.getPropertyValue(n).trim();return{ln:v('--line2')||v('--line')||'#ddd',nd:v('--mut')||'#888',o:v('--accent')||v('--o')||'#E8650A',bg:v('--soft')||'transparent'}};let C=col();
+const col=()=>{const g=getComputedStyle(document.documentElement);const v=n=>g.getPropertyValue(n).trim();return{ln:v('--line2')||v('--line')||'#ddd',nd:v('--mut')||'#888',o:v('--accent')||v('--o')||'#E07800',bg:v('--soft')||'transparent'}};let C=col();
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const size=()=>{const r=cv.getBoundingClientRect();if(!r.width)return;dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)};
 const addNode=(x,y)=>{N.push({x,y,vx:rnd(-.08,.08),vy:rnd(-.08,.08),r:rnd(2.2,3.4),b:0});if(N.length>26)N.shift()};
