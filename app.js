@@ -13,7 +13,7 @@ $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
 (()=>{const d=SAVED;if(!d||!(d.cur>0))return;const r=$('resume');r.hidden=false;r.textContent=L('▶ 続きから('+chs[d.cur].dataset.t+')','▶ Continue ('+(window.T?T(chs[d.cur].dataset.t):chs[d.cur].dataset.t)+')');(d.seen||[]).forEach(j=>seen.add(j));r.onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(d.cur)}})();
 (()=>{let n=0;const c=document.querySelector('.hero .coin');c.onclick=()=>{if(++n%5==0){c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');confetti()}}})();
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
-$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(L('「さわってわかるビットコイン」9章と3つのゲームをぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿','I finished all 9 chapters and 3 games of “Touch & Learn Bitcoin”! Hashing, mining and signatures make sense once you try them ₿'))+'&url='+encodeURIComponent(U);
+$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(L('「さわってわかるビットコイン」10章と3つのゲームをぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿','I finished all 10 chapters and 3 games of “Touch & Learn Bitcoin”! Hashing, mining and signatures make sense once you try them ₿'))+'&url='+encodeURIComponent(U);
 // quizzes
 const Q=[['試してみよう: 「。」を1個足したら、ハッシュはどうなる?',['ちょっとだけ変わる','まったく別のものになる','変わらない'],1,'1文字でも変わると、指紋はほぼ全部入れかわります。だから改ざんがすぐバレます。'],
 ['ブロック#1のデータを書きかえたら、こわれるのはどこ?',['ブロック#1だけ','#1より前ぜんぶ','#1の次から後ろぜんぶ'],2,'#1のハッシュが変わるので、それを「前のハッシュ」として持っている#2以降がつながらなくなります。'],
@@ -145,3 +145,22 @@ b.onclick=()=>{r.dataset.theme=dk()?'light':'dark';try{localStorage.setItem('sw-
 // language
 (()=>{const b=$('lang');b.querySelectorAll('button').forEach(x=>{const on=(x.dataset.l=='en')==EN;x.setAttribute('aria-pressed',on);x.onclick=()=>{if(on)return;try{localStorage.setItem('sw-lang',EN?'ja':'en');if(!$('app').hidden)sessionStorage.setItem('sw-go',cur)}catch(e){}location.reload()}});
 let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-go')}catch(e){}if(g!==null){$('hero').hidden=true;$('app').hidden=false;go(+g)}})();
+
+// big-picture flow show
+(()=>{const f=$('flow');if(!f)return;const L2=[...f.children],tok=$('fTok'),cap=$('fCap'),pb=$('fPlay');let k=-1,T=null;
+const T_=x=>window.T?window.T(x):x;
+const place=()=>{if(k<0){tok.style.opacity=0;return}const r=L2[k].querySelector('.fi');tok.style.opacity=1;tok.style.transform=`translate(${r.offsetLeft+L2[k].offsetLeft+r.offsetWidth/2-14}px,${r.offsetTop+L2[k].offsetTop+r.offsetHeight/2-14}px)`};
+const set=n=>{k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});place();
+cap.textContent=k<0?T_('▶ 再生を押すと、最初から順番に進みます'):k>=L2.length-1?T_('✅ これで支払い完了!全部の章がつながりました'):`${k+1}. ${T_(L2[k].querySelector('b').textContent)}`;if(k>=L2.length-1){stop();if(window.confetti)confetti()}};
+const stop=()=>{clearInterval(T);T=null;pb.textContent=T_('▶ 再生')};
+pb.onclick=()=>{if(T)return stop();if(k>=L2.length-1)set(-1);pb.textContent=T_('⏸ 停止');set(k+1);T=setInterval(()=>set(k+1),1800)};
+$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fReset').onclick=()=>{stop();set(-1)};
+L2.forEach((l,i)=>{l.onclick=e=>{if(e.target.closest('.more'))return;stop();set(i)};l.querySelector('.more').onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))}});
+addEventListener('resize',place);set(-1)})();
+
+// intro
+(()=>{const v=$('iView');if(!v)return;const T_=x=>window.T?window.T(x):x;
+const show=all=>{$('iBank').setAttribute('aria-pressed',!all);$('iAll').setAttribute('aria-pressed',all);
+v.innerHTML=all?`<div class="net">${'👤📒 '.repeat(6).trim().split(' ').map(x=>`<span>${x}</span>`).join('')}</div><p>${T_('台帳はみんなが同じものを持っています。1人がズルしても、ほかの全員と合わないのでバレます。')}</p>`:`<div class="net"><span>👤</span><span>👤</span><span class="big">🏦📒</span><span>👤</span><span>👤</span></div><p>${T_('台帳は銀行だけが持っています。銀行が書きかえたり、止めたりできます。')}</p>`};
+$('iBank').onclick=()=>show(false);$('iAll').onclick=()=>show(true);show(false);
+document.querySelectorAll('.rm0').forEach(b=>b.onclick=()=>go(chs.findIndex(c=>c.dataset.t==b.dataset.g)))})();
