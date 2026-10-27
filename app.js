@@ -82,7 +82,7 @@ function supply(h){let s=0;for(let i=0;i<34;i++){const b=Math.min(210000,Math.ma
 function drawC(h,cur){const W=320,H=150,P=24,mx=7e6,x=v=>P+v/mx*(W-P-6),y=v=>H-18-v/21e6*(H-34);let d='';for(let v=0;v<=mx;v+=50000)d+=(v?'L':'M')+x(v).toFixed(1)+' '+y(supply(v)).toFixed(1);
 $('hCurve').innerHTML=`<line x1="${P}" x2="${W-6}" y1="${y(21e6)}" y2="${y(21e6)}" class="cap"/><text x="${W-6}" y="${y(21e6)-4}" text-anchor="end">2100万</text><path d="${d}" class="ln0"/><path d="${d.split('L').filter((_,i)=>i*50000<=h).join('L')}" class="ln1"/><circle cx="${x(h)}" cy="${y(cur)}" r="5"/>${[2009,2050,2100,2140].map(yr=>`<text x="${x((yr-2009)*52596)}" y="${H-4}" text-anchor="middle">${yr}</text>`).join('')}`}
 $('hgt').oninput=hv;hv();
-let hT;$('hPlay').onclick=()=>{clearInterval(hT);const g=$('hgt');if(+g.value>=+g.max)g.value=0;hT=setInterval(()=>{g.value=+g.value+40000;hv();if(+g.value>=+g.max)clearInterval(hT)},30)};
+let hT=0;$('hPlay').onclick=()=>{cancelAnimationFrame(hT);const g=$('hgt'),M=+g.max,MV=12000,PZ=350;g.value=0;hv();let t0=performance.now(),pz=0,last=0;const st=t0;const f=now=>{if(pz){if(now<pz){hT=requestAnimationFrame(f);return}t0+=PZ;pz=0}const t=Math.min(1,(now-t0)/MV),h=Math.round(M*t*t/10000)*10000,k=Math.floor(h/210000);g.value=h;hv();if(k>last){last=k;if(k<=4){pz=now+PZ;const r=$('hR');r.classList.remove('pp');void r.offsetWidth;r.classList.add('pp')}}if(t<1)hT=requestAnimationFrame(f);else window.__hDur=now-st};hT=requestAnimationFrame(f)};
 // bonus game: spot the fake transactions (3 levels, one new rule per level)
 (()=>{const N=['アリス','ボブ','キャロル'],E={アリス:'👩',ボブ:'👨',キャロル:'👧'},SL={アリス:'🌸',ボブ:'⭐',キャロル:'🍀'},FAKE=['👾','🐙','🦝'],PER=4,TOT=12;
 const LV=[{i:'💰',t:L('残高チェック','Balance check'),r:L('持っている以上のコインは送れません。財布の中身と金額をくらべよう!','You can’t send more coins than you have. Compare the wallet with the amount!'),s:10},
@@ -178,7 +178,7 @@ let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-g
 // big-picture flow show: one stage, one scene per step
 (()=>{const f=$('flow');if(!f)return;const L2=[...f.children],S=$('fStage'),ti=$('fTitle'),de=$('fDesc'),mo=$('fMore'),pb=$('fPlay');let k=-1,T=null,tm=[];
 const t=x=>window.T?window.T(x):x,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let SP=1.5;const rate=()=>{if(!RM)S.getAnimations({subtree:true}).forEach(x=>x.playbackRate=1/SP)};const at=(ms,fn)=>tm.push(setTimeout(()=>{fn();rate()},RM?0:ms*SP)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
+const SP=1.12;const rate=()=>{if(!RM)S.getAnimations({subtree:true}).forEach(x=>x.playbackRate=1/SP)};const at=(ms,fn)=>tm.push(setTimeout(()=>{fn();rate()},RM?0:ms*SP)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
 const hx=n=>[...Array(n)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
 const slip=(c='')=>`<div class="slip ${c}"><small>${t('取引')}</small><b>${t('アリス → ボブ')}</b><span class="amt">0.01 BTC</span></div>`;
 const sc=[
@@ -199,7 +199,7 @@ const A=[.8,2.4,1.8,2.1,2.4,1.8,1.9,.9,2.3],dw=()=>RM?4000:Math.max(SP>1?6000:45
 const stop=()=>{clearTimeout(T);T=null;pb.textContent=t('▶ 再生');bar(0)};
 const tick=()=>{const d=dw();bar(d);T=setTimeout(()=>{set(k+1);if(T)tick()},d)};
 pb.onclick=()=>{if(T)return stop();if(k>=L2.length-1)k=-1;pb.textContent=t('⏸ 停止');T=1;set(k+1);if(T)tick()};
-$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};document.querySelectorAll('#fSpd button').forEach(b=>b.onclick=()=>{SP=+b.dataset.s;document.querySelectorAll('#fSpd button').forEach(x=>x.setAttribute('aria-pressed',x==b));if(T){clearTimeout(T);tick()}});
+$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};
 L2.forEach((l,i)=>{l.onclick=e=>{e.preventDefault();stop();set(i)}});set(-1)})();
 
 // intro
