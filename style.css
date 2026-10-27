@@ -399,3 +399,6 @@ h2 em{display:inline-grid;place-items:center;line-height:1;font-variant-numeric:
 #iView .ic{margin:0 .1em}
 .net{flex-wrap:nowrap}.net .ic{width:1.45em;height:1.45em;margin:0}
 :is(button,summary,h2,h3,a,b,.note,nav) .ic:not(:only-child){margin-right:.45em}
+.ic,.ic:only-child,:is(button,summary,h2,h3,a,b,.note,nav) .ic:not(:only-child){margin:0 .75em 0 0}
+.ic-r,.ic-down,.ic-up,.ic-r:only-child{margin:0 0 0 .75em}
+[aria-label]>.ic:only-child,.net .ic,#iView .ic,[role=img] .ic,[role=img].ic,.idle .ic,.seal .ic,.toy .ic,.coin .ic{margin:0}
