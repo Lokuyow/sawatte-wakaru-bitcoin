@@ -542,8 +542,8 @@ h2 em{font-size:.66em}
 .bed{font-size:.8rem;padding:5px 12px;min-height:0;margin:0}
 @media (prefers-reduced-motion:reduce){.bmx.go svg,.bc.chg{animation:none}}
 /* vivid light accent */
-@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:#f7931a;--btnh:#e8850c;--onb:#13202b}}
-:root[data-theme=light]{--btn:#f7931a;--btnh:#e8850c;--onb:#13202b}
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:#f7931a;--btnh:#e8850c;--onb:#fff}}
+:root[data-theme=light]{--btn:#f7931a;--btnh:#e8850c;--onb:#fff}
 .bc{white-space:normal;overflow:visible;font-size:.85rem;line-height:1.35}
 /* score card */
 .scard{margin:12px auto 4px;max-width:340px;text-align:center;border:1.5px solid var(--line2);border-radius:20px;padding:18px 16px;background:var(--card);animation:hwPop .45s}
@@ -567,7 +567,7 @@ h2 em{font-size:.66em}
 /* summary: one persistent stage */
 .stage .fsn{position:absolute;inset:0}
 .fo{position:absolute;transform:translate(-50%,-50%);transition:left .9s cubic-bezier(.5,0,.3,1),top .9s cubic-bezier(.5,0,.3,1),opacity .5s,transform .6s;text-align:center;font-size:.7rem;line-height:1.2;white-space:nowrap}
-.fp span{display:block;font-size:1.6rem}.fp b{display:block;font-size:.75rem}.fp code{display:block;margin-top:2px;font-weight:800;color:var(--od);font-size:.72rem}
+.fpp span{display:block;font-size:1.6rem}.fpp b{display:block;font-size:.75rem}.fpp code{display:block;margin-top:2px;font-weight:800;color:var(--od);font-size:.72rem}
 .fB.got{animation:hwPop .5s}
 .fkey{background:var(--card);border:1.5px solid var(--o);border-radius:10px;padding:3px 8px}.fkey small{display:block;color:var(--od);font-weight:700}.fkey code{font-size:.62rem}
 .fpub{display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:150px}.fpub span{background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:2px 6px;font-weight:700}.fpub i{font-style:normal;color:var(--o)}.fpub small{width:100%;color:var(--mut)}
@@ -587,7 +587,7 @@ h2 em{font-size:.66em}
 /* summary: bigger, scales with stage width */
 #fStage{container-type:inline-size;height:clamp(400px,95vw,480px)}
 #fStage .fo,#fStage .fnd{font-size:clamp(.78rem,2.6cqw,1.1rem)}#fStage .fnd svg{width:2.6em;height:2.6em}
-#fStage .fp span{font-size:2.6em}#fStage .fp b{font-size:1.05em}#fStage .fp code{font-size:1.05em}
+
 #fStage .fkey{padding:.35em .7em}#fStage .fkey code{font-size:.85em}
 #fStage .fpub{max-width:46%}
 #fStage .fnd{width:2.8em}#fStage .fnd svg{width:2.4em;height:2.4em}#fStage .fnd b{font-size:1.1em}#fStage .fnd em{font-size:.9em}
@@ -641,3 +641,17 @@ h2 em{font-size:.66em}
 @media (min-width:700px){.people.tx2{gap:20px}.people.tx2 button.p{padding:9px 12px}.people.tx2 button.p .pn{font-size:.9rem}}
 @media (prefers-reduced-motion:reduce){.tLn line{animation:none}}
 @media (max-width:699px){.people.tx2{gap:5px}.people.tx2 button.p{gap:4px;padding:7px 6px;font-size:1.05rem}.people.tx2 button.p .pn{font-size:.74rem;white-space:normal;overflow:visible;letter-spacing:-.02em}.tMid .tAmtC button{padding:5px 6px;font-size:.7rem}#tSend{padding:8px 10px}}
+
+/* light: white text on filled orange */
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]) button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):not(.sm.ghost){color:#fff;font-weight:800;text-shadow:0 1px 1px rgba(120,60,0,.25)}:root:not([data-theme=dark]) button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):hover{background:#e8850c}:root:not([data-theme=dark]) button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):active{background:#d4780a}}
+:root[data-theme=light] button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico){color:#fff;font-weight:800;text-shadow:0 1px 1px rgba(120,60,0,.25)}:root[data-theme=light] button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):hover{background:#e8850c}:root[data-theme=light] button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):active{background:#d4780a}
+/* summary avatars & nodes */
+#fStage .fpp{display:flex;flex-direction:column;align-items:center;gap:.25em}
+#fStage .fpp span{box-sizing:border-box;width:4.2em;aspect-ratio:1;height:auto;border-radius:50%;display:grid;place-items:center;background:var(--card);border:1.5px solid var(--line2);font-size:1em;line-height:0;padding:0}
+#fStage .fpp span svg,#fStage .fpp span .ic{width:2.4em;height:2.4em;margin:0;display:block}
+#fStage .fpp b{font-size:1em;line-height:1.2}#fStage .fpp code{font-size:.95em;margin:0;line-height:1.2}
+#fStage .fnd{color:var(--mut)}#fStage .fnd.ok{color:var(--mut)}#fStage .fnd svg{stroke-width:1.3;display:block}
+.tFoot{grid-column:1/-1;display:grid;justify-items:center;gap:6px;margin-top:4px;position:relative;z-index:1}
+.tFoot .tHint{margin:0;font-size:.85rem;min-height:1.3em;text-align:center}
+.tFoot #tDouble{font-size:.8rem;padding:6px 14px;min-height:0;margin:0}
+.tFoot #tDouble svg{width:1.1em;height:1.1em}

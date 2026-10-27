@@ -116,7 +116,7 @@ q('#sgRe').onclick=reset;reset()})();
 // 5 ledger
 const ppl=[['アリス','👩'],['ボブ','👨'],['キャロル','👧'],['デイブ','🧔']];let bal={アリス:5,ボブ:2,キャロル:0,デイブ:1};
 let tF=-1,tT=-1,tA=1;const tHint=()=>{$('tHint').textContent=tF<0?L('左で送る人を選ぶ','Pick who sends (left)'):tT<0?L('右で受け取る人を選ぶ','Pick who receives (right)'):L(`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA}コイン`,`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA} coin${tA>1?'s':''}`);$('tSend').disabled=tF<0||tT<0;$('tSend').classList.toggle('pls',tF>=0&&tT>=0)};
-{const P=$('people');P.className='people tx2';P.innerHTML=`<div class="tCol" id="tL"></div><div class="tMid"><svg class="tArr" viewBox="0 0 40 24" aria-hidden="true"><path d="M4 12h30M26 5l8 7-8 7"/></svg><div id="tMidA"></div><button type="button" id="tSend">${L('送る','Send')}</button></div><div class="tCol" id="tR"></div><svg class="tLn" id="tLn" aria-hidden="true"><line id="tLnL"/></svg>`;$('tMidA').appendChild($('tAmtC'))}
+{const P=$('people');P.className='people tx2';P.innerHTML=`<div class="tCol" id="tL"></div><div class="tMid"><svg class="tArr" viewBox="0 0 40 24" aria-hidden="true"><path d="M4 12h30M26 5l8 7-8 7"/></svg><div id="tMidA"></div><button type="button" id="tSend">${L('送る','Send')}</button></div><div class="tCol" id="tR"></div><svg class="tLn" id="tLn" aria-hidden="true"><line id="tLnL"/></svg>`;$('tMidA').appendChild($('tAmtC'));const f=document.createElement('div');f.className='tFoot';const dB=$('tDouble');dB.className='ghost sm';f.append($('tHint'),dB);P.appendChild(f)}
 const row=(s,sel,dis)=>ppl.map(([n,e],i)=>`<button type="button" class="p${i==sel?' fr':''}" data-s="${s}" data-i="${i}"${i==dis?' disabled':''}><span class="pe">${e}</span><span class="pn">${nm(n)}</span><b>${bal[n]}</b></button>`).join('');
 function line(){const l=$('tLnL'),P=$('people');if(tF<0||tT<0){l.style.opacity=0;return}const R=P.getBoundingClientRect(),a=$('tL').children[tF+1].getBoundingClientRect(),b=$('tR').children[tT+1].getBoundingClientRect();l.setAttribute('x1',a.right-R.left);l.setAttribute('y1',a.top+a.height/2-R.top);l.setAttribute('x2',b.left-R.left);l.setAttribute('y2',b.top+b.height/2-R.top);l.style.opacity=1}
 function rp(){$('tL').innerHTML=`<small>${L('送る人','Sender')}</small>`+row('L',tF,tT);$('tR').innerHTML=`<small>${L('受け取る人','Receiver')}</small>`+row('R',tT,tF);tHint();line()}
@@ -241,13 +241,13 @@ let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-g
 const t=x=>window.T?window.T(x):x,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SP=1.12;const rate=()=>{if(!RM)S.getAnimations({subtree:true}).forEach(x=>x.playbackRate=1/SP)};const at=(ms,fn)=>tm.push(setTimeout(()=>{fn();rate()},RM?0:ms*SP)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
 const hx=n=>[...Array(n)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
-const NX=[8,22,36,64,78,92];
+const NX=[9,25.4,41.8,58.2,74.6,91];
 const build=()=>{S.innerHTML=`<div class="fsn">
-<div class="fo fp fA" id="fA"><span>👩</span><b>${L('アリス','Alice')}</b></div>
-<div class="fo fp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
+<div class="fo fpp fA" id="fA"><span>👩</span><b>${L('アリス','Alice')}</b></div>
+<div class="fo fpp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
 <div class="fo fkey" id="fK"><small>${L('秘密鍵','Private key')}</small><code id="fKc"></code></div>
 <div class="fo fpub" id="fPub"><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span>${L('アドレス','Address')}</span><small>${L('一方通行','one-way')}</small></div>
-${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:54%"><svg viewBox="3 4 18 17"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
+${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:63%"><svg viewBox="3 4 18 17"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
 <div class="fo fmp" id="fMp"><small>${L('メンプール','Mempool')}</small><i></i><i></i><i></i></div>
 <div class="fo fch fc1" id="fC1">#1</div><div class="fo fch fc2" id="fC2">#2</div>
 <div class="fo fblk" id="fBk"><small id="fBn">${L('新しいブロック','New block')}</small><code id="fNn"></code></div>
@@ -259,17 +259,17 @@ const TX=L('アリス → ボブ 0.01 BTC','Alice → Bob 0.01 BTC');
 const pose=k=>{if(!S.querySelector('.fsn'))build();const F=S.firstChild;F.className='fsn s'+k;
 P('fA',18,17);P('fB',82,17);$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
 P('fK',15,33,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
-P('fPub',62,33,k==1?1:0);
-P('fS',k<=3?50:k==4?50:k==5?20:k==6?41:87,k<=3?20:k==4?54:k==5?83:66,k>=2?(k>=7?0:1):0,k>=6?.6:1);
+P('fPub',60,40,k==1?1:0);
+P('fS',k<=4?50:k==5?25:k==6?50:87,k<=4?45:k==5?83:38,k>=2?(k>=7?0:1):0,k>=6?.6:k==5?.7:1);
 const st=$('fSt');if(k==2&&!RM){let n=0;st.textContent='';const ty=()=>{st.textContent=TX.slice(0,++n);if(n<TX.length)at(60,ty)};at(400,ty)}else st.textContent=TX;
 $('fSe').classList.toggle('on',k>=3);
 NX.forEach((x,i)=>{const e=$('fN'+i);e.classList.remove('ok','led');if(k>=4){if(k==4&&!RM)at(700+Math.abs(i-2.5)*350,()=>{e.classList.add('ok');window.__bz&&__bz(6)});else e.classList.add('ok')}if(k>=8){if(RM)e.classList.add('led');else at(1800+i*200,()=>e.classList.add('led'))}});
 P('fMp',17,84,k==5?1:k>5?.25:0);
-P('fC1',50,85,k>=6?1:0);P('fC2',63,85,k>=6?1:0);
-P('fBk',k>=7?83:39,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
+P('fC1',52,85,k>=6?1:0);P('fC2',65,85,k>=6?1:0);
+P('fBk',k>=7?84:20,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
 const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
 $('fBn').textContent=k>=7?'#3':L('新しいブロック','New block');
-const cf=$('fCf');P('fCf',63,70,k>=8?1:0);if(k>=8){let n=0;const up=()=>{cf.textContent=L(`承認 ${n}/6`,`${n}/6 confirmations`);cf.classList.toggle('ok',n>=6);if(n++<6&&!RM)at(500,up);else if(n<=6){n=6;up()}};up();at(RM?0:900,()=>{const b=$('fB');b.classList.remove('got');void b.offsetWidth;b.classList.add('got');window.__bu&&__bu(b,12);window.__bz&&__bz(20)})}};
+const cf=$('fCf');P('fCf',50,50,k>=8?1:0);if(k>=8){let n=0;const up=()=>{cf.textContent=L(`承認 ${n}/6`,`${n}/6 confirmations`);cf.classList.toggle('ok',n>=6);if(n++<6&&!RM)at(500,up);else if(n<=6){n=6;up()}};up();at(RM?0:900,()=>{const b=$('fB');b.classList.remove('got');void b.offsetWidth;b.classList.add('got');window.__bu&&__bu(b,12);window.__bz&&__bz(20)})}};
 const set=n=>{clr();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
 if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
 const l=L2[k];pose(k);rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
