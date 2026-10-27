@@ -643,8 +643,6 @@ h2 em{font-size:.66em}
 @media (max-width:699px){.people.tx2{gap:5px}.people.tx2 button.p{gap:4px;padding:7px 6px;font-size:1.05rem}.people.tx2 button.p .pn{font-size:.74rem;white-space:normal;overflow:visible;letter-spacing:-.02em}.tMid .tAmtC button{padding:5px 6px;font-size:.7rem}#tSend{padding:8px 10px}}
 
 /* light: white text on filled orange */
-@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]) button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):not(.sm.ghost){color:#fff;font-weight:800;text-shadow:0 1px 1px rgba(120,60,0,.25)}:root:not([data-theme=dark]) button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):hover{background:#e8850c}:root:not([data-theme=dark]) button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):active{background:#d4780a}}
-:root[data-theme=light] button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico){color:#fff;font-weight:800;text-shadow:0 1px 1px rgba(120,60,0,.25)}:root[data-theme=light] button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):hover{background:#e8850c}:root[data-theme=light] button:not(.ghost):not(.p):not(header *):not(.sm):not(.seg *):not(.ico):active{background:#d4780a}
 /* summary avatars & nodes */
 #fStage .fpp{display:flex;flex-direction:column;align-items:center;gap:.25em}
 #fStage .fpp span{box-sizing:border-box;width:4.2em;aspect-ratio:1;height:auto;border-radius:50%;display:grid;place-items:center;background:var(--card);border:1.5px solid var(--line2);font-size:1em;line-height:0;padding:0}
