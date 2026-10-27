@@ -292,3 +292,19 @@ details.more>:not(summary){margin-top:10px}
 details.more ul{line-height:1.7}
 @media(min-width:900px){.ch{padding:44px 48px}}
 details.more>.cap{margin:6px 14px 10px}
+.sec3{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center;margin:10px 14px}
+.sec3 div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;height:100%}.sec3 span{display:block;font-size:1.5rem}.sec3 b{font-size:.78rem;line-height:1.4;display:block}.sec3 i{font-style:normal;color:var(--o);font-weight:700}
+.mixh{font-size:.85rem;font-weight:700;margin-bottom:4px}
+.mix{display:flex;height:30px;border-radius:10px;overflow:hidden;border:1px solid var(--line);font-size:.74rem;font-weight:700}.mix>div{display:grid;place-items:center;white-space:nowrap;overflow:hidden}
+.mx-r{background:var(--ok);color:#fff}.mx-n{background:#5b8def;color:#fff}.mx-f{background:#8a8178;color:#fff}
+.mixl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.74rem;color:var(--mut)}.mixl i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+@media(max-width:420px){.sec3{grid-template-columns:1fr;gap:4px}.sec3 i{text-align:center;transform:rotate(90deg)}.sec3 div{display:flex;align-items:center;gap:10px;text-align:left;padding:8px 12px}.sec3 span{font-size:1.3rem}}
+main{box-sizing:border-box}
+.ch>.cap,.ch .cap{font-size:.78rem;color:var(--mut);margin:6px 0 14px;line-height:1.6}
+.ecap{margin:0;padding:10px 12px;font-weight:700;font-size:.88rem;color:var(--od);background:var(--soft);border-top:1px solid var(--line);text-align:center}
+@media(min-width:1024px){.chain2 .blk{display:block}}
+@media(min-width:1200px){.chain2 .blk{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,200px)}}
+.chain2 input{width:100%;box-sizing:border-box}
+.fps>div{min-width:0}.fps span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:420px){.ch{padding:24px 16px}.chain2 .blk,.blk{padding:12px}.fps{gap:6px}}
+textarea,input,select{box-sizing:border-box;max-width:100%}
