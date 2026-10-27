@@ -681,3 +681,4 @@ h2 em{font-size:.66em}
 button:not(.ghost):not(:disabled):active{filter:brightness(.92)}
 button.on,button.ghost.on{background:var(--btn)}
 #fStage .fpub{max-width:none;width:max-content}#fStage .fpub.fbel>i:first-child{display:none}
+@media(max-width:500px){.people.tx2 button.p .pn{white-space:nowrap;letter-spacing:-.04em}.people.tx2 button.p{gap:4px;padding-left:6px!important;padding-right:8px!important}}
