@@ -267,3 +267,28 @@ details.more.myth{padding-top:0;border-top:1.5px solid var(--line);margin-top:20
 .gbal .gw{overflow:hidden}.gbal .gwh .hk.mini{width:22px;height:22px;flex:none;transform:rotate(-8deg)}
 .gbal .gwh .hk.mini{padding:0}
 .gstage:empty{display:none}
+/* rich myth widgets */
+details.more .cap{font-size:.78rem;color:var(--mut);margin:4px 0 8px}
+.inc{display:flex;height:30px;border-radius:10px;overflow:hidden;border:1px solid var(--line);margin:8px 0 0;font-size:.78rem;font-weight:700}
+.inc>div{display:grid;place-items:center;white-space:nowrap;overflow:hidden;transition:width .4s}.inc-r{background:var(--o);color:#3a2000}.inc-f{background:var(--ok);color:#fff}
+.ymo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.ymo div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center;min-width:0}.ymo b{display:block;font-family:var(--m);font-size:1.15rem;color:var(--od);overflow-wrap:anywhere}.ymo small{color:var(--mut)}
+#ymY{width:9em;display:inline-block}
+.ymbar{height:10px;background:var(--card);border:1px solid var(--line);border-radius:99px;overflow:hidden}.ymbar div{height:100%;background:var(--o);transition:width .3s}
+.jobs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0}.jobs div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}.jobs span{display:block;font-size:1.6rem}.jobs b{display:block;font-size:.85rem}.jobs small{display:block;font-size:.74rem;color:var(--mut);margin-top:4px;line-height:1.4}
+.jarr{text-align:center;font-size:.9rem;margin:6px 0}
+.qtab{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.qtab button{margin:0}
+.qout{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}.qout .qi{display:block;font-size:1.8rem}.qout small{display:block;font-size:.84rem;margin-top:4px;line-height:1.6}
+@media(max-width:420px){.jobs{grid-template-columns:1fr}.jobs div{display:grid;grid-template-columns:2.2em 1fr;text-align:left;align-items:center;column-gap:8px}.jobs span{grid-row:span 2;font-size:1.4rem}.jobs small{margin:0}}
+@media(prefers-reduced-motion:reduce){.inc>div,.ymbar div{transition:none}}
+/* breathing room */
+.ch{padding:32px 24px;line-height:1.9}
+.ch>p,.ch>label,.ch>.crow,.ch>.res,.ch>.mstats,.ch>.seg,.ch>.etable,.ch>.bits,.ch>.take,.ch>.warn,.ch>.note,.ch>svg{margin-top:18px;margin-bottom:18px}
+.ch>h3,.ch>.sub3{margin-top:36px;margin-bottom:12px}
+.ch>h2{margin-bottom:16px}
+.ch details.more{margin:22px 0}
+details.more.words>summary{font-weight:600;color:var(--mut);font-size:.88rem}
+details.more.words>summary span{color:var(--ink)}
+details.more>:not(summary){margin-top:10px}
+details.more ul{line-height:1.7}
+@media(min-width:900px){.ch{padding:44px 48px}}
+details.more>.cap{margin:6px 14px 10px}
