@@ -224,7 +224,7 @@ function burst(el,n=10){if(RM||!el)return;const r=el.getBoundingClientRect();if(
 window.__burst=burst;
 const seen=new WeakMap();
 new MutationObserver(ms=>{for(const m of ms){const t=m.target.nodeType==1?m.target:m.target.parentElement;if(!t)continue;const A=m.type=='attributes';
- const res=A?null:t.closest('.res,.qres,#eRes');if(res){const x=res.textContent;if(seen.get(res)===x)continue;seen.set(res,x);if(/✅|⭕|正解|成功|Correct|Success|found|見つかった/.test(x)){burst(res);buzz(12);res.classList.remove('pp');void res.offsetWidth;res.classList.add('pp')}else if(/❌|失敗|Wrong|fail/i.test(x))buzz([8,40,8])}
+ const res=A?null:t.closest('.res,.qres,#eRes');if(res){const raw=res.textContent,x=raw.replace(window.__icRE||/(?!)/g,'');if(seen.get(res)===x)continue;seen.set(res,x);const ic=c=>res.querySelector(c);if(/✅|⭕/.test(raw)||ic('.ic-ok,.ic-o')||/正解|成功|Correct|Success|found|見つかった/.test(x)){burst(res);buzz(12);res.classList.remove('pp');void res.offsetWidth;res.classList.add('pp')}else if(/❌/.test(raw)||ic('.ic-x')||/失敗|Wrong|fail/i.test(x))buzz([8,40,8])}
  const hs=A?null:t.closest('.hash,.hh,.pv,#mHash');if(hs&&!RM){hs.classList.remove('roll');void hs.offsetWidth;hs.classList.add('roll')}
  if(A&&t.classList.contains('blk')&&(m.oldValue||'').includes('bad')!=t.classList.contains('bad')){const was=(m.oldValue||'').includes('bad'),is=t.classList.contains('bad');if(is&&!was){buzz(15);t.classList.remove('snap');void t.offsetWidth;t.classList.add('crack')}else if(was&&!is){t.classList.remove('crack');void t.offsetWidth;t.classList.add('snap')}}
 }}).observe(document.querySelector('main')||document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class'],attributeOldValue:true});
@@ -240,4 +240,65 @@ if($('tCoin')){$('tCoin').onclick=()=>{const c=$('tCoin');sp=sp>=8?0:sp+1;const 
  $('tS').textContent=sp==0?'1 BTC':(EN_&&n==1e8?'100,000,000 pieces × 1 sat':EN_?`${n.toLocaleString('en')} pieces × ${(1e8/n).toLocaleString('en')} sats`:`${n.toLocaleString('ja')}個 × ${(1e8/n).toLocaleString('ja')}サトシ`);
  if(sp==8){$('tSn').textContent=L('もう分けられない!1BTC = 1億サトシ','Can’t split further! 1 BTC = 100 million sats');burst(c,14)}else $('tSn').textContent=L('コインをタップして分けてみよう','Tap the coin to split it');
  c.style.setProperty('--n',Math.min(sp,6))}}
+})();
+/* icons: replace emoji in UI text with an SVG sprite */
+(()=>{const P={
+tip:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+x:'<path d="M6 6l12 12M18 6L6 18"/>',o:'<circle cx="12" cy="12" r="7.5"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+q:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.4M12 17h.01"/>',
+pick:'<path d="M4 20l9-9M6 6.5a13 13 0 0 1 11.5 11.5M11.5 9.5l3 3"/>',
+bad:'<path d="M5 21V10a7 7 0 0 1 14 0v11l-2.3-1.8L14.3 21 12 19.2 9.7 21l-2.4-1.8z"/><path d="M9.5 10.5h.01M14.5 10.5h.01"/>',
+book:'<path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3zM21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/>',
+zap:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+game:'<rect x="2.5" y="7" width="19" height="11" rx="4"/><path d="M7.5 10.5v4M5.5 12.5h4M15 11.5h.01M17.5 13.5h.01"/>',
+trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M10 17h4v4h-4z"/>',
+warn:'<path d="M12 3.5l9.5 16.5h-19zM12 10v4M12 17h.01"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14.5 8.5l2 2"/>',
+link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+coin:'<circle cx="12" cy="12" r="9"/><path d="M9.5 8h3.5a2 2 0 0 1 0 4H9.5zM9.5 12h4a2 2 0 0 1 0 4h-4zM10.5 6.5v11M12.5 6.5V8M12.5 16v1.5"/>',
+lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+unlock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.7"/>',
+hand:'<path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6a1.5 1.5 0 0 1 3 0v8a7 7 0 0 1-7 7 6 6 0 0 1-5-2.8l-2-3.7a1.5 1.5 0 0 1 2.6-1.5L8 15"/>',
+doc:'<path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+bank:'<path d="M3 10l9-6 9 6M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3 21h18"/>',
+globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+search:'<circle cx="11" cy="11" r="7"/><path d="M20.5 20.5L16 16"/>',pen:'<path d="M4 20l4.5-1L19 8.5 15.5 5 5 15.5zM13.5 7l3.5 3.5"/>',
+box:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"/>',
+flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3-1-3 0-6 1-8.5z"/>',
+shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',pause:'<path d="M9 5v14M15 5v14"/>',
+dice:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 15h.01M15 9h.01M9 15h.01M12 12h.01"/>',
+down:'<path d="M12 5v14M6 13l6 6 6-6"/>',up:'<path d="M12 19V5M6 11l6-6 6 6"/>',r:'<path d="M5 12h14M13 6l6 6-6 6"/>',l:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+bot:'<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 17h5"/>',
+frown:'<circle cx="12" cy="12" r="9"/><path d="M8.5 16.5a5 5 0 0 1 7 0M9 9.5h.01M15 9.5h.01"/>',
+sprout:'<path d="M12 21v-9M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/>',
+eyeoff:'<path d="M3 3l18 18M10.6 6.1Q11.3 6 12 6c5 0 9 6 9 6a15 15 0 0 1-2.8 3.4M6.6 7.6C4.2 9.3 3 12 3 12s4 6 9 6a8 8 0 0 0 3.4-.8"/>',
+eye:'<path d="M2.5 12S6 5 12 5s9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7z"/><circle cx="12" cy="12" r="3"/>',
+target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12h.01"/>',
+pin:'<path d="M12 16v5M8 3h8l-1 6 3 4H6l3-4z"/>',send:'<path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/>',
+puzzle:'<path d="M4 8h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v4H4z"/>',
+radio:'<circle cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.5 5.5a9 9 0 0 0 0 13M18.5 5.5a9 9 0 0 1 0 13"/>',
+spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>',
+cart:'<path d="M3 4h2l2.5 11h11L21 8H6.3"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/>',
+pc:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 21h8M12 16v5"/>',
+wallet:'<rect x="3" y="7" width="18" height="13" rx="3"/><path d="M7 7l9-3.5L17 7M16 13.5h.01"/>',
+tool:'<path d="M15 4a5 5 0 0 0-5.5 6.5L3.5 16.5l4 4 6-6A5 5 0 0 0 20 9l-3 3-3-3 3-3a5 5 0 0 0-2-2z"/>',
+mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+s1:'<g class="f"><circle cx="12" cy="6.5" r="3.6"/><circle cx="17.2" cy="10.3" r="3.6"/><circle cx="15.2" cy="16.5" r="3.6"/><circle cx="8.8" cy="16.5" r="3.6"/><circle cx="6.8" cy="10.3" r="3.6"/></g>',
+s2:'<path class="f" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>',
+s3:'<g class="f"><circle cx="8.5" cy="8.5" r="4"/><circle cx="15.5" cy="8.5" r="4"/><circle cx="8.5" cy="15.5" r="4"/><circle cx="15.5" cy="15.5" r="4"/></g>',
+s4:'<path class="f" d="M6 14C4 8 8 3 12 3s8 5 6 11l2.5 5-3.3-1.7-1 3.2-2.2-3-2 3-2-3-2.2 3-1-3.2L3.5 19z"/>',
+s5:'<path class="f" d="M3.5 6l5.5 3h6l5.5-3-1.5 8.5L12 21l-7-6.5z"/>'};
+const M={'💡':'tip','❌':'x','✗':'x','✕':'x','⭕':'o','✅':'ok','✓':'ok','🤔':'q','⛏':'pick','😈':'bad','📖':'book','⚡':'zap','🎮':'game','🏆':'trophy','⚠':'warn','⏳':'clock','⏰':'clock','🔑':'key','⛓':'link','🔗':'link','🪙':'coin','💰':'coin','🔒':'lock','🔏':'lock','🔓':'unlock','🙋':'hand','👋':'hand','📄':'doc','📝':'doc','📒':'book','📨':'mail','👤':'user','👩':'user','👨':'user','👧':'user','🧔':'user','🏦':'bank','🌍':'globe','🔍':'search','✍':'pen','✏':'pen','🖋':'pen','🧱':'box','📦':'box','🔥':'flame','🛡':'shield','⏸':'pause','🎲':'dice','⬇':'down','↓':'down','↑':'up','→':'r','←':'l','👾':'bot','🤖':'bot','😵':'frown','🔰':'sprout','🙈':'eyeoff','🕵':'eye','🎯':'target','📌':'pin','💸':'send','🧩':'puzzle','📡':'radio','🎉':'spark','🛒':'cart','🖥':'pc','👛':'wallet','🛠':'tool','🌸':'s1','⭐':'s2','🍀':'s3','🐙':'s4','🦝':'s5'};
+const NM={ok:['できた','OK'],o:['正しい','True'],x:['ちがう','Wrong'],s1:['花','Flower'],s2:['星','Star'],s3:['クローバー','Clover'],s4:['タコ','Octopus'],s5:['ナゾの形','Odd shape'],trophy:['トロフィー','Trophy'],flame:['連続','Streak']};
+const EN=document.documentElement.lang=='en';
+const sp=document.createElementNS('http://www.w3.org/2000/svg','svg');sp.setAttribute('aria-hidden','true');sp.style.cssText='position:absolute;width:0;height:0;overflow:hidden';sp.innerHTML=Object.entries(P).map(([k,v])=>`<symbol id="i-${k}" viewBox="0 0 24 24">${v}</symbol>`).join('');document.body.prepend(sp);
+const keys=Object.keys(M).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+const RE=new RegExp('('+keys.join('|')+')[\\uFE0F\\u200D]*','g');window.__icRE=RE;
+const mk=(n,solo)=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','ic ic-'+n);s.innerHTML=`<use href="#i-${n}"/>`;if(solo&&NM[n]){s.setAttribute('role','img');s.setAttribute('aria-label',NM[n][EN?1:0])}else s.setAttribute('aria-hidden','true');return s};
+const fix=t=>{const v=t.nodeValue;RE.lastIndex=0;if(!RE.test(v))return;const p=t.parentNode;if(!p||p.closest&&p.closest('svg,script,style,title'))return;
+ if(p.tagName=='OPTION'){t.nodeValue=v.replace(RE,'').trim();return}
+ const solo=!v.replace(RE,'').trim();const f=document.createDocumentFragment();let i=0;v.replace(RE,(m,k,o)=>{if(o>i)f.appendChild(document.createTextNode(v.slice(i,o).replace(/ $/,'')));f.appendChild(mk(M[k],solo));i=o+m.length});
+ if(i<v.length)f.appendChild(document.createTextNode(v.slice(i).replace(/^ /,'')));p.replaceChild(f,t)};
+const walk=r=>{if(r.nodeType==3)return fix(r);if(r.nodeType!=1||/^(SCRIPT|STYLE|svg)$/i.test(r.tagName))return;const w=document.createTreeWalker(r,4),a=[];let n;while(n=w.nextNode())a.push(n);a.forEach(fix)};
+setTimeout(()=>{walk(document.body);new MutationObserver(ms=>{for(const m of ms){if(m.type=='characterData')fix(m.target);else m.addedNodes.forEach(walk)}}).observe(document.body,{childList:true,subtree:true,characterData:true});});
 })();
