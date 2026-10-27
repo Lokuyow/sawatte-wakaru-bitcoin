@@ -270,15 +270,25 @@ P('fBk',k>=7?84:20,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').
 const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
 $('fBn').textContent=k>=7?'#3':L('新しいブロック','New block');
 const cf=$('fCf');P('fCf',50,50,k>=8?1:0);if(k>=8){let n=0;const up=()=>{cf.textContent=L(`承認 ${n}/6`,`${n}/6 confirmations`);cf.classList.toggle('ok',n>=6);if(n++<6&&!RM)at(500,up);else if(n<=6){n=6;up()}};up();at(RM?0:900,()=>{const b=$('fB');b.classList.remove('got');void b.offsetWidth;b.classList.add('got');window.__bu&&__bu(b,12);window.__bz&&__bz(20)})}};
-const set=n=>{clr();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
+const set=n=>{clr();if($('fDone'))undone();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
 if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
 const l=L2[k];pose(k);rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
-if(k>=L2.length-1&&T){const d=dw();stop();bar(d);tm.push(setTimeout(()=>{ti.textContent=t('✅ これで支払い完了!全部の章がつながりました');window.confetti&&confetti()},d))}};
+if(k>=L2.length-1&&T){const d=dw();stop();bar(d);tm.push(setTimeout(()=>done(),d))}};
 const A=[.8,2.4,1.8,2.1,2.4,1.8,1.9,.9,2.3],dw=()=>RM?4000:Math.max(SP>1?6000:4500,A[k]*1000*SP+(SP>1?4500:3000)),fb=$('fBar'),bar=d=>{fb.style.transition='none';fb.style.width='0';if(d){fb.offsetWidth;fb.style.transition=`width ${d}ms linear`;fb.style.width='100%'}};
 const stop=()=>{clearTimeout(T);T=null;pb.textContent=t('▶ 再生');bar(0)};
 const tick=()=>{const d=dw();bar(d);T=setTimeout(()=>{set(k+1);if(T)tick()},d)};
 pb.onclick=()=>{if(T)return stop();if(k>=L2.length-1)k=-1;pb.textContent=t('⏸ 停止');T=1;set(k+1);if(T)tick()};
-$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};
+const SPK='<svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>';
+const undone=()=>{const d=$('fDone');if(d)d.remove();S.querySelectorAll('.fspk').forEach(e=>e.remove());$('fCap').hidden=false;document.querySelector('.fctl').hidden=false;document.querySelector('.fopt').hidden=false;S.classList.remove('fwin')};
+const done=()=>{stop();if(k!=L2.length-1)set(L2.length-1);undone();L2.forEach(l=>{l.classList.remove('on');l.classList.add('done')});S.classList.add('fwin');
+for(let i=0;i<14;i++){const e=document.createElement('i');e.className='fspk';e.innerHTML=SPK;e.style.left=(5+Math.random()*90)+'%';e.style.top=(5+Math.random()*85)+'%';e.style.animationDelay=(Math.random()*1.2)+'s';e.style.setProperty('--s',(.5+Math.random()*.9).toFixed(2));S.appendChild(e)}
+const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/',tx=L('「さわってわかるビットコイン」で、送金がボブに届くまでの全体の流れをマスターしました ₿','I mastered the whole journey of a Bitcoin payment in “Touch & Learn Bitcoin” ₿');
+const d=document.createElement('div');d.id='fDone';d.className='fdone';d.setAttribute('role','status');
+d.innerHTML=`<div class="fdk">${SPK}<span>${L('全9ステップ完了','All 9 steps done')}</span>${SPK}</div><h3>${L('おめでとう!<br>全体の流れをマスター','Congratulations!<br>You mastered the whole flow')}</h3><p>${L('鍵・署名・ハッシュ・マイニング・承認。ボブに 0.01 BTC が届くまでを、ぜんぶ自分の手で進めました。','Keys, signatures, hashing, mining and confirmations: you walked a 0.01 BTC payment all the way to Bob.')}</p><div class="fdb"><button type="button" class="ghost" id="fdR">${L('最初から','Start over')}</button><button type="button" id="fdG">${L('ゲームで試す','Try the games')}</button><button type="button" id="fdN">${L('まとめへ','To the summary')} →</button><a class="btn sx ghost" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(tx+'\n'+U)}">${L('Xで共有','Share on X')}</a></div>`;
+const cap=$('fCap');cap.hidden=true;document.querySelector('.fctl').hidden=true;document.querySelector('.fopt').hidden=true;cap.after(d);
+$('fdR').onclick=()=>{undone();set(0)};$('fdG').onclick=()=>{undone();go(chs.findIndex(c=>c.dataset.t=='ゲーム'))};$('fdN').onclick=()=>{undone();go(chs.findIndex(c=>c.dataset.t=='まとめ'))};
+window.confetti&&confetti();window.__bz&&__bz([30,60,30,60,120]);window.__bu&&__bu($('fB'),18);d.focus&&d.querySelector('h3').setAttribute('tabindex','-1');d.querySelector('h3').focus({preventScroll:true})};
+$('fNext').onclick=()=>{stop();if(k>=L2.length-1)return done();set(k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};
 L2.forEach((l,i)=>{l.onclick=e=>{e.preventDefault();stop();set(i)}});set(-1)})();
 
 // intro

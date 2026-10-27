@@ -691,3 +691,21 @@ p,li,dd,summary,small,.q,h3{text-wrap:pretty}
 .trophy{display:flex;justify-content:center}.trophy svg{margin:0 auto}
 @media(max-width:500px){.gwh{flex-wrap:nowrap!important;white-space:nowrap;gap:3px;font-size:.78rem;letter-spacing:-.03em}.gwh>*{flex:none}.gwh b{margin-left:auto}}
 .trophy{display:flex!important;justify-content:center!important;width:100%;margin-left:0!important;margin-right:0!important}.trophy>*{margin:0 auto!important}
+.tN{display:inline-flex!important;align-items:center;justify-content:center;line-height:1!important;vertical-align:middle!important;padding:0!important;font-variant-numeric:tabular-nums}
+.tipb,.tipb:visited{background:var(--btn)!important;color:var(--onb,#fff)!important}
+.tipb:hover{background:var(--btnh)!important;filter:none}
+.stage.fwin{box-shadow:0 0 0 2px var(--o) inset}
+.fspk{position:absolute;width:calc(22px*var(--s,1));height:calc(22px*var(--s,1));color:var(--o);pointer-events:none;transform:translate(-50%,-50%);animation:fspk 1.6s ease-in-out infinite;z-index:3}
+.fspk svg,.fdk svg{width:100%;height:100%;fill:currentColor;display:block}
+@keyframes fspk{0%,100%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(0)}50%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(45deg)}}
+.fdone{margin-top:14px;padding:22px 18px;border-radius:16px;border:2px solid var(--o);background:var(--card,var(--bg));text-align:center;animation:fdin .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes fdin{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:none}}
+.fdk{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--od);font-weight:800;font-size:.85rem;letter-spacing:.04em}
+.fdk svg{width:16px;height:16px;color:var(--o)}
+.fdone h3{font-size:clamp(1.5rem,5.4vw,2.1rem);line-height:1.25;margin:8px 0 10px;font-weight:900;text-wrap:balance}
+.fdone h3:focus{outline:none}
+.fdone p{color:var(--mut);margin:0 auto 16px;max-width:34em;font-size:.92rem}
+.fdb{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.fdb>*{margin:0!important}
+@media(max-width:500px){.fdb{display:grid;grid-template-columns:1fr 1fr}.fdb>*{width:100%;justify-content:center;white-space:nowrap;font-size:.85rem;padding-left:6px;padding-right:6px}}
+@media(prefers-reduced-motion:reduce){.fspk{animation:none;opacity:.8;transform:translate(-50%,-50%)}.fdone{animation:none}}
