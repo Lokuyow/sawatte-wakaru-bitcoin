@@ -146,17 +146,32 @@ b.onclick=()=>{r.dataset.theme=dk()?'light':'dark';try{localStorage.setItem('sw-
 (()=>{const b=$('lang');b.querySelectorAll('button').forEach(x=>{const on=(x.dataset.l=='en')==EN;x.setAttribute('aria-pressed',on);x.onclick=()=>{if(on)return;try{localStorage.setItem('sw-lang',EN?'ja':'en');if(!$('app').hidden)sessionStorage.setItem('sw-go',cur)}catch(e){}location.reload()}});
 let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-go')}catch(e){}if(g!==null){$('hero').hidden=true;$('app').hidden=false;go(+g)}})();
 
-// big-picture flow show
-(()=>{const f=$('flow');if(!f)return;const L2=[...f.children],tok=$('fTok'),cap=$('fCap'),pb=$('fPlay');let k=-1,T=null;
-const T_=x=>window.T?window.T(x):x;
-const place=()=>{if(k<0){tok.style.opacity=0;return}const r=L2[k].querySelector('.fi');tok.style.opacity=1;tok.style.transform=`translate(${r.offsetLeft+L2[k].offsetLeft+r.offsetWidth/2-14}px,${r.offsetTop+L2[k].offsetTop+r.offsetHeight/2-14}px)`};
-const set=n=>{k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});place();
-cap.textContent=k<0?T_('▶ 再生を押すと、最初から順番に進みます'):k>=L2.length-1?T_('✅ これで支払い完了!全部の章がつながりました'):`${k+1}. ${T_(L2[k].querySelector('b').textContent)}`;if(k>=L2.length-1){stop();if(window.confetti)confetti()}};
-const stop=()=>{clearInterval(T);T=null;pb.textContent=T_('▶ 再生')};
-pb.onclick=()=>{if(T)return stop();if(k>=L2.length-1)set(-1);pb.textContent=T_('⏸ 停止');set(k+1);T=setInterval(()=>set(k+1),1800)};
-$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fReset').onclick=()=>{stop();set(-1)};
-L2.forEach((l,i)=>{l.onclick=e=>{if(e.target.closest('.more'))return;stop();set(i)};l.querySelector('.more').onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))}});
-addEventListener('resize',place);set(-1)})();
+// big-picture flow show: one stage, one scene per step
+(()=>{const f=$('flow');if(!f)return;const L2=[...f.children],S=$('fStage'),ti=$('fTitle'),de=$('fDesc'),mo=$('fMore'),pb=$('fPlay');let k=-1,T=null,tm=[];
+const t=x=>window.T?window.T(x):x,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const at=(ms,fn)=>tm.push(setTimeout(fn,RM?0:ms)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
+const hx=n=>[...Array(n)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
+const slip=(c='')=>`<div class="slip ${c}"><small>${t('取引')}</small><b>${t('アリス → ボブ')}</b><span class="amt">0.01 BTC</span></div>`;
+const sc=[
+()=>{S.innerHTML=`<div class="sc1"><div class="grid256" id="g256">${'<i></i>'.repeat(256)}</div><div class="keyout pend" id="kOut">🔑 <b>${t('秘密鍵')}</b><code>${hx(16)}…</code></div></div>`;const c=[...S.querySelectorAll('#g256 i')];let n=0;const st=()=>{for(let m=0;m<16&&n<256;m++,n++){c[n].textContent=Math.random()<.5?'0':'1';c[n].className='b'+c[n].textContent}if(n<256){if(!RM)at(45,st)}else $('kOut').classList.remove('pend')};if(RM)while(n<256)st();else st()},
+()=>{S.innerHTML=`<div class="sc2"><div class="pill k">🔑 ${t('秘密鍵')}</div><div class="arr a1">→</div><div class="fun">▽<small>${t('一方通行')}</small></div><div class="arr a2">→</div><div class="pill pub">${t('公開鍵')}</div><div class="arr a3">→</div><div class="pill adr">${t('アドレス')}<code>bc1q${hx(6)}…</code></div></div><div class="back">← ✕ <span>${t('逆向きの計算はできない')}</span></div>`},
+()=>{S.innerHTML=`<div class="sc3"><div class="slip big"><small>${t('取引')}</small><b id="ty"></b><span class="amt" id="ty2"></span><small class="fee" id="ty3"></small></div></div>`;const a=t('アリス → ボブ'),b='0.01 BTC',fe=t('手数料')+' 0.0001 BTC',e=$('ty');let n=0;const st=()=>{e.textContent=a.slice(0,++n);if(n<a.length)at(110,st);else at(250,()=>{$('ty2').textContent=b;at(300,()=>$('ty3').textContent=fe)})};if(RM){e.textContent=a;$('ty2').textContent=b;$('ty3').textContent=fe}else st()},
+()=>{S.innerHTML=`<div class="sc4"><div class="slipw">${slip('big')}<div class="stamp">🔏</div><div class="seal">${t('署名')}</div></div><div class="chk">${t('公開鍵でチェック')} <b>✓ ${t('本人の署名')}</b></div></div>`},
+()=>{const p=[[50,10],[86,30],[86,70],[50,90],[14,70],[14,30]];S.innerHTML=`<div class="sc5"><i class="rip"></i><i class="rip r2"></i>${p.map((q,i)=>`<span class="node" style="left:${q[0]}%;top:${q[1]}%;animation-delay:${.5+i*.25}s">🖥️<b style="animation-delay:${.7+i*.25}s">✓</b></span>`).join('')}<div class="mini">📄</div></div><div class="sub">${t('ノードが署名と残高をチェックして、となりに伝える')}</div>`},
+()=>{const fs=[[t('ほかの取引'),2],[t('あなたの取引'),12,1],[t('ほかの取引'),25],[t('ほかの取引'),5]];S.innerHTML=`<div class="sc6"><div class="mph"><span>${t('メンプール(順番待ち)')}</span><span>${t('手数料')}</span></div><div class="mpl">${fs.map((x,i)=>`<div class="mp${x[2]?' me':''}" data-f="${x[1]}" style="top:${i*40}px"><span>📄 ${x[0]}</span><b>${x[1]} sat/vB</b></div>`).join('')}</div><div class="sub">${t('手数料が高い取引ほど上へ')}</div></div>`;at(900,()=>{[...S.querySelectorAll('.mp')].sort((a,b)=>b.dataset.f-a.dataset.f).forEach((e,i)=>e.style.top=i*40+'px')})},
+()=>{S.innerHTML=`<div class="sc7"><div class="blkbox"><small>${t('新しいブロック')}</small><div class="tx3"><span>📄</span><span class="me">📄</span><span>📄</span></div></div><div class="mine"><div>${t('ナンス')} <b id="nn">0</b></div><code id="nh">${hx(16)}</code><div class="nfound" id="nf" hidden>⛏️ ${t('当たり!')}</div></div></div>`;let n=0;const st=()=>{n+=Math.random()*900+300|0;$('nn').textContent=n.toLocaleString();if(n<9000&&!RM){$('nh').textContent=hx(16);at(70,st)}else{$('nh').innerHTML='<em>0000</em>'+hx(12);$('nh').classList.add('ok');$('nf').hidden=false}};at(600,st)},
+()=>{const h=[hx(4),hx(4),hx(4),hx(4)];S.innerHTML=`<div class="sc8">${[0,1,2].map(i=>`<div class="cb${i==2?' new':''}"><small>#${840001+i}</small><span>${t('前の指紋')}</span><code>00${h[i]}</code><span>${t('指紋')}</span><code class="own">00${h[i+1]}</code></div>${i<2?'<div class="lk">🔗</div>':''}`).join('')}</div><div class="sub">${t('新しいブロックが前のブロックの指紋を引きつぐ')}</div>`},
+()=>{S.innerHTML=`<div class="sc9"><div class="stack" id="stk"></div><div class="side"><div class="conf">${t('承認')} <b id="cf">0</b>/6</div><div class="wal">👛 ${t('ボブの残高')}<b id="wb">0.000 BTC</b></div></div></div>`;let n=0;const st=()=>{n++;const d=document.createElement('div');d.className='sb'+(n==1?' me':'');d.textContent=n==1?t('あなたの取引入り'):'+1';$('stk').prepend(d);$('cf').textContent=n;if(n==1)$('wb').textContent='0.010 BTC';if(n==6)S.querySelector('.conf').classList.add('ok');else if(!RM)at(380,st)};if(RM)while(n<6)st();else at(300,st)}];
+const set=n=>{clr();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
+if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
+const l=L2[k];sc[k]();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
+if(k>=L2.length-1&&T){stop();at(3400,()=>{ti.textContent=t('✅ これで支払い完了!全部の章がつながりました');window.confetti&&confetti()})}};
+const D=[2800,3400,3400,3200,3200,3400,3800,3200];
+const stop=()=>{clearTimeout(T);T=null;pb.textContent=t('▶ 再生')};
+const tick=()=>{T=setTimeout(()=>{set(k+1);if(T)tick()},D[k]||3200)};
+pb.onclick=()=>{if(T)return stop();if(k>=L2.length-1)k=-1;pb.textContent=t('⏸ 停止');T=1;set(k+1);if(T)tick()};
+$('fNext').onclick=()=>{stop();set(k>=L2.length-1?0:k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};
+L2.forEach((l,i)=>{l.onclick=e=>{e.preventDefault();stop();set(i)}});set(-1)})();
 
 // intro
 (()=>{const v=$('iView');if(!v)return;const T_=x=>window.T?window.T(x):x;
@@ -164,3 +179,6 @@ const show=all=>{$('iBank').setAttribute('aria-pressed',!all);$('iAll').setAttri
 v.innerHTML=all?`<div class="net">${'👤📒 '.repeat(6).trim().split(' ').map(x=>`<span>${x}</span>`).join('')}</div><p>${T_('台帳はみんなが同じものを持っています。1人がズルしても、ほかの全員と合わないのでバレます。')}</p>`:`<div class="net"><span>👤</span><span>👤</span><span class="big">🏦📒</span><span>👤</span><span>👤</span></div><p>${T_('台帳は銀行だけが持っています。銀行が書きかえたり、止めたりできます。')}</p>`};
 $('iBank').onclick=()=>show(false);$('iAll').onclick=()=>show(true);show(false);
 document.querySelectorAll('.rm0').forEach(b=>b.onclick=()=>go(chs.findIndex(c=>c.dataset.t==b.dataset.g)))})();
+
+// 51% myth: catch-up chance (q/p)^z
+(()=>{const z=$('zN');if(!z)return;const t=x=>window.T?window.T(x):x;const up=()=>{const q=+$('aP').value/100,p=1-q,n=+z.value,P=q>=p?1:Math.pow(q/p,n);$('zV').textContent=n;$('zB').style.width=(P*100)+'%';$('zT').textContent=t('計算力')+` ${Math.round(q*100)}% `+t('で追いつける確率')+`: ${P>=.9995?'100':P<.0001?'0.01'+t('未満'):(P*100).toFixed(P<.1?2:1)}%`};z.oninput=up;$('aP').addEventListener('input',up);up()})();
