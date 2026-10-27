@@ -139,9 +139,9 @@ const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':(h==
 $('aMany').onclick=()=>{const p=$('aP').value/100;let k=0;for(let i=0;i<100;i++)if(sim(p).ok)k++;$('aRes').innerHTML=L(`100回中 <b>${k}回</b> 成功(計算力 ${$('aP').value}%)`,`<b>${k}</b> of 100 succeeded (power ${$('aP').value}%)`)}})();
 
 // theme
-(()=>{const r=document.documentElement,b=$('theme'),dk=()=>r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme: dark)').matches;const ui=()=>{b.textContent=dk()?'☀️':'🌙'};ui();
+(()=>{const r=document.documentElement,b=$('theme'),dk=()=>r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme: dark)').matches;const ui=()=>{b.classList.toggle('dk',dk())};ui();
 b.onclick=()=>{r.dataset.theme=dk()?'light':'dark';try{localStorage.setItem('sw-theme',r.dataset.theme)}catch(e){}ui()}})();
 
 // language
-(()=>{const b=$('lang');b.textContent=EN?'JA':'EN';b.onclick=()=>{try{localStorage.setItem('sw-lang',EN?'ja':'en');if(!$('app').hidden)sessionStorage.setItem('sw-go',cur)}catch(e){}location.reload()};
+(()=>{const b=$('lang');b.querySelectorAll('button').forEach(x=>{const on=(x.dataset.l=='en')==EN;x.setAttribute('aria-pressed',on);x.onclick=()=>{if(on)return;try{localStorage.setItem('sw-lang',EN?'ja':'en');if(!$('app').hidden)sessionStorage.setItem('sw-go',cur)}catch(e){}location.reload()}});
 let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-go')}catch(e){}if(g!==null){$('hero').hidden=true;$('app').hidden=false;go(+g)}})();
