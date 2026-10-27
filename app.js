@@ -29,6 +29,13 @@ d.querySelectorAll('button').forEach(b=>b.onclick=()=>{const ok=+b.dataset.j==k;
 // hash flip render
 function flipTo(el,h,old){el.innerHTML=[...h].map((c,i)=>`<span${old&&old[i]!=c?' class="flip"':''}>${c}</span>`).join('')}
 // 1 hash
+(()=>{const R=$('brg');if(!R)return;const who=[L('アリス','Alice'),L('ボブ','Bob'),L('キャロル','Carol')],tx=a=>L(`アリス → ボブ ${a} BTC`,`Alice → Bob ${a} BTC`);
+R.innerHTML=`<div class="brL">${who.map((w,i)=>`<div class="brC" id="brC${i}"><small>${w}</small><span class="brT">${tx(1)}</span><code class="brF"></code></div>`).join('')}</div><button class="ghost" id="brB"></button><div class="brR" id="brR" aria-live="polite"></div>`;
+let bad=false;const C=[0,1,2].map(i=>$('brC'+i));
+const up=async a=>{const b=$('brB');b.textContent=bad?L('元に戻す','Undo'):L('キャロルの台帳をこっそり書きかえる','Secretly edit Carol’s ledger');const ok=(await sha('A>B 1')).slice(0,6),ng=(await sha('A>B 9')).slice(0,6);
+C.forEach((c,i)=>{const t=bad&&i==2;c.querySelector('.brT').innerHTML=t?L('アリス → ボブ <b>9</b> BTC','Alice → Bob <b>9</b> BTC'):tx(1);c.querySelector('.brF').textContent=(t?ng:ok);c.classList.toggle('bad',t);if(a&&t){c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop')}});
+$('brR').innerHTML=bad?L('指紋が合わない → 書きかえがすぐバレる','Fingerprints don’t match → the edit is caught at once'):'';if(a){window.__bz&&__bz(bad?40:10);bad&&window.__bu&&__bu(C[2],6)}};
+$('brB').onclick=()=>{bad=!bad;up(true)};up(false)})();
 (()=>{const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,inp=$('hIn'),P=EN?['Hello','Hallo','Hello!','hello']:['こんにちは','こんにちわ','こんにちは!','こんばんは'];let prevT=null,prevH='',seq=0;
 const esc=c=>c.replace(/[&<>"]/g,x=>'&#'+x.charCodeAt(0)+';');
 $('hwP').innerHTML=P.map(p=>`<button class="ghost" data-p="${esc(p)}">${esc(p)}</button>`).join('');$('hwPl').textContent=L('前の指紋','Previous');$('hwNl').textContent=L('いまの指紋','Now');
