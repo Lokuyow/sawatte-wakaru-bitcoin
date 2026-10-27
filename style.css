@@ -422,3 +422,5 @@ h2{font-size:1.45rem;text-wrap:balance;word-break:auto-phrase}
 h2 em{font-size:.66em}
 #hY{font-size:1em;min-width:0}#hH{min-width:0}
 #hH{margin-right:.5em}
+.netv{margin:20px -4px 8px;border-radius:var(--r);overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#netC{display:block;width:100%;height:240px;cursor:pointer}
