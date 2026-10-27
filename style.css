@@ -598,7 +598,7 @@ h2 em{font-size:.66em}
 .flow.rail .fi{font-size:1.6rem}
 .fcap b{font-size:1.15rem}.fcap p{font-size:1rem}
 @media(min-width:700px){.flow.rail .fi{font-size:2rem}.fcap b{font-size:1.3rem}.fcap p{font-size:1.08rem}}
-#fStage .fnd svg{width:clamp(34px,7cqw,50px)!important;height:clamp(34px,7cqw,50px)!important}#fStage .fnd{width:auto!important}
+#fStage .fnd svg{width:clamp(30px,9cqw,56px)!important;height:clamp(28px,8.5cqw,53px)!important;stroke-width:1.4}#fStage .fnd{width:auto!important}
 /* hash mixer v3: single column, flashier */
 .hw{position:relative}
 .hw::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 40%,rgba(247,147,26,.55),rgba(247,147,26,0) 65%);border-radius:inherit}

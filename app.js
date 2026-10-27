@@ -247,7 +247,7 @@ const build=()=>{S.innerHTML=`<div class="fsn">
 <div class="fo fp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
 <div class="fo fkey" id="fK"><small>${L('秘密鍵','Private key')}</small><code id="fKc"></code></div>
 <div class="fo fpub" id="fPub"><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span>${L('アドレス','Address')}</span><small>${L('一方通行','one-way')}</small></div>
-${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:54%"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
+${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:54%"><svg viewBox="3 4 18 17"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
 <div class="fo fmp" id="fMp"><small>${L('メンプール','Mempool')}</small><i></i><i></i><i></i></div>
 <div class="fo fch fc1" id="fC1">#1</div><div class="fo fch fc2" id="fC2">#2</div>
 <div class="fo fblk" id="fBk"><small id="fBn">${L('新しいブロック','New block')}</small><code id="fNn"></code></div>
