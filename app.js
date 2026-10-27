@@ -1,6 +1,6 @@
 const EN=document.documentElement.lang=='en',L=(j,e)=>EN?e:j,NM={アリス:'Alice',ボブ:'Bob',キャロル:'Carol',デイブ:'Dave'},nm=n=>EN?NM[n]||n:n;
 if(EN){document.getElementById('hIn').value='Hello'}
-function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const w=document.createElement('div');w.className='confetti';const C=['#f7931a','#b35500','#ffd9a6','#17804f','#2a2118'];for(let i=0;i<40;i++){const p=document.createElement('i');p.style.cssText=`left:${Math.random()*100}%;background:${C[i%5]};animation-delay:${Math.random()*.3}s;--x:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg`;w.appendChild(p)}document.body.appendChild(w);setTimeout(()=>w.remove(),2200)}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const w=document.createElement('div');w.className='confetti';const _cs=getComputedStyle(document.documentElement),C=[_cs.getPropertyValue('--accent').trim()||'#E8650A',_cs.getPropertyValue('--btnh').trim()||'#DA5E00','#ffd9a6','#17804f','#2a2118'];for(let i=0;i<40;i++){const p=document.createElement('i');p.style.cssText=`left:${Math.random()*100}%;background:${C[i%5]};animation-delay:${Math.random()*.3}s;--x:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg`;w.appendChild(p)}document.body.appendChild(w);setTimeout(()=>w.remove(),2200)}
 const $=id=>document.getElementById(id),enc=new TextEncoder();
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',enc.encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
@@ -115,11 +115,11 @@ q('#sgFk').onclick=async()=>{if(busy)return;busy=true;amount=1;amt.textContent='
 q('#sgRe').onclick=reset;reset()})();
 // 5 ledger
 const ppl=[['アリス','👩'],['ボブ','👨'],['キャロル','👧'],['デイブ','🧔']];let bal={アリス:5,ボブ:2,キャロル:0,デイブ:1};
-let tF=-1,tT=-1,tA=1;const tHint=()=>{$('tHint').textContent=tF<0?L('左で送る人を選ぶ','Pick who sends (left)'):tT<0?L('右で受け取る人を選ぶ','Pick who receives (right)'):L(`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA}コイン`,`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA} coin${tA>1?'s':''}`);$('tSend').disabled=tF<0||tT<0;$('tSend').classList.toggle('pls',tF>=0&&tT>=0)};
+let tF=-1,tT=-1,tA=1;const tHint=()=>{$('tHint').textContent=tF<0?L('左で送る人を選ぶ','Pick who sends (left)'):tT<0?L('右で受け取る人を選ぶ','Pick who receives (right)'):L(`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA}コイン`,`${nm(ppl[tF][0])} → ${nm(ppl[tT][0])} ${tA} coin${tA>1?'s':''}`);$('tSend').disabled=tF<0||tT<0;$('tSend').classList.toggle('pls',tF>=0&&tT>=0);$('people').dataset.st=tF<0?'a':tT<0?'b':'c';$('tHint').hidden=tF<0||tT<0};
 {const P=$('people');P.className='people tx2';P.innerHTML=`<div class="tCol" id="tL"></div><div class="tMid"><svg class="tArr" viewBox="0 0 40 24" aria-hidden="true"><path d="M4 12h30M26 5l8 7-8 7"/></svg><div id="tMidA"></div><button type="button" id="tSend">${L('送る','Send')}</button></div><div class="tCol" id="tR"></div><svg class="tLn" id="tLn" aria-hidden="true"><line id="tLnL"/></svg>`;$('tMidA').appendChild($('tAmtC'));const f=document.createElement('div');f.className='tFoot';const dB=$('tDouble');dB.className='ghost sm';f.append($('tHint'),dB);P.appendChild(f)}
 const row=(s,sel,dis)=>ppl.map(([n,e],i)=>`<button type="button" class="p${i==sel?' fr':''}" data-s="${s}" data-i="${i}"${i==dis?' disabled':''}><span class="pe">${e}</span><span class="pn">${nm(n)}</span><b>${bal[n]}</b></button>`).join('');
 function line(){const l=$('tLnL'),P=$('people');if(tF<0||tT<0){l.style.opacity=0;return}const R=P.getBoundingClientRect(),a=$('tL').children[tF+1].getBoundingClientRect(),b=$('tR').children[tT+1].getBoundingClientRect();l.setAttribute('x1',a.right-R.left);l.setAttribute('y1',a.top+a.height/2-R.top);l.setAttribute('x2',b.left-R.left);l.setAttribute('y2',b.top+b.height/2-R.top);l.style.opacity=1}
-function rp(){$('tL').innerHTML=`<small>${L('送る人','Sender')}</small>`+row('L',tF,tT);$('tR').innerHTML=`<small>${L('受け取る人','Receiver')}</small>`+row('R',tT,tF);tHint();line()}
+function rp(){$('tL').innerHTML=`<small><i class="tN">1</i>${L('送る人','Sender')}</small>`+row('L',tF,tT);$('tR').innerHTML=`<small><i class="tN">2</i>${L('受け取る人','Receiver')}</small>`+row('R',tT,tF);tHint();line()}
 addEventListener('resize',()=>line());
 $('tAmtC').innerHTML=[1,3,5].map(a=>`<button type="button" class="ghost${a==tA?' on':''}" data-a="${a}">${a} ${L('コイン',a>1?'coins':'coin')}</button>`).join('');
 $('tAmtC').onclick=e=>{const b=e.target.closest('button');if(!b)return;tA=+b.dataset.a;$('tAmtC').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==b));window.__bz&&__bz(8);tHint()};
@@ -257,9 +257,9 @@ ${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:63%"><svg
 const P=(id,x,y,o=1,s=1)=>{const e=$(id);if(x!=null){e.style.left=x+'%';e.style.top=y+'%'}e.style.opacity=o;e.style.transform=`translate(-50%,-50%) scale(${s})`};
 const TX=L('アリス → ボブ 0.01 BTC','Alice → Bob 0.01 BTC');
 const pose=k=>{if(!S.querySelector('.fsn'))build();const F=S.firstChild;F.className='fsn s'+k;
-P('fA',18,17);P('fB',82,17);$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
-P('fK',15,33,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
-P('fPub',60,40,k==1?1:0);
+P('fA',18,5);P('fB',82,5);$('fA').style.transform=$('fB').style.transform='translate(-50%,0)';$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
+P('fK',18,33,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
+P('fPub',60,33,k==1?1:0);{const K=$('fK'),Pb=$('fPub'),W=S.firstChild.clientWidth,H=S.firstChild.clientHeight,kr=K.offsetLeft+K.offsetWidth/2,pw=Pb.offsetWidth;Pb.classList.remove('fbel');if(W>=500&&kr+10+pw<=W-8){Pb.style.left=(kr+10)+'px';Pb.style.top=K.offsetTop+'px';Pb.style.transform='translate(0,-50%)'}else{Pb.classList.add('fbel');Pb.style.left=Math.min(W-pw/2-8,Math.max(pw/2+8,K.offsetLeft))+'px';Pb.style.top=(K.offsetTop+K.offsetHeight/2+Pb.offsetHeight/2+8)+'px';Pb.style.transform='translate(-50%,-50%)'}}
 P('fS',k<=4?50:k==5?25:k==6?50:87,k<=4?45:k==5?83:38,k>=2?(k>=7?0:1):0,k>=6?.6:k==5?.7:1);
 const st=$('fSt');if(k==2&&!RM){let n=0;st.textContent='';const ty=()=>{st.textContent=TX.slice(0,++n);if(n<TX.length)at(60,ty)};at(400,ty)}else st.textContent=TX;
 $('fSe').classList.toggle('on',k>=3);
@@ -375,7 +375,7 @@ setTimeout(()=>{walk(document.body);const SK={contains:n=>{const e=n.nodeType==1
 
 /* intro network animation */
 (()=>{const cv=document.getElementById('netC');if(!cv)return;const cx=cv.getContext('2d');const RM=matchMedia('(prefers-reduced-motion: reduce)');let W=0,H=0,dpr=1,N=[],B=[],P=null,S=[],run=false,raf=0,lastT=0,hop=0;
-const col=()=>{const g=getComputedStyle(document.documentElement);const v=n=>g.getPropertyValue(n).trim();return{ln:v('--line2')||v('--line')||'#ddd',nd:v('--mut')||'#888',o:v('--o')||'#f7931a',bg:v('--soft')||'transparent'}};let C=col();
+const col=()=>{const g=getComputedStyle(document.documentElement);const v=n=>g.getPropertyValue(n).trim();return{ln:v('--line2')||v('--line')||'#ddd',nd:v('--mut')||'#888',o:v('--accent')||v('--o')||'#E8650A',bg:v('--soft')||'transparent'}};let C=col();
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const size=()=>{const r=cv.getBoundingClientRect();if(!r.width)return;dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)};
 const addNode=(x,y)=>{N.push({x,y,vx:rnd(-.08,.08),vy:rnd(-.08,.08),r:rnd(2.2,3.4),b:0});if(N.length>26)N.shift()};
@@ -405,3 +405,5 @@ addEventListener('resize',()=>{if(!W)return;const ow=W;size();if(Math.abs(W-ow)>
 new MutationObserver(()=>{C=col();draw()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']});
 cv.addEventListener('pointerdown',e=>{if(!W)init();const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=Math.min(e.clientY-r.top,H-62);addNode(x,y);const n=N[N.length-1];n.b=1;spark(x,y,10);try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}if(RM.matches){addBlock();B.forEach(b=>{b.x=b.tx;b.a=1});draw()}else if(!P||!P.b)newPulse(n)});
 })();
+/* optical centring: shift icon-only svgs so their ink bbox is centred */
+(()=>{const fix=()=>{document.querySelectorAll('svg.ic').forEach(s=>{const p=s.parentElement;if(!p||p.children.length!=1||p.textContent.trim())return;const u=s.querySelector('use');if(!u)return;const R=s.getBoundingClientRect();if(!R.width)return;u.style.transform='';let b;try{b=u.getBBox()}catch(e){return}if(!b.width)return;const m=s.getScreenCTM();if(!m)return;const dx=R.left+R.width/2-(m.a*(b.x+b.width/2)+m.e),dy=R.top+R.height/2-(m.d*(b.y+b.height/2)+m.f);if(Math.abs(dx)>.3||Math.abs(dy)>.3)u.style.transform=`translate(${(dx/m.a).toFixed(2)}px,${(dy/m.d).toFixed(2)}px)`})};let t;let t2;const go=()=>{cancelAnimationFrame(t);t=requestAnimationFrame(fix);clearTimeout(t2);t2=setTimeout(fix,300)};new MutationObserver(go).observe(document.body,{childList:true,subtree:true});addEventListener('resize',go);addEventListener('load',go);go()})();
