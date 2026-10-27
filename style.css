@@ -333,16 +333,11 @@ input[type=range]::-webkit-slider-thumb{transition:box-shadow .2s,transform .2s}
 input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 8px color-mix(in srgb,var(--o) 25%,transparent);transform:scale(1.15)}
 input[type=range]:active::-moz-range-thumb{box-shadow:0 0 0 8px color-mix(in srgb,var(--o) 25%,transparent)}
 /* toys */
-.toy{display:flex;align-items:center;gap:14px;margin:14px 0 18px;min-width:0}
-.toy .tv{min-width:0;font-size:.95rem}.toy .tv small{display:block;color:var(--mut);font-size:.78rem}
-.toy .tv b{font-variant-numeric:tabular-nums;word-break:break-all}
 
 
 
-.bcoin{flex:0 0 auto;width:64px;height:64px;padding:0;border-radius:50%;font-size:1.8rem;font-weight:800;color:#fff;background:radial-gradient(circle at 35% 30%,#ffc670,#f7931a 55%,#b35500);box-shadow:0 0 0 calc(var(--n,0)*2px) color-mix(in srgb,var(--o) 20%,transparent),0 4px 10px rgba(0,0,0,.15)}
 @media(prefers-reduced-motion:reduce){button,button:active{transition:none;transform:none}.rip,.spark,.roll,.vb,.crack,.snap{animation:none!important}}
 .rpo{overflow:hidden}.rpo.rps{position:relative}
-.toy 
 /* ===== minimal palette ===== */
 :root{--bg:#fafaf8;--card:#ffffff;--soft:#f3f2ef;--line:#e6e4df;--line2:#d9d6cf;--ink:#1f1d1a;--mut:#6b665e;--o:#f7931a;--od:#a85400;--btn:#a85400;--btnh:#8c4600;--ok:#1f7a4d;--ng:#c43a3f;--okbg:#ffffff;--ngbg:#ffffff;--okline:#1f7a4d;--ngline:#c43a3f;--glow:transparent;--hashbg:#f3f2ef;--hashfg:#1f1d1a;--hdr:rgba(250,250,248,.92);--onb:#ffffff;--okh:#196640;--ngh:#a83035;--tint:rgba(247,147,26,.12)}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111214;--card:#18191c;--soft:#202226;--line:#2c2e33;--line2:#3a3d43;--ink:#e9e8e5;--mut:#9b988f;--o:#f2a03d;--od:#f2a03d;--btn:#f2a03d;--btnh:#f5b35f;--ok:#5fbf8f;--ng:#e5797d;--okbg:#18191c;--ngbg:#18191c;--okline:#5fbf8f;--ngline:#e5797d;--hashbg:#0d0e10;--hashfg:#e9e8e5;--hdr:rgba(17,18,20,.88);--onb:#111214;--okh:#6fcb9c;--ngh:#ec8a8e;--tint:rgba(242,160,61,.14)}}
@@ -354,7 +349,7 @@ button.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px 
 .blk.bad .fp,.bad .fp{border-color:var(--ng);color:var(--ng)}
 .found{box-shadow:0 0 0 3px var(--tint)}
 @keyframes flip{0%{transform:rotateX(90deg);color:var(--o)}}
-.coin,.bcoin,.ftok{background:var(--o);box-shadow:none;color:#fff}
+.coin,.ftok{background:var(--o);box-shadow:none;color:#fff}
 .bar div{background:var(--o)}
 .x{background:var(--ink);color:var(--bg)}.x:hover{background:var(--ink)}
 :focus-visible{outline:2px solid var(--o)}
@@ -512,3 +507,41 @@ h2 em{font-size:.66em}
 @keyframes hwMix{0%{opacity:1;transform:translate(-50%,-50%) rotate(0) translateX(0)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--a) + 540deg*var(--s))) translateX(var(--r)) scale(.4)}}
 .hwM.go .hwFl span{animation-duration:.3s}
 .hwH i.rn{color:var(--line2);font-weight:400}
+/* 1-3 tap ledger */
+.people button.p{display:block;width:100%;min-width:0;min-height:0;margin:0;background:var(--soft);color:var(--ink);border:1.5px solid transparent;box-shadow:none;font-weight:400;cursor:pointer;transition:border-color .2s,transform .2s}
+.people button.p div{font-size:.74rem}.people button.p b{font-size:1rem;color:var(--od)}
+.people button.p.fr{border-color:var(--o);transform:translateY(-3px);box-shadow:0 4px 0 -1px var(--glow)}
+.people button.p.got{animation:hwPop .4s}
+.tAmtC{display:flex;gap:8px;justify-content:center;margin:4px 0}.tAmtC button{font-size:.85rem;padding:6px 14px;min-height:0}
+.tAmtC button.on{background:var(--o);color:#fff;box-shadow:none}
+.tHint{text-align:center;font-size:.85rem;font-weight:700;color:var(--od);margin:6px 0 10px;min-height:1.4em}
+.tFly{position:fixed;z-index:50;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--o);color:#fff;font-weight:800;font-size:.85rem;display:grid;place-items:center;pointer-events:none;transition:transform .45s cubic-bezier(.4,0,.3,1)}
+/* flashy mixer */
+.hwGo{display:inline-flex;align-items:center;gap:8px;font-size:1.05rem;font-weight:800;padding:12px 26px;border-radius:999px}
+.hwGo svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.hwGo.pls{animation:hwPls 1.1s ease-in-out infinite}
+@keyframes hwPls{0%,100%{box-shadow:0 0 0 0 var(--glow)}50%{box-shadow:0 0 0 10px transparent;transform:scale(1.05)}}
+.hwM.go{animation:hwShk2 .68s}
+@keyframes hwShk2{10%,50%,90%{transform:translate(-4px,1px) rotate(-1.5deg)}30%,70%{transform:translate(4px,-1px) rotate(1.5deg)}}
+.hwMx span{font-size:1.35rem!important}
+.hwMx span.p0{clip-path:inset(0 0 66% 0)}.hwMx span.p1{clip-path:inset(33% 0 33% 0)}.hwMx span.p2{clip-path:inset(66% 0 0 0)}
+.hwMx i{width:7px!important;height:7px!important;background:var(--o)!important;border-radius:2px}
+.hwMx i:nth-child(3n){background:var(--line2)!important;width:5px!important;height:5px!important}
+@keyframes hwMix{0%{opacity:1;transform:translate(-50%,-50%) rotate(0) translateX(0)}35%{opacity:1;transform:translate(-50%,-50%) rotate(calc(var(--a) + 300deg*var(--s))) translateX(calc(var(--r)*.35))}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--a) + 720deg*var(--s))) translateX(var(--r)) scale(.5)}}
+.hw{overflow:hidden}
+@media (prefers-reduced-motion:reduce){.hwGo.pls{animation:none;box-shadow:0 0 0 3px var(--glow)}}
+/* 2-2 tap chain */
+.chain2 .blk{display:block;padding:12px}
+.bpv{display:flex;align-items:center;gap:6px;justify-content:space-between;margin:6px 0}.bpv small{font-size:.72rem;color:var(--mut)}
+.bfl{display:flex;align-items:center;gap:8px;margin:8px 0;min-width:0}
+.bc{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bc.chg{animation:hwPop .4s;color:var(--od)}
+.bmx{flex:none;width:30px;height:30px;color:var(--o)}.bmx svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.bmx.go svg{animation:hwSpin .5s ease-in-out}
+.bfl .hh{flex:none}
+.bed{font-size:.8rem;padding:5px 12px;min-height:0;margin:0}
+@media (prefers-reduced-motion:reduce){.bmx.go svg,.bc.chg{animation:none}}
+/* vivid light accent */
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:#f7931a;--btnh:#e8850c;--onb:#13202b}}
+:root[data-theme=light]{--btn:#f7931a;--btnh:#e8850c;--onb:#13202b}
+.bc{white-space:normal;overflow:visible;font-size:.85rem;line-height:1.35}

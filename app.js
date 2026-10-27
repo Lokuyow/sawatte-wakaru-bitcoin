@@ -42,31 +42,33 @@ $('hwP').innerHTML=P.map(p=>`<button class="ghost" data-p="${esc(p)}">${esc(p)}<
 const grid=h=>{let o='';for(let r=0;r<8;r++)for(let c=0;c<8;c++){const cc=c<4?c:7-c,v=parseInt(h[r*4+cc],16);o+=`<i class="g${v>11?3:v>7?2:v>3?1:0}"></i>`}return o};
 const rng=(a,b)=>{a=[...a];b=[...b];let s=0;while(s<a.length&&s<b.length&&a[s]==b[s])s++;let e=0;while(e<a.length-s&&e<b.length-s&&a[a.length-1-e]==b[b.length-1-e])e++;return[s,b.length-e,Math.max(a.length-s-e,b.length-s-e)]};
 const bz=p=>window.__bz&&__bz(p),bu=(e,n)=>window.__bu&&__bu(e,n);
-async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;
-const [s,e,n]=prevT==null?[0,0,0]:rng(prevT,t);$('hwIn').innerHTML=ch.map((c,i)=>`<span class="${prevT!=null&&i>=s&&i<e?'chg':''}" style="--d:${i*40}ms">${esc(c==' '?'\u00a0':c)}</span>`).join('')||'&nbsp;';
-const M=$('hwM'),fl=$('hwFl');if(anim&&!RM){const cs=ch.slice(0,10);fl.innerHTML=cs.map((c,i)=>`<span style="--d:${i*30}ms">${esc(c)}</span>`).join('');
-const mx=$('hwMx');let fr='';cs.forEach((c,i)=>{for(const k of [0,1]){const a=Math.random()*360,r=14+Math.random()*16;fr+=`<span class="${k?'b':'t'}" style="--a:${a}deg;--r:${r}px;--d:${280+i*20}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<10;i++)fr+=`<i style="--a:${Math.random()*360}deg;--r:${10+Math.random()*22}px;--d:${300+i*25}ms;--s:${i%2?1:-1}"></i>`;mx.innerHTML=fr;
-M.classList.remove('go');void M.offsetWidth;M.classList.add('go');window.__bz&&__bz([6,30,6,30,6]);await new Promise(r=>setTimeout(r,640));if(my!=seq)return}
+const showIn=()=>{const t=inp.value,ch=[...t],[s,e,n]=prevT==null?[0,0,0]:rng(prevT,t);$('hwIn').innerHTML=ch.map((c,i)=>`<span class="${prevT!=null&&i>=s&&i<e?'chg':''}" style="--d:${i*40}ms">${esc(c==' '?'\u00a0':c)}</span>`).join('')||'&nbsp;';$('hwGo').classList.toggle('pls',prevT!=null&&t!=prevT);return n};
+$('hwGo').innerHTML='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="3"/><path d="M20 17C18 9 22 4 27 6M23 20c8-2 13 2 11 7M20 23c2 8-2 13-7 11M17 20C9 22 4 18 6 13"/></svg><span>'+L('ハッシュする','Hash it')+'</span>';
+async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;const n=showIn();$('hwGo').classList.remove('pls');
+const M=$('hwM'),fl=$('hwFl');if(anim&&!RM){const cs=ch.slice(0,14);fl.innerHTML=cs.map((c,i)=>`<span style="--d:${i*25}ms">${esc(c)}</span>`).join('');
+const mx=$('hwMx');let fr='';cs.forEach((c,i)=>{for(const k of [0,1,2]){const a=Math.random()*360,r=34+Math.random()*46;fr+=`<span class="p${k}" style="--a:${a}deg;--r:${r}px;--d:${240+i*14}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<28;i++)fr+=`<i style="--a:${Math.random()*360}deg;--r:${30+Math.random()*60}px;--d:${260+i*12}ms;--s:${i%2?1:-1}"></i>`;mx.innerHTML=fr;
+M.classList.remove('go');void M.offsetWidth;M.classList.add('go');window.__bz&&__bz([8,25,8,25,8,25,8]);await new Promise(r=>setTimeout(r,680));if(my!=seq)return}
 const same=prevH&&prevH!=h;$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
 $('hwG1').innerHTML=grid(h);const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
 if(anim&&!RM){const t0=performance.now(),X='0123456789abcdef';await new Promise(res=>{const f=()=>{if(my!=seq)return res();const k=Math.floor((performance.now()-t0)/380*64);if(k>=64){H1.innerHTML=fin;return res()}H1.innerHTML=[...h].map((c,i)=>i<k?c:`<i class="rn">${X[Math.random()*16|0]}</i>`).join('');requestAnimationFrame(f)};f()});if(my!=seq)return}else H1.innerHTML=fin;
 const O=document.querySelector('.hwO');O.classList.toggle('one',!prevH);const C=document.querySelector('.hwC.now');if(anim&&!RM){C.classList.remove('st');void C.offsetWidth;C.classList.add('st')}
 let d=0;if(prevH)for(let i=0;i<64;i++)if(h[i]!=prevH[i])d++;
 $('hwR').innerHTML=!prevH||prevH==h?'':(n<=1?L(`1文字変えただけで、指紋がまるごと変わる <b>${d}/64</b>`,`Change 1 character and the whole fingerprint changes <b>${d}/64</b>`):L(`${n}文字の変更で、指紋がまるごと変わる <b>${d}/64</b>`,`${n} characters changed, the whole fingerprint changes <b>${d}/64</b>`));
-if(anim&&prevH!=h){bz(12);bu(C,8)}if(prevH!=h){prevT=t;prevH=h}}
-let tm;inp.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>run(true),250)};
-$('hwP').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(inp.value==b.dataset.p)return;inp.value=b.dataset.p;run(true)};
+if(anim&&prevH!=h){bz([20,40,30]);bu(C,18);bu(M,14)}if(prevH!=h){prevT=t;prevH=h}}
+inp.oninput=showIn;$('hwGo').onclick=()=>run(true);
+$('hwP').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(inp.value==b.dataset.p)return;inp.value=b.dataset.p;showIn();window.__bz&&__bz(8)};
 prevT=null;run(false)})();
 
 // 2 chain (notebook analogy)
-const init=EN?['Alice→Bob 2 coins','Bob→Carol 1 coin','Carol→Dave 1 coin','Dave→Alice 3 coins']:['アリス→ボブ 2コイン','ボブ→キャロル 1コイン','キャロル→デイブ 1コイン','デイブ→アリス 3コイン'];let data=[...init],prevs=[],fixing=false;const Z='0'.repeat(64);
+const PR=[['アリス','ボブ'],['ボブ','キャロル'],['キャロル','デイブ'],['デイブ','アリス']],A0=[2,1,1,3],AC=[9,99];let amt=[...A0];const txt=i=>L(`${PR[i][0]}→${PR[i][1]} ${amt[i]}コイン`,`${nm(PR[i][0])}→${nm(PR[i][1])} ${amt[i]} coin${amt[i]>1?'s':''}`);const init=A0.map((a,i)=>txt(i));let data=[...init],prevs=[],fixing=false;const Z='0'.repeat(64);
 const fp=h=>`<span class="fp" style="--c:hsl(${parseInt(h.slice(0,4),16)%360} 70% 45%)">${h.slice(0,6)}</span>`;
 async function hashes(){const hs=[];for(let i=0;i<data.length;i++)hs.push(await sha(i+prevs[i]+data[i]));return hs}
 async function seal(){prevs=[Z];for(let i=0;i<data.length;i++){const h=await sha(i+prevs[i]+data[i]);prevs.push(h)}prevs.length=data.length}
 let good=[],repaired=false;
 async function chain(build){const el=$('chain');const hs=await hashes();
-if(build){el.innerHTML=data.map((d,i)=>`${i?`<div class="link" id="l${i}"><span>↓</span><small>指紋を引きつぐ</small></div>`:''}<div class="blk" id="b${i}"><div class="bh"><b>${L("ページ","Page")} #${i}</b><span class="st"></span></div><input data-i="${i}" aria-label="${L(`ページ${i}の中身`,`Page ${i} contents`)}"><div class="fps"><div><small>前のページの指紋</small><span class="pv"></span></div><div><small>このページの指紋</small><span class="hh"></span></div></div></div>`).join('');
-el.querySelectorAll('input').forEach(n=>{n.value=data[n.dataset.i];n.oninput=()=>{repaired=false;data[n.dataset.i]=n.value;chain()}})}
+if(build){el.innerHTML=data.map((d,i)=>`${i?`<div class="link" id="l${i}"><span>↓</span><small>指紋を引きつぐ</small></div>`:''}<div class="blk" id="b${i}"><div class="bh"><b>${L("ページ","Page")} #${i}</b><span class="st"></span></div><div class="bpv"><small>${L('前のページの指紋','Previous fingerprint')}</small><span class="pv"></span></div><div class="bfl"><span class="bc"></span><span class="bmx" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="3"/><path d="M20 17C18 9 22 4 27 6M23 20c8-2 13 2 11 7M20 23c2 8-2 13-7 11M17 20C9 22 4 18 6 13"/></svg></span><span class="hh"></span></div><button type="button" class="ghost bed" data-i="${i}">✎ ${L('こっそり書きかえる','Secretly edit')}</button></div>`).join('');
+el.querySelectorAll('.bed').forEach(n=>n.onclick=()=>{const i=+n.dataset.i;repaired=false;const k=AC.indexOf(amt[i]);amt[i]=k<0?AC[0]:k<AC.length-1?AC[k+1]:A0[i];data[i]=txt(i);const b=$('b'+i),m=b.querySelector('.bmx'),c=b.querySelector('.bc');c.textContent=data[i];c.classList.remove('chg');void c.offsetWidth;c.classList.add('chg');m.classList.remove('go');void m.offsetWidth;m.classList.add('go');window.__bz&&__bz([6,30,6,30,6]);setTimeout(async()=>{await chain();window.__bu&&__bu(b.querySelector('.hh'),8);window.__bz&&__bz(40)},matchMedia('(prefers-reduced-motion: reduce)').matches?0:520)})}
+data.forEach((d,i)=>$('b'+i).querySelector('.bc').textContent=d);
 let broken=-1;hs.forEach((h,i)=>{if(broken<0&&h!==good[i])broken=i});
 hs.forEach((h,i)=>{const b=$('b'+i),was=b.className;const st=broken<0||i<broken?'':i==broken?'edit':'bad';
 b.className='blk'+(st?' '+st:'');if(st&&was!=b.className){b.style.animationDelay=(i-broken)*0.15+'s';b.classList.add('shake')}
@@ -78,7 +80,7 @@ $('cFix').hidden=broken<0;}
 $('cFix').onclick=async()=>{fixing=true;$('cFix').disabled=true;const hs=await hashes();let from=hs.findIndex((h,i)=>h!==good[i]);
 for(let i=from;i<data.length;i++){$('b'+i).querySelector('.st').textContent='⛏ 計算中…';await new Promise(r=>setTimeout(r,500));prevs[i]=i?await sha((i-1)+prevs[i-1]+data[i-1]):Z;good[i]=await sha(i+prevs[i]+data[i]);await chain()}
 fixing=false;repaired=true;$('cFix').disabled=false;await chain();$('cTake').innerHTML='💡 直せました。でも本物のビットコインでは、1ページごとに大量のマイニングが必要です。そのうえ世界中が先へ先へと書き足しているので、追いついて全部やり直すのは現実的ではありません。'};
-$('cReset').onclick=async()=>{repaired=false;data=[...init];await seal();good=await hashes();$('cTake').innerHTML='💡 1か所でも書きかえると、その先のハンコが全部合わなくなる。だから昔の記録はこっそり変えられません。';chain(true)};
+$('cReset').onclick=async()=>{repaired=false;amt=[...A0];data=[...init];await seal();good=await hashes();$('cTake').innerHTML='💡 1か所でも書きかえると、その先のハンコが全部合わなくなる。だから昔の記録はこっそり変えられません。';chain(true)};
 (async()=>{await seal();good=await hashes();chain(true)})();
 // 3 mining (small async batches so the UI stays responsive)
 const fmtT=s=>EN?(s<60?s.toFixed(1)+' s':s<3600?Math.floor(s/60)+' min '+Math.floor(s%60)+' s':(s/3600).toFixed(1)+' h'):s<60?s.toFixed(1)+'秒':s<3600?Math.floor(s/60)+'分'+Math.floor(s%60)+'秒':(s/3600).toFixed(1)+'時間';let mining=false,stopReq=false,rate=1e5;
@@ -113,10 +115,13 @@ q('#sgFk').onclick=async()=>{if(busy)return;busy=true;amount=1;amt.textContent='
 q('#sgRe').onclick=reset;reset()})();
 // 5 ledger
 const ppl=[['アリス','👩'],['ボブ','👨'],['キャロル','👧'],['デイブ','🧔']];let bal={アリス:5,ボブ:2,キャロル:0,デイブ:1};
-function rp(){$('people').innerHTML=ppl.map(([n,e])=>`<div class="p">${e}<div>${n}<br><b>${bal[n]}</b> コイン</div></div>`).join('')}
-['tFrom','tTo'].forEach((s,k)=>$(s).innerHTML=ppl.map(([n],i)=>`<option value="${i}" ${i==k?'selected':''}>${nm(n)}</option>`).join(''));
+let tF=-1,tA=1;const tHint=()=>{$('tHint').textContent=tF<0?L('送る人をタップ','Tap who sends'):L(`${nm(ppl[tF][0])}から → 受け取る人をタップ`,`From ${nm(ppl[tF][0])} → tap who receives`)};
+function rp(){$('people').innerHTML=ppl.map(([n,e],i)=>`<button type="button" class="p${i==tF?' fr':''}" data-i="${i}">${e}<div>${nm(n)}<br><b>${bal[n]}</b> ${L('コイン','coins')}</div></button>`).join('');tHint()}
+$('tAmtC').innerHTML=[1,3,5].map(a=>`<button type="button" class="ghost${a==tA?' on':''}" data-a="${a}">${a} ${L('コイン','coins')}</button>`).join('');
+$('tAmtC').onclick=e=>{const b=e.target.closest('button');if(!b)return;tA=+b.dataset.a;$('tAmtC').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==b));window.__bz&&__bz(8)};
+const fly=(f,t,a)=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const P=$('people').children,A=P[f].getBoundingClientRect(),B=P[t].getBoundingClientRect(),c=document.createElement('div');c.className='tFly';c.textContent=a;c.style.left=A.left+A.width/2+'px';c.style.top=A.top+A.height/2+'px';document.body.appendChild(c);requestAnimationFrame(()=>{c.style.transform=`translate(${B.left-A.left}px,${B.top-A.top}px)`});setTimeout(()=>c.remove(),560)};
+$('people').onclick=e=>{const b=e.target.closest('button.p');if(!b)return;const i=+b.dataset.i;window.__bz&&__bz(8);if(tF<0||tF==i){tF=tF==i?-1:i;rp();return}const f=tF,ok=bal[ppl[f][0]]>=tA;tF=-1;if(ok)fly(f,i,tA);setTimeout(()=>{tx(ppl[f][0],ppl[i][0],tA);const P=$('people').children;if(ok){P[i].classList.add('got');window.__bu&&__bu(P[i],10);window.__bz&&__bz(15)}else window.__bz&&__bz(60)},ok?480:0)};
 function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=L(`❌ ${f}→${t} ${a}: おかしな取引です`,`❌ ${nm(f)}→${nm(t)} ${a}: invalid transaction`)}else if(bal[f]<a){li.className='ng';li.textContent=L(`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持っていません。却下!`,`❌ ${nm(f)}→${nm(t)} ${a} coins: the ledger shows ${nm(f)} has only ${bal[f]}. Rejected!`)}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=L(`✅ ${f}→${t} ${a}コイン: みんなで確認してOK。台帳に記録しました`,`✅ ${nm(f)}→${nm(t)} ${a} coins: verified by everyone and recorded`)}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]&&document.querySelectorAll(".p")[ppl.findIndex(p=>p[0]==f)].classList.add('bump')}
-$('tSend').onclick=()=>tx(ppl[$('tFrom').value][0],ppl[$('tTo').value][0],+$('tAmt').value);
 $('tDouble').onclick=()=>{const a=bal['アリス'];if(!a){tx('アリス','ボブ',1);return}tx('アリス','ボブ',a);tx('アリス','キャロル',a)};rp();
 // 6 halving
 function hv(q){const h=+$('hgt').value,n=Math.floor(h/210000);let r=n<64?Math.floor(5e9/2**n):0,s=0;for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),blocks=i<n?210000:h-i*210000+1;s+=sat*blocks}
@@ -275,12 +280,6 @@ new MutationObserver(ms=>{for(const m of ms){const t=m.target.nodeType==1?m.targ
 document.addEventListener('input',e=>{const r=e.target;if(r.type!='range')return;const v=r.closest('label')?.querySelector('b');if(v&&!RM){v.classList.remove('vb');void v.offsetWidth;v.classList.add('vb')}});
 document.addEventListener('click',e=>{const q=e.target.closest('.quiz button,.opts button,[data-ok]');if(q&&q.classList.contains('ok'))burst(q,8)});
 const EN_=document.documentElement.lang=='en';
-/* sats split */
-let sp=0;const U=[1,10,100,1e3,1e4,1e5,1e6,1e7,1e8];
-if($('tCoin')){$('tCoin').onclick=()=>{const c=$('tCoin');sp=sp>=8?0:sp+1;const n=U[sp];c.classList.remove('pp');void c.offsetWidth;c.classList.add('pp');buzz(8);
- $('tS').textContent=sp==0?'1 BTC':(EN_&&n==1e8?'100,000,000 pieces × 1 sat':EN_?`${n.toLocaleString('en')} pieces × ${(1e8/n).toLocaleString('en')} sats`:`${n.toLocaleString('ja')}個 × ${(1e8/n).toLocaleString('ja')}サトシ`);
- if(sp==8){$('tSn').textContent=L('もう分けられない!1BTC = 1億サトシ','Can’t split further! 1 BTC = 100 million sats');burst(c,14)}else $('tSn').textContent=L('コインをタップして分けてみよう','Tap the coin to split it');
- c.style.setProperty('--n',Math.min(sp,6))}}
 })();
 /* icons: replace emoji in UI text with an SVG sprite */
 (()=>{const P={
