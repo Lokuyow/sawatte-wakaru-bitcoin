@@ -236,20 +236,38 @@ let g=null;try{g=sessionStorage.getItem('sw-go');sessionStorage.removeItem('sw-g
 const t=x=>window.T?window.T(x):x,RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SP=1.12;const rate=()=>{if(!RM)S.getAnimations({subtree:true}).forEach(x=>x.playbackRate=1/SP)};const at=(ms,fn)=>tm.push(setTimeout(()=>{fn();rate()},RM?0:ms*SP)),clr=()=>{tm.forEach(clearTimeout);tm=[]};
 const hx=n=>[...Array(n)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
-const slip=(c='')=>`<div class="slip ${c}"><small>${t('取引')}</small><b>${t('アリス → ボブ')}</b><span class="amt">0.01 BTC</span></div>`;
-const sc=[
-()=>{S.innerHTML=`<div class="sc1"><div class="grid256" id="g256">${'<i></i>'.repeat(256)}</div><div class="keyout pend" id="kOut">🔑 <b>${t('秘密鍵')}</b><code>${hx(16)}…</code></div></div>`;const c=[...S.querySelectorAll('#g256 i')];let n=0;const st=()=>{for(let m=0;m<16&&n<256;m++,n++){c[n].textContent=Math.random()<.5?'0':'1';c[n].className='b'+c[n].textContent}if(n<256){if(!RM)at(45,st)}else $('kOut').classList.remove('pend')};if(RM)while(n<256)st();else st()},
-()=>{S.innerHTML=`<div class="sc2"><div class="pill k">🔑 ${t('秘密鍵')}</div><div class="arr a1">→</div><div class="fun">▽<small>${t('一方通行')}</small></div><div class="arr a2">→</div><div class="pill pub">${t('公開鍵')}</div><div class="arr a3">→</div><div class="pill adr">${t('アドレス')}<code>bc1q${hx(6)}…</code></div></div><div class="back">← ✕ <span>${t('逆向きの計算はできない')}</span></div>`},
-()=>{S.innerHTML=`<div class="sc3"><div class="slip big"><small>${t('取引')}</small><b id="ty"></b><span class="amt" id="ty2"></span><small class="fee" id="ty3"></small></div></div>`;const a=t('アリス → ボブ'),b='0.01 BTC',fe=t('手数料')+' 0.0001 BTC',e=$('ty');let n=0;const st=()=>{e.textContent=a.slice(0,++n);if(n<a.length)at(110,st);else at(250,()=>{$('ty2').textContent=b;at(300,()=>$('ty3').textContent=fe)})};if(RM){e.textContent=a;$('ty2').textContent=b;$('ty3').textContent=fe}else st()},
-()=>{S.innerHTML=`<div class="sc4"><div class="slipw">${slip('big')}<div class="stamp">🔏</div><div class="seal">${t('署名')}</div></div><div class="chk">${t('公開鍵でチェック')} <b>✓ ${t('本人の署名')}</b></div></div>`},
-()=>{const p=[[50,10],[86,30],[86,70],[50,90],[14,70],[14,30]];S.innerHTML=`<div class="sc5"><i class="rip"></i><i class="rip r2"></i>${p.map((q,i)=>`<span class="node" style="left:${q[0]}%;top:${q[1]}%;animation-delay:${.5+i*.25}s">🖥️<b style="animation-delay:${.7+i*.25}s">✓</b></span>`).join('')}<div class="mini">📄</div></div><div class="sub">${t('ノードが署名と残高をチェックして、となりに伝える')}</div>`},
-()=>{const fs=[[t('ほかの取引'),2],[t('あなたの取引'),12,1],[t('ほかの取引'),25],[t('ほかの取引'),5]];S.innerHTML=`<div class="sc6"><div class="mph"><span>${t('メンプール(順番待ち)')}</span><span>${t('手数料')}</span></div><div class="mpl">${fs.map((x,i)=>`<div class="mp${x[2]?' me':''}" data-f="${x[1]}" style="top:${i*40}px"><span>📄 ${x[0]}</span><b>${x[1]} sat/vB</b></div>`).join('')}</div><div class="sub">${t('手数料が高い取引ほど上へ')}</div></div>`;at(900,()=>{[...S.querySelectorAll('.mp')].sort((a,b)=>b.dataset.f-a.dataset.f).forEach((e,i)=>e.style.top=i*40+'px')})},
-()=>{S.innerHTML=`<div class="sc7"><div class="blkbox"><small>${t('新しいブロック')}</small><div class="tx3"><span>📄</span><span class="me">📄</span><span>📄</span></div></div><div class="mine"><div>${t('ナンス')} <b id="nn">0</b></div><code id="nh">${hx(16)}</code><div class="nfound" id="nf" hidden>⛏️ ${t('当たり!')}</div></div></div>`;let n=0;const st=()=>{n+=Math.random()*900+300|0;$('nn').textContent=n.toLocaleString();if(n<9000&&!RM){$('nh').textContent=hx(16);at(70,st)}else{$('nh').innerHTML='<em>0000</em>'+hx(12);$('nh').classList.add('ok');$('nf').hidden=false}};at(600,st)},
-()=>{const h=[hx(4),hx(4),hx(4),hx(4)];S.innerHTML=`<div class="sc8">${[0,1,2].map(i=>`<div class="cb${i==2?' new':''}"><small>#${840001+i}</small><span>${t('前の指紋')}</span><code>00${h[i]}</code><span>${t('指紋')}</span><code class="own">00${h[i+1]}</code></div>${i<2?'<div class="lk">🔗</div>':''}`).join('')}</div><div class="sub">${t('新しいブロックが前のブロックの指紋を引きつぐ')}</div>`},
-()=>{S.innerHTML=`<div class="sc9"><div class="stack" id="stk"></div><div class="side"><div class="conf">${t('承認')} <b id="cf">0</b>/6</div><div class="wal">👛 ${t('ボブの残高')}<b id="wb">0.000 BTC</b></div></div></div>`;let n=0;const st=()=>{n++;const d=document.createElement('div');d.className='sb'+(n==1?' me':'');d.textContent=n==1?t('あなたの取引入り'):'+1';$('stk').prepend(d);$('cf').textContent=n;if(n==1)$('wb').textContent='0.010 BTC';if(n==6)S.querySelector('.conf').classList.add('ok');else if(!RM)at(380,st)};if(RM)while(n<6)st();else at(300,st)}];
+const NX=[8,22,36,64,78,92];
+const build=()=>{S.innerHTML=`<div class="fsn">
+<div class="fo fp fA" id="fA"><span>👩</span><b>${L('アリス','Alice')}</b></div>
+<div class="fo fp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
+<div class="fo fkey" id="fK"><small>${L('秘密鍵','Private key')}</small><code id="fKc"></code></div>
+<div class="fo fpub" id="fPub"><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span>${L('アドレス','Address')}</span><small>${L('一方通行','one-way')}</small></div>
+${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:50%"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b><em>+0.01</em></div>`).join('')}
+<div class="fo fmp" id="fMp"><small>${L('メンプール','Mempool')}</small><i></i><i></i><i></i></div>
+<div class="fo fch fc1" id="fC1">#1</div><div class="fo fch fc2" id="fC2">#2</div>
+<div class="fo fblk" id="fBk"><small id="fBn">${L('新しいブロック','New block')}</small><code id="fNn"></code></div>
+<div class="fo fslip" id="fS"><small>${L('取引','Tx')}</small><b id="fSt"></b><span class="fseal" id="fSe">${L('署名','Signed')} ✓</span></div>
+<div class="fo fcf" id="fCf"></div>
+</div>`};
+const P=(id,x,y,o=1,s=1)=>{const e=$(id);if(x!=null){e.style.left=x+'%';e.style.top=y+'%'}e.style.opacity=o;e.style.transform=`translate(-50%,-50%) scale(${s})`};
+const TX=L('アリス → ボブ 0.01 BTC','Alice → Bob 0.01 BTC');
+const pose=k=>{if(!S.querySelector('.fsn'))build();const F=S.firstChild;F.className='fsn s'+k;
+P('fA',12,14);P('fB',88,14);$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
+P('fK',12,36,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
+P('fPub',55,36,k==1?1:0);
+P('fS',k<=3?50:k==4?50:k==5?20:k==6?41:87,k<=3?16:k==4?50:k==5?80:66,k>=2?(k>=7?0:1):0,k>=6?.6:1);
+const st=$('fSt');if(k==2&&!RM){let n=0;st.textContent='';const ty=()=>{st.textContent=TX.slice(0,++n);if(n<TX.length)at(60,ty)};at(400,ty)}else st.textContent=TX;
+$('fSe').classList.toggle('on',k>=3);
+NX.forEach((x,i)=>{const e=$('fN'+i);e.classList.remove('ok','led');if(k>=4){if(k==4&&!RM)at(700+Math.abs(i-2.5)*350,()=>{e.classList.add('ok');window.__bz&&__bz(6)});else e.classList.add('ok')}if(k>=8){if(RM)e.classList.add('led');else at(1800+i*200,()=>e.classList.add('led'))}});
+P('fMp',20,80,k==5?1:k>5?.25:0);
+P('fC1',58,80,k>=6?1:0);P('fC2',72,80,k>=6?1:0);
+P('fBk',k>=7?87:41,80,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
+const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
+$('fBn').textContent=k>=7?'#3':L('新しいブロック','New block');
+const cf=$('fCf');P('fCf',72,67,k>=8?1:0);if(k>=8){let n=0;const up=()=>{cf.textContent=L(`承認 ${n}/6`,`${n}/6 confirmations`);cf.classList.toggle('ok',n>=6);if(n++<6&&!RM)at(500,up);else if(n<=6){n=6;up()}};up();at(RM?0:900,()=>{const b=$('fB');b.classList.remove('got');void b.offsetWidth;b.classList.add('got');window.__bu&&__bu(b,12);window.__bz&&__bz(20)})}};
 const set=n=>{clr();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
 if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
-const l=L2[k];sc[k]();rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
+const l=L2[k];pose(k);rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
 if(k>=L2.length-1&&T){const d=dw();stop();bar(d);tm.push(setTimeout(()=>{ti.textContent=t('✅ これで支払い完了!全部の章がつながりました');window.confetti&&confetti()},d))}};
 const A=[.8,2.4,1.8,2.1,2.4,1.8,1.9,.9,2.3],dw=()=>RM?4000:Math.max(SP>1?6000:4500,A[k]*1000*SP+(SP>1?4500:3000)),fb=$('fBar'),bar=d=>{fb.style.transition='none';fb.style.width='0';if(d){fb.offsetWidth;fb.style.transition=`width ${d}ms linear`;fb.style.width='100%'}};
 const stop=()=>{clearTimeout(T);T=null;pb.textContent=t('▶ 再生');bar(0)};
