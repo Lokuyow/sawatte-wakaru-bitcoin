@@ -833,3 +833,18 @@ details.more>summary{display:flex;width:100%;box-sizing:border-box;min-height:44
 @keyframes hwMix0{0%{opacity:1;transform:translate(-50%,-50%) rotate(0) translateX(0)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--a) + 540deg*var(--s))) translateX(var(--r)) scale(.4)}}
 .hwC.st{animation:hwSt .4s cubic-bezier(.2,1.5,.4,1)!important}
 @media (prefers-reduced-motion:reduce){.hwM.go,.hwM.go .hwBl,.hwM.go .hwFl span,.hwM.go .hwMx span,.hwM.go .hwMx i,.hwC.st{animation:none!important}.hwFl,.hwMx{display:none}}
+/* z48 consistent hover */
+details.more>summary,.people button.p,.quiz .opts button,a.go51,#home,nav span,#share{transition:background-color .15s,color .15s,border-color .15s,text-decoration-color .15s}
+@media(hover:hover){
+details.more>summary:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:var(--r) var(--r) 0 0}
+details.more:not([open])>summary:hover{border-radius:var(--r)}
+.people button.p:not(:disabled):hover{background:var(--line2)}
+.quiz .opts button:not(:disabled):not(.right):not(.wrong):hover{background:var(--soft)}
+.myth a.go51:hover{color:var(--od,var(--o))}
+#home:hover{opacity:.82}
+nav span.on:hover,nav span.seen:hover{background:var(--soft)}
+#share.x:hover{background:color-mix(in srgb,var(--ink) 82%,var(--card))}
+.cmp button[aria-pressed=true]:hover,#tAmtC button.on:hover,button.ghost.on:not(:disabled):hover,.qtab button.on:hover{background:var(--btnh)!important;border-color:var(--btnh)!important}
+#hPlay.ghost:not(:disabled):hover{background:var(--line2)}
+}
+@media(hover:hover){.seg button[aria-pressed=true]:hover,:root:not([data-theme=light]) .seg button[aria-pressed=true]:hover{background:color-mix(in srgb,var(--ink) 84%,var(--card))!important}}
