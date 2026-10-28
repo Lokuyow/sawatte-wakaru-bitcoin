@@ -808,3 +808,4 @@ nav span b,#prog span b{box-shadow:var(--bsh)}
 .flow.rail li{min-width:0;padding:6px 0}
 .flow.rail .fi{font-size:min(1.6rem,5.6vw)}.flow.rail .fi .ic{width:1em;height:1em}
 @media(min-width:700px){.flow.rail .fi{font-size:2rem}}
+.myth a.go51{color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}

@@ -429,3 +429,5 @@ window.__share=async s=>{const ok=await __copy(s);if(ok)__toast(L('コピーし�
 /* brick B stack */
 window.bStack=(cls)=>{const d=document.createElement('div');d.className='bst '+(cls||'');d.setAttribute('aria-hidden','true');d.innerHTML='<i style="--x:0;--y:4;--d:0"></i><i style="--x:1;--y:4;--d:1"></i><i style="--x:2;--y:4;--d:2"></i><i style="--x:0;--y:3;--d:3"></i><i style="--x:3;--y:3;--d:4"></i><i style="--x:0;--y:2;--d:5"></i><i style="--x:1;--y:2;--d:6"></i><i style="--x:2;--y:2;--d:7"></i><i style="--x:0;--y:1;--d:8"></i><i style="--x:3;--y:1;--d:9"></i><i style="--x:0;--y:0;--d:10"></i><i style="--x:1;--y:0;--d:11"></i><i style="--x:2;--y:0;--d:12"></i>'+'<b style="--x:.5;--y:-.75"></b><b style="--x:1.5;--y:-.75"></b><b style="--x:.5;--y:4.75"></b><b style="--x:1.5;--y:4.75"></b>';return d};
 (()=>{const t=document.querySelector('.trophy');if(t){t.textContent='';t.appendChild(bStack('big'))}})();
+
+;(()=>{const g=document.querySelector('.go51');if(g)g.onclick=e=>{e.preventDefault();go(13);scrollTo(0,0)}})();
