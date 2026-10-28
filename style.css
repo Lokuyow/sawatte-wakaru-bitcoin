@@ -804,3 +804,7 @@ nav span b,#prog span b{box-shadow:var(--bsh)}
 .flow.rail li{box-shadow:var(--bsh3)}
 .flow.rail .fi{box-shadow:none}
 .tx2 .tN{border-radius:6px;box-shadow:var(--bsh)}
+.flow.rail{grid-template-columns:repeat(9,minmax(0,1fr))}
+.flow.rail li{min-width:0;padding:6px 0}
+.flow.rail .fi{font-size:min(1.6rem,5.6vw)}.flow.rail .fi .ic{width:1em;height:1em}
+@media(min-width:700px){.flow.rail .fi{font-size:2rem}}
