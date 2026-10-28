@@ -732,3 +732,6 @@ details.more>summary:has(>.ic){text-align:left;justify-content:flex-start;align-
 #home{color:inherit;text-decoration:none;cursor:pointer;border-radius:6px}
 @media(hover:hover){#home:hover{color:var(--o)}}
 :is(button,[role=button],summary,a.btn,.btn,#home,nav span,nav .ph,.pt,.ph,.coin,.flow li,.steps li,.sgS li,.lch,.gw,.rm,.rm0,#netC,.people button.p,.tools button,.seg button,.cmp button,#tAmtC button){-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.ic.ic-coin{color:var(--accent)}
+:is(button,.btn) .ic.ic-coin{color:inherit}
+.idle .ic.ic-coin{color:var(--mut);opacity:.6}
