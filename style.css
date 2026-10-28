@@ -848,3 +848,22 @@ nav span.on:hover,nav span.seen:hover{background:var(--soft)}
 #hPlay.ghost:not(:disabled):hover{background:var(--line2)}
 }
 @media(hover:hover){.seg button[aria-pressed=true]:hover,:root:not([data-theme=light]) .seg button[aria-pressed=true]:hover{background:color-mix(in srgb,var(--ink) 84%,var(--card))!important}}
+/* z49 rounded-rect buttons (icon rx 7/32 ≈ .22) */
+button,.btn,.hwGo{border-radius:10px}
+.tools,.spd{border-radius:8px}.tools button,.spd button{border-radius:6px}
+.keyout,.pool span,.sgKey,.srank,.toast,h2 em{border-radius:8px}
+.fp,.brF,.fpp code{border-radius:6px}
+/* z49 section badge = flat label, not a button */
+h2 em{background:color-mix(in srgb,var(--o) 12%,transparent);color:var(--od);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--o) 45%,transparent);font-weight:700;border-radius:6px;cursor:default;user-select:none;pointer-events:none}
+h2 em{color:#9a4f00}[data-theme=dark] h2 em{color:#f5b35f}
+@media(prefers-color-scheme:dark){html:not([data-theme=light]) h2 em{color:#f5b35f}}
+.credit{margin:20px 0 0;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:.78rem;color:var(--mut)}.credit a{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:0 6px;border-radius:6px;color:var(--mut);text-decoration:none}.credit a:hover{color:var(--ink);background:var(--soft)}.credit i{font-style:normal;opacity:.6}
+/* z49 unify: radius scale from icon (rx 7/32≈.22) — chip 6 / control 10 / tile 8 / card 12 / panel 16 */
+:root{--r-chip:6px;--r-ctl:10px;--r-tile:8px;--r-card:12px;--r-panel:16px}
+.ch{border-radius:var(--r-panel)}.stage{border-radius:var(--r-panel)}
+.note,.hash,.done li,.gbal div,.mstats div,.etable,.lp,.rm,.cmpv,.flow li,.pill,.blkbox,.mcols>div,.ymo div,.jobs div,.qout,.sec3 div,.quiz .opts button,.rm0,textarea,input,select{border-radius:var(--r-card)}
+.log li,.steps li,.warn,.row,.slip,.mp,.cb,.inc,.mix,.flow.rail li{border-radius:var(--r-tile)}
+/* pressable = raised; labels = flat */
+:where(button,.btn,.tipb){box-shadow:var(--bsh)}
+.cn,.done li::before,.tx2 .tN,.seal,.fseal,.srank,.brF{box-shadow:none}
+.cn{border-radius:var(--r-chip)}
