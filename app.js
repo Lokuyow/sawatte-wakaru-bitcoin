@@ -343,7 +343,7 @@ doc:'<path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/>',user:'<circle cx="12" 
 bank:'<path d="M3 10l9-6 9 6M5 10v8M9.7 10v8M14.3 10v8M19 10v8M3 21h18"/>',
 globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
 search:'<circle cx="11" cy="11" r="7"/><path d="M20.5 20.5L16 16"/>',pen:'<path d="M4 20l4.5-1L19 8.5 15.5 5 5 15.5zM13.5 7l3.5 3.5"/>',
-brick:'<rect x="5" y="4.5" width="5" height="6" rx="1.3" fill="currentColor" stroke="none"/><rect x="14" y="4.5" width="5" height="6" rx="1.3" fill="currentColor" stroke="none"/><rect x="2" y="9" width="20" height="12" rx="2.5" fill="currentColor" stroke="none"/><path d="M2 17h20v1.5a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5z" fill="#000" fill-opacity=".2" stroke="none"/>',
+brick:'<rect x="3" y="3" width="18" height="18" rx="4.5" fill="currentColor" stroke="none"/><rect x="3" y="3" width="18" height="18" rx="4.5" fill="#000" fill-opacity=".2" stroke="none"/><rect x="3" y="3" width="18" height="15.6" rx="4.5" fill="currentColor" stroke="none"/>',
 box:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"/>',
 flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3-1-3 0-6 1-8.5z"/>',
 shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',pause:'<path d="M9 5v14M15 5v14"/>',
