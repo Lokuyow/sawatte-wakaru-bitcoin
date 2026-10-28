@@ -905,3 +905,16 @@ h2 em{color:#9a4f00}[data-theme=dark] h2 em{color:#f5b35f}
 .fblk{width:auto;min-width:5.6em;padding:.6em .5em}
 .fcb{width:32px;height:28px}.fcr{gap:4px}@media(max-width:360px){.fcb{width:28px}.fcr{gap:3px}}
 .fblk .ftx{width:max-content;margin:3px auto 0}
+/* z52 comfortable chips */
+#fStage .fpub{gap:6px}
+#fStage .fpub span{padding:6px 12px;border-radius:8px;line-height:1.2}
+#fStage .fpub i{display:inline-flex;align-items:center;line-height:1}
+#fStage .fkey{padding:6px 12px;border-radius:8px}
+.sgKey{padding:5px 10px}.roll .fp{padding:4px 10px}
+
+#fStage .fnd .ck{stroke:var(--ok);stroke-width:1.3;opacity:0;transition:opacity .25s}
+#fStage .fnd.ok .ck{opacity:1}
+#fStage .fnd b{display:none}
+.fcr{flex-direction:row-reverse}
+.fblk.lk::before{right:auto;left:100%;width:10px}
+.fch+.fch::before{right:auto;left:100%;width:8px}

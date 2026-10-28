@@ -245,7 +245,7 @@ const build=()=>{S.innerHTML=`<div class="fsn">
 <div class="fo fpp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
 <div class="fo fkey" id="fK"><small>${L('秘密鍵','Private key')}</small><code id="fKc"></code></div>
 <div class="fo fpub" id="fPub"><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span>${L('アドレス','Address')}</span><small>${L('一方通行','one-way')}</small></div>
-${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:63%"><svg viewBox="3 4 18 17"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg><b>✓</b></div>`).join('')}
+${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:63%"><svg viewBox="3 4 18 17"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/><path class="ck" d="M7.6 10.6l2.8 2.6 5-5.2"/></svg></div>`).join('')}
 <div class="fo fmp" id="fMp"><small>${L('メンプール','Mempool')}</small><i></i><i></i><i></i></div>
 <div class="fo fch fc1" id="fC1">#1</div><div class="fo fch fc2" id="fC2">#2</div>
 <div class="fo fblk" id="fBk"><small id="fBn">${L('新しいブロック','New block')}</small><code id="fNn"></code><span class="ftx">0.01 BTC</span></div>
@@ -259,19 +259,21 @@ const pose=k=>{if(!S.querySelector('.fsn'))build();const F=S.firstChild;F.classN
 P('fA',18,5);P('fB',82,5);$('fA').style.transform=$('fB').style.transform='translate(-50%,0)';$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
 P('fK',18,33,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
 P('fPub',60,33,k==1?1:0);{const K=$('fK'),Pb=$('fPub'),W=S.firstChild.clientWidth,H=S.firstChild.clientHeight,kr=K.offsetLeft+K.offsetWidth/2,pw=Pb.offsetWidth;Pb.classList.remove('fbel');if(W>=500&&kr+10+pw<=W-8){Pb.style.left=(kr+10)+'px';Pb.style.top=K.offsetTop+'px';Pb.style.transform='translate(0,-50%)'}else{Pb.classList.add('fbel');Pb.style.left=Math.min(W-pw/2-8,Math.max(pw/2+8,K.offsetLeft))+'px';Pb.style.top=(K.offsetTop+K.offsetHeight/2+Pb.offsetHeight/2+8)+'px';Pb.style.transform='translate(-50%,-50%)'}}
-P('fS',k<=4?50:k==5?17:20,k<=4?45:k==5?80:85,k>=2&&k<=5?1:0,k>=5?.6:1);
+P('fS',k<=4?50:k==5?19:42,k<=4?45:k==5?80:85,k>=2&&k<=5?1:0,k>=5?.6:1);
 const st=$('fSt');if(k==2&&!RM){let n=0;st.textContent='';const ty=()=>{st.textContent=TX.slice(0,++n);if(n<TX.length)at(60,ty)};at(400,ty)}else st.textContent=TX;
 $('fSe').classList.toggle('on',k>=3);
 NX.forEach((x,i)=>{const e=$('fN'+i);e.classList.remove('ok','led');if(k>=4){if(k==4&&!RM)at(700+Math.abs(i-2.5)*350,()=>{e.classList.add('ok');window.__bz&&__bz(6)});else e.classList.add('ok')}if(k>=8){if(RM)e.classList.add('led');else at(1800+i*200,()=>e.classList.add('led'))}});
 P('fMp',17,84,k==5?1:k>5?.25:0);
-P('fC1',52,85,k>=6?1:0);P('fC2',65,85,k>=6?1:0);
-P('fBk',k>=7?84:20,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
+P('fC1',89,85,k>=6?1:0);P('fC2',77,85,k>=6?1:0);
+P('fBk',k>=7?61:42,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
 const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
 $('fBn').textContent=L('ブロック #3','Block #3');$('fBk').classList.toggle('htx',k>=6);
 const cf=$('fCf');P('fCf',50,50,0);const cr=$('fCr');P('fCr',50,85,k>=8?1:0);if(k>=8){['fC1','fC2','fBk'].forEach(i=>$(i).style.opacity=0);P('fMp',null,null,0);NX.forEach((x,i)=>$('fN'+i).style.opacity=.35);
-const ba=$('fBal');ba.classList.add('pend');cr.innerHTML=`<i class="fcb">#2</i><i class="fcb me">#3<em id="fCn">${L('承認 0','0 conf')}</em></i>`;let n=0;
-const up=()=>{n++;const b=document.createElement('i');b.className='fcb nw';b.textContent='#'+(3+n);cr.appendChild(b);$('fCn').textContent=L(`承認 ${n}`,`${n} conf`);window.__bz&&__bz(6);
+const ba=$('fBal');ba.classList.add('pend');cr.innerHTML=`<i class="fcb">#2</i><i class="fcb me">#3<em id="fCn">${L('承認 1','1 conf')}</em></i>`;let n=1;
+const up=()=>{n++;const b=document.createElement('i');b.className='fcb nw';b.textContent='#'+(2+n);cr.appendChild(b);$('fCn').textContent=L(`承認 ${n}`,`${n} conf`);window.__bz&&__bz(6);
 if(n>=6){$('fCn').classList.add('ok');ba.classList.remove('pend');const bb=$('fB');bb.classList.remove('got');void bb.offsetWidth;bb.classList.add('got');window.__bu&&__bu(bb,12);window.__bz&&__bz(20)}else at(RM?0:450,up)};at(RM?0:500,up)}else{cr.innerHTML='';$('fBal').classList.remove('pend');NX.forEach((x,i)=>$('fN'+i).style.opacity='')}};
+const capFit=()=>{const c=$('fCap');if(!c||!c.offsetWidth)return;const s=[ti.textContent,de.textContent,mo.textContent,mo.hidden];c.style.minHeight='';let m=c.offsetHeight;L2.forEach(l=>{ti.textContent=`${L2.length}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;m=Math.max(m,c.offsetHeight)});[ti.textContent,de.textContent,mo.textContent,mo.hidden]=s;c.style.minHeight=m+'px'};
+addEventListener('resize',()=>{clearTimeout(capFit.t);capFit.t=setTimeout(capFit,120)});new IntersectionObserver(e=>e.some(x=>x.isIntersecting)&&capFit()).observe($('fCap'));
 const set=n=>{clr();if($('fDone'))undone();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
 if(k<0){S.innerHTML='<div class="idle">₿</div>';ti.textContent=t('▶ 再生を押すと、最初から順番に進みます');de.textContent='';mo.hidden=true;return}
 const l=L2[k];pose(k);rate();ti.textContent=`${k+1}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;mo.onclick=e=>{e.preventDefault();stop();go(chs.findIndex(c=>c.dataset.t==l.dataset.g))};
