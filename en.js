@@ -4,5 +4,5 @@ const J=/[\u3000-\u30ff\u4e00-\u9fff\uff01-\uff60]/;window.T=t=>D[t]!=null?D[t]:
 const tr=n=>{const v=n.nodeValue;if(!J.test(v))return;const k=v.trim();if(D[k]!=null){const o=v.replace(k,D[k]);if(o!==v)n.nodeValue=o}else window.__miss.add(k)};
 const at=e=>{for(const a of ['aria-label','placeholder','title','alt']){const v=e.getAttribute&&e.getAttribute(a);if(!v||!J.test(v))continue;const m=v.match(/^(\S+) (.+)$/);if(D[v]!=null)e.setAttribute(a,D[v]);else if(m&&D[m[2]]!=null)e.setAttribute(a,m[1]+' '+D[m[2]]);else window.__miss.add('@'+a+':'+v)}};
 const walk=r=>{if(r.nodeType==3)return tr(r);if(r.nodeType!=1||r.tagName=='SCRIPT'||r.tagName=='STYLE')return;at(r);const w=document.createTreeWalker(r,5);let n;while(n=w.nextNode())n.nodeType==3?tr(n):at(n)};
-document.title='Touch & Learn Bitcoin';walk(document.body);
+document.title='Touch & Learn Bitcoin';document.querySelectorAll('meta[name=apple-mobile-web-app-title],meta[name=application-name]').forEach(m=>m.content='TouchBTC');walk(document.body);
 new MutationObserver(ms=>{for(const m of ms){if(m.type=='characterData')tr(m.target);else m.addedNodes.forEach(walk)}}).observe(document.body,{childList:true,subtree:true,characterData:true})})();
