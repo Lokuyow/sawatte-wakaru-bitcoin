@@ -811,3 +811,4 @@ nav span b,#prog span b{box-shadow:var(--bsh)}
 .myth a.go51{color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
 .lead1{text-align:center}
 html:lang(ja) .lead1 .nw{display:inline-block}
+.lead1 .l1{font-weight:400;font-size:.92em;color:var(--mut,inherit)}.lead1 b{font-weight:700}
