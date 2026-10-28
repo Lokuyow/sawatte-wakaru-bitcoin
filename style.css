@@ -735,3 +735,5 @@ details.more>summary:has(>.ic){text-align:left;justify-content:flex-start;align-
 .ic.ic-coin{color:var(--accent)}
 :is(button,.btn) .ic.ic-coin{color:inherit}
 .idle .ic.ic-coin{color:var(--mut);opacity:.6}
+:root[data-theme=dark] .mark .tile{stroke:var(--line2);stroke-width:1.5}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .mark .tile{stroke:var(--line2);stroke-width:1.5}}
