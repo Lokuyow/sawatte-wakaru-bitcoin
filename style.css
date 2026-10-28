@@ -729,3 +729,5 @@ details.more>summary:has(>.ic){text-align:left;justify-content:flex-start;align-
 @media(hover:hover){.cmp button[aria-pressed=false]:hover,#tAmtC button:not(.on):hover{background:var(--soft);color:var(--ink)}}
 .cmp button[aria-pressed=false]:is(:active,:focus):not(:hover),#tAmtC button:not(.on):is(:active,:focus):not(:hover){background:var(--card)}
 :is(.cmp button[aria-pressed=true],#tAmtC button.on,.seg button.on,.seg button[aria-pressed=true],.spd button[aria-pressed=true],button.ghost.on),:is(.cmp button[aria-pressed=true],#tAmtC button.on,.seg button.on,.seg button[aria-pressed=true],button.ghost.on):is(:hover,:active,:focus,:focus-visible){box-shadow:none;border-color:transparent}
+#home{color:inherit;text-decoration:none;cursor:pointer;border-radius:6px}
+@media(hover:hover){#home:hover{color:var(--o)}}
