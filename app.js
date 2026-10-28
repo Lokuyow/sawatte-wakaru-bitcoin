@@ -244,21 +244,21 @@ const build=()=>{S.innerHTML=`<div class="fsn">
 <div class="fo fpp fA" id="fA"><span>👩</span><b>${L('アリス','Alice')}</b></div>
 <div class="fo fpp fB" id="fB"><span>👨</span><b>${L('ボブ','Bob')}</b><code id="fBal">0 BTC</code></div>
 <div class="fo fkey" id="fK"><small>${L('秘密鍵','Private key')}</small><code id="fKc"></code></div>
-<div class="fo fpub" id="fPub"><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span>${L('アドレス','Address')}</span><small>${L('一方通行','one-way')}</small></div>
+<div class="fo fpub" id="fPub"><span class="fbk">${L('秘密鍵','Private key')}</span><i>→</i><span>${L('公開鍵','Public key')}</span><i>→</i><span class="fad">${L('ボブのアドレス',"Bob's address")}</span><small>${L('一方通行','one-way')}</small></div>
 ${NX.map((x,i)=>`<div class="fo fnd" id="fN${i}" style="left:${x}%;top:63%"><svg viewBox="3 4 18 17"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/><path class="ck" d="M7.6 10.6l2.8 2.6 5-5.2"/></svg></div>`).join('')}
 <div class="fo fmp" id="fMp"><small>${L('メンプール','Mempool')}</small><i></i><i></i><i></i></div>
 <div class="fo fch fc1" id="fC1">#1</div><div class="fo fch fc2" id="fC2">#2</div>
 <div class="fo fblk" id="fBk"><small id="fBn">${L('新しいブロック','New block')}</small><code id="fNn"></code><span class="ftx">0.01 BTC</span></div>
 <div class="fo fslip" id="fS"><small>${L('取引','Tx')}</small><b id="fSt"></b><span class="fseal" id="fSe">${L('署名','Signed')} ✓</span></div>
 <div class="fo fcf" id="fCf"></div>
-<div class="fo fcr" id="fCr"></div>
+<div class="fo fdv" id="fDv"></div><div class="fo fcr" id="fCr"></div>
 </div>`};
 const P=(id,x,y,o=1,s=1)=>{const e=$(id);if(x!=null){e.style.left=x+'%';e.style.top=y+'%'}e.style.opacity=o;e.style.transform=`translate(-50%,-50%) scale(${s})`};
-const TX=L('アリス → ボブ 0.01 BTC','Alice → Bob 0.01 BTC');
+const TX=L('→ ボブのアドレス 0.01 BTC',"→ Bob's address 0.01 BTC");
 const pose=k=>{if(!S.querySelector('.fsn'))build();const F=S.firstChild;F.className='fsn s'+k;
 P('fA',18,5);P('fB',82,5);$('fA').style.transform=$('fB').style.transform='translate(-50%,0)';$('fBal').textContent=k>=8?'0.01 BTC':'0 BTC';
 P('fK',18,33,1,k>=2?.8:1);if(k==0){const c=$('fKc');let n=0;const st=()=>{c.textContent=hx(12);if(++n<14&&!RM)at(70,st)};st()}else if(!$('fKc').textContent)$('fKc').textContent=hx(12);
-P('fPub',60,33,k==1?1:0);{const K=$('fK'),Pb=$('fPub'),W=S.firstChild.clientWidth,H=S.firstChild.clientHeight,kr=K.offsetLeft+K.offsetWidth/2,pw=Pb.offsetWidth;Pb.classList.remove('fbel');if(W>=500&&kr+10+pw<=W-8){Pb.style.left=(kr+10)+'px';Pb.style.top=K.offsetTop+'px';Pb.style.transform='translate(0,-50%)'}else{Pb.classList.add('fbel');Pb.style.left=Math.min(W-pw/2-8,Math.max(pw/2+8,K.offsetLeft))+'px';Pb.style.top=(K.offsetTop+K.offsetHeight/2+Pb.offsetHeight/2+8)+'px';Pb.style.transform='translate(-50%,-50%)'}}
+P('fPub',null,null,k==1?1:0);{const B=$('fB'),Pb=$('fPub'),W=S.firstChild.clientWidth;Pb.classList.add('fv');const cx=Math.min(W-Pb.offsetWidth/2-8,B.offsetLeft);Pb.style.left=cx+'px';Pb.style.top=(B.offsetTop+B.offsetHeight+8)+'px';Pb.style.transform='translate(-50%,0)'}
 P('fS',k<=4?50:k==5?19:42,k<=4?45:k==5?80:85,k>=2&&k<=5?1:0,k>=5?.6:1);
 const st=$('fSt');if(k==2&&!RM){let n=0;st.textContent='';const ty=()=>{st.textContent=TX.slice(0,++n);if(n<TX.length)at(60,ty)};at(400,ty)}else st.textContent=TX;
 $('fSe').classList.toggle('on',k>=3);
@@ -268,10 +268,11 @@ P('fC1',89,85,k>=6?1:0);P('fC2',77,85,k>=6?1:0);
 P('fBk',k>=7?61:42,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);
 const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
 $('fBn').textContent=L('ブロック #3','Block #3');$('fBk').classList.toggle('htx',k>=6);
-const cf=$('fCf');P('fCf',50,50,0);const cr=$('fCr');P('fCr',50,85,k>=8?1:0);if(k>=8){['fC1','fC2','fBk'].forEach(i=>$(i).style.opacity=0);P('fMp',null,null,0);NX.forEach((x,i)=>$('fN'+i).style.opacity=.35);
-const ba=$('fBal');ba.classList.add('pend');cr.innerHTML=`<i class="fcb">#2</i><i class="fcb me">#3<em id="fCn">${L('承認 1','1 conf')}</em></i>`;let n=1;
-const up=()=>{n++;const b=document.createElement('i');b.className='fcb nw';b.textContent='#'+(2+n);cr.appendChild(b);$('fCn').textContent=L(`承認 ${n}`,`${n} conf`);window.__bz&&__bz(6);
-if(n>=6){$('fCn').classList.add('ok');ba.classList.remove('pend');const bb=$('fB');bb.classList.remove('got');void bb.offsetWidth;bb.classList.add('got');window.__bu&&__bu(bb,12);window.__bz&&__bz(20)}else at(RM?0:450,up)};at(RM?0:500,up)}else{cr.innerHTML='';$('fBal').classList.remove('pend');NX.forEach((x,i)=>$('fN'+i).style.opacity='')}};
+const cf=$('fCf');P('fCf',50,50,0);const cr=$('fCr');P('fCr',50,85,k>=8?1:0);{const bk=$('fBk'),mp=$('fMp'),L0=bk.offsetLeft-bk.offsetWidth/2,mr=mp.offsetLeft+mp.offsetWidth/2,dv=$('fDv');dv.style.left=Math.min((mr+L0)/2,mr+12)+'px';dv.style.top=bk.offsetTop+'px';dv.style.opacity=k>=7?1:0;
+if(k>=8){['fC1','fC2','fBk'].forEach(i=>$(i).style.opacity=0);cr.classList.remove('cmp');const D0=Math.min((mr+L0)/2,mr+12);cr.style.left=(D0+8)+'px';cr.style.right='0';cr.style.top=bk.offsetTop+'px';cr.style.transform='translateY(calc(-50% - 11px))';
+const ba=$('fBal');ba.classList.add('pend');cr.innerHTML=`<i class="fsp" style="width:${Math.max(0,L0-D0-8-10)}px"></i><div class="fblk htx lk"><small>${L('ブロック #3','Block #3')}</small><code class="ok">${nn.textContent}</code><span class="ftx">0.01 BTC</span><em id="fCn">${L('承認 1','1 conf')}</em></div><div class="fch lk">#2</div><div class="fch">#1</div>`;let n=1;
+const up=()=>{n++;const b=document.createElement('div');b.className='fch lk nw';b.textContent='#'+(2+n);const sp=cr.firstChild;cr.insertBefore(b,sp.nextSibling);sp.style.width=Math.max(0,parseFloat(sp.style.width)-b.offsetWidth-(cr.classList.contains('cmp')?4:10))+'px';if(cr.scrollWidth>cr.clientWidth+2)cr.classList.add('cmp');$('fCn').textContent=L(`承認 ${n}`,`${n} conf`);window.__bz&&__bz(6);
+if(n>=6){$('fCn').classList.add('ok');ba.classList.remove('pend');const bb=$('fB');bb.classList.remove('got');void bb.offsetWidth;bb.classList.add('got');window.__bu&&__bu(bb,12);window.__bz&&__bz(20)}else at(RM?0:450,up)};at(RM?0:500,up)}else{cr.innerHTML='';cr.style.right='';cr.classList.remove('cmp');$('fBal').classList.remove('pend')}}};
 const capFit=()=>{const c=$('fCap');if(!c||!c.offsetWidth)return;const s=[ti.textContent,de.textContent,mo.textContent,mo.hidden];c.style.minHeight='';let m=c.offsetHeight;L2.forEach(l=>{ti.textContent=`${L2.length}. ${t(l.querySelector('b').textContent)}`;de.textContent=t(l.querySelector('p').textContent);mo.textContent=t(l.querySelector('.more').textContent);mo.hidden=false;m=Math.max(m,c.offsetHeight)});[ti.textContent,de.textContent,mo.textContent,mo.hidden]=s;c.style.minHeight=m+'px'};
 addEventListener('resize',()=>{clearTimeout(capFit.t);capFit.t=setTimeout(capFit,120)});new IntersectionObserver(e=>e.some(x=>x.isIntersecting)&&capFit()).observe($('fCap'));
 const set=n=>{clr();if($('fDone'))undone();k=n;L2.forEach((l,i)=>{l.classList.toggle('on',i==k);l.classList.toggle('done',i<k)});
