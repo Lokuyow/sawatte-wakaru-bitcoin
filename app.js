@@ -45,7 +45,7 @@ const bz=p=>window.__bz&&__bz(p),bu=(e,n)=>window.__bu&&__bu(e,n);
 const showIn=()=>{const t=inp.value,ch=[...t],[s,e,n]=prevT==null?[0,0,0]:rng(prevT,t);$('hwIn').innerHTML=ch.map((c,i)=>`<span class="${prevT!=null&&i>=s&&i<e?'chg':''}" style="--d:${i*40}ms">${esc(c==' '?'\u00a0':c)}</span>`).join('')||'&nbsp;';$('hwGo').classList.toggle('pls',prevT!=null&&t!=prevT);return n};
 $('hwGo').innerHTML='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="3"/><path d="M20 17C18 9 22 4 27 6M23 20c8-2 13 2 11 7M20 23c2 8-2 13-7 11M17 20C9 22 4 18 6 13"/></svg><span>'+L('ハッシュする','Hash it')+'</span>';
 async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;const n=showIn();$('hwGo').classList.remove('pls');
-const M=$('hwM'),G=$('hwGo');if(anim&&!RM){[M,G].forEach(e=>e.classList.remove('go'));void M.offsetWidth;M.classList.add('go');G.classList.add('go');window.__bz&&__bz(15)}
+const M=$('hwM'),G=$('hwGo');if(anim&&!RM){$('hwFl').innerHTML=ch.slice(0,12).map((c,i)=>`<span style="--d:${i*22}ms;--r:${(i%2?1:-1)*(20+i*7%30)}deg;--x:${(i%3-1)*6}px">${esc(c)}</span>`).join('');[M,G].forEach(e=>e.classList.remove('go'));void M.offsetWidth;M.classList.add('go');G.classList.add('go');window.__bz&&__bz(15)}
 const same=prevH&&prevH!=h;$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
 $('hwG1').innerHTML=grid(h);const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
 H1.innerHTML=fin;

@@ -825,3 +825,9 @@ details.more>summary{display:flex;width:100%;box-sizing:border-box;min-height:44
 .hwIn .chg{animation:hwPop2 .18s ease-out}
 @keyframes hwPop2{from{transform:scale(1.2)}}
 @media (prefers-reduced-motion:reduce){.hwIn .chg{animation:none}}
+/* z46 spin + scatter */
+.hwM.go .hwBl{animation:hwSpin4 .45s cubic-bezier(.2,.7,.3,1)!important}
+.hwM.go .hwFl span{animation:hwScat .3s var(--d) ease-in forwards!important}
+@keyframes hwSpin4{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes hwScat{0%{opacity:1;transform:none}100%{opacity:0;transform:translate(var(--x),26px) rotate(var(--r)) scale(.5)}}
+@media (prefers-reduced-motion:reduce){.hwM.go .hwBl,.hwM.go .hwFl span{animation:none!important}.hwFl{display:none}}
