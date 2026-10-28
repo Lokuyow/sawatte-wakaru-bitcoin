@@ -809,3 +809,5 @@ nav span b,#prog span b{box-shadow:var(--bsh)}
 .flow.rail .fi{font-size:min(1.6rem,5.6vw)}.flow.rail .fi .ic{width:1em;height:1em}
 @media(min-width:700px){.flow.rail .fi{font-size:2rem}}
 .myth a.go51{color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+.lead1{text-align:center}
+html:lang(ja) .lead1 .nw{display:inline-block}
