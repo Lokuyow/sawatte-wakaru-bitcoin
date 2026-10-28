@@ -45,16 +45,14 @@ const bz=p=>window.__bz&&__bz(p),bu=(e,n)=>window.__bu&&__bu(e,n);
 const showIn=()=>{const t=inp.value,ch=[...t],[s,e,n]=prevT==null?[0,0,0]:rng(prevT,t);$('hwIn').innerHTML=ch.map((c,i)=>`<span class="${prevT!=null&&i>=s&&i<e?'chg':''}" style="--d:${i*40}ms">${esc(c==' '?'\u00a0':c)}</span>`).join('')||'&nbsp;';$('hwGo').classList.toggle('pls',prevT!=null&&t!=prevT);return n};
 $('hwGo').innerHTML='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="3"/><path d="M20 17C18 9 22 4 27 6M23 20c8-2 13 2 11 7M20 23c2 8-2 13-7 11M17 20C9 22 4 18 6 13"/></svg><span>'+L('ハッシュする','Hash it')+'</span>';
 async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;const n=showIn();$('hwGo').classList.remove('pls');
-const M=$('hwM'),fl=$('hwFl');if(anim&&!RM){const cs=ch.slice(0,14);fl.innerHTML=cs.map((c,i)=>`<span style="--d:${i*25}ms">${esc(c)}</span>`).join('');
-const mx=$('hwMx');let fr='';cs.forEach((c,i)=>{for(const k of [0,1,2]){const a=Math.random()*360,r=50+Math.random()*80;fr+=`<span class="p${k}" style="--a:${a}deg;--r:${r}px;--d:${240+i*14}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<48;i++)fr+=`<i style="--a:${Math.random()*360}deg;--r:${40+Math.random()*110}px;--d:${260+i*12}ms;--s:${i%2?1:-1}"></i>`;mx.innerHTML=fr;
-const G=$('hwGo'),W=$('hw');[M,G,W].forEach(e=>e.classList.remove('go','boom'));void M.offsetWidth;M.classList.add('go');G.classList.add('go');W.classList.add('boom');window.__bz&&__bz([30,20,12,20,12,20,12,20,40]);await new Promise(r=>setTimeout(r,680));if(my!=seq)return}
+const M=$('hwM'),G=$('hwGo');if(anim&&!RM){[M,G].forEach(e=>e.classList.remove('go'));void M.offsetWidth;M.classList.add('go');G.classList.add('go');window.__bz&&__bz(15)}
 const same=prevH&&prevH!=h;$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
-$('hwG1').innerHTML=grid(h);if(anim&&!RM)$('hwG1').querySelectorAll('i').forEach((e,i)=>{e.style.animationDelay=(i*9)+'ms';e.classList.add("hpp")});const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
-if(anim&&!RM){const t0=performance.now(),X='0123456789abcdef';await new Promise(res=>{const f=()=>{if(my!=seq)return res();const k=Math.floor((performance.now()-t0)/380*64);if(k>=64){H1.innerHTML=fin;return res()}H1.innerHTML=[...h].map((c,i)=>i<k?c:`<i class="rn">${X[Math.random()*16|0]}</i>`).join('');requestAnimationFrame(f)};f()});if(my!=seq)return}else H1.innerHTML=fin;
+$('hwG1').innerHTML=grid(h);const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
+H1.innerHTML=fin;
 const O=document.querySelector('.hwO');O.classList.toggle('one',!prevH);const C=document.querySelector('.hwC.now');if(anim&&!RM){C.classList.remove('st');void C.offsetWidth;C.classList.add('st')}
 let d=0;if(prevH)for(let i=0;i<64;i++)if(h[i]!=prevH[i])d++;
 $('hwR').innerHTML=!prevH||prevH==h?'':(n<=1?L(`1文字変えただけで、指紋がまるごと変わる <b>${d}/64</b>`,`Change 1 character and the whole fingerprint changes <b>${d}/64</b>`):L(`${n}文字の変更で、指紋がまるごと変わる <b>${d}/64</b>`,`${n} characters changed, the whole fingerprint changes <b>${d}/64</b>`));
-if(anim&&prevH!=h){bz([40,30,20,30,60]);bu(C,26);bu(M,22)}if(prevH!=h){prevT=t;prevH=h}}
+if(anim&&prevH!=h)bz(20);if(prevH!=h){prevT=t;prevH=h}}
 inp.oninput=showIn;$('hwGo').onclick=()=>run(true);
 $('hwP').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(inp.value==b.dataset.p)return;inp.value=b.dataset.p;showIn();window.__bz&&__bz(8)};
 prevT=null;run(false)})();

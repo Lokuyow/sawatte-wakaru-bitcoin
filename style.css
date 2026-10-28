@@ -812,3 +812,16 @@ nav span b,#prog span b{box-shadow:var(--bsh)}
 .lead1{text-align:center}
 html:lang(ja) .lead1 .nw{display:inline-block}
 .lead1 .l1{font-weight:400;font-size:.92em;color:var(--mut,inherit)}.lead1 b{font-weight:700}
+h2.c{text-align:center}
+details.more>summary{display:flex;width:100%;box-sizing:border-box;min-height:44px;align-items:flex-start;-webkit-user-select:none;user-select:none}
+/* z45 calm hash */
+.hwM.go,.hwM.go .hwBl,.hwM.go .hwFl span,.hwM.go .hwMx span,.hwM.go .hwMx i,.hw.boom::after,.hwGo.go::after,.hwG i.hpp{animation:none!important}
+.hwGo.go{animation:hwTap .14s ease-out!important}
+.hwC.st{animation:hwIn2 .18s ease-out!important}
+.hwGo.pls{animation:none!important;box-shadow:0 0 0 3px var(--glow)}
+@keyframes hwTap{50%{transform:scale(.96)}}
+@keyframes hwIn2{from{opacity:.4;transform:translateY(3px)}}
+@media (prefers-reduced-motion:reduce){.hwGo.go,.hwC.st{animation:none!important}}
+.hwIn .chg{animation:hwPop2 .18s ease-out}
+@keyframes hwPop2{from{transform:scale(1.2)}}
+@media (prefers-reduced-motion:reduce){.hwIn .chg{animation:none}}
