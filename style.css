@@ -978,3 +978,6 @@ h2 em{color:#9a4f00}[data-theme=dark] h2 em{color:#f5b35f}
 #fStage .fpub.fsd>i:nth-child(4) svg{width:1.9em;height:1.9em;stroke-width:2.6;stroke:currentColor;color:inherit}
 #fStage .fpub.fsd>i>small{font-size:.9em;font-weight:700;color:var(--mut);right:calc(100% + 2px)}
 @media(max-width:420px){#fStage .fpub.fsd>i>small{font-size:.95em}}
+#fStage .fpub.fsd>i:nth-child(4){font-size:1em;width:1.5em;height:1.5em}
+#fStage .fpub.fsd>i:nth-child(4) svg{width:1.5em;height:1.5em}
+#fStage .fpub.fsd>i>small{font-size:.95em}
