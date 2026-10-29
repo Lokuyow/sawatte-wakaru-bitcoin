@@ -957,3 +957,12 @@ h2 em{color:#9a4f00}[data-theme=dark] h2 em{color:#f5b35f}
 #fStage .fmp.hold{width:9.6em;height:4.4em}#fStage .fmp.hold i{visibility:hidden}
 #fStage .fpub.fv{gap:1px}#fStage .fpub.fv>i{transform:none;width:1em;height:1em;display:inline-flex!important;justify-content:center;align-items:center;overflow:hidden}#fStage .fpub.fv>i{width:1.2em;height:1.2em}#fStage .fpub.fv>i svg{transform:rotate(90deg);width:1.1em;height:1.1em}
 #fStage .fpub.fv small{position:absolute!important;right:calc(100% + 6px);left:auto;top:50%;bottom:auto;transform:translateY(-50%)!important;margin:0}
+
+#fStage .fpub.fv>i{overflow:visible;position:relative}
+#fStage .fpub.fv>i>small{position:absolute;left:calc(100% + 4px);top:50%;transform:translateY(-50%);right:auto;margin:0;white-space:nowrap;font-size:.62em;line-height:1;color:var(--mut)}
+
+.fcr .fwr{display:flex;align-items:center;gap:inherit;transition:transform .34s cubic-bezier(.3,.7,.3,1);will-change:transform}
+.fcr .fwr>*{position:relative;flex:none}
+.fcr .fh{opacity:0;transform:translateX(-6px);transition:opacity .25s,transform .25s}
+.fcr .fh.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.fcr .fwr,.fcr .fh{transition:none}}
