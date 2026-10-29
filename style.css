@@ -983,3 +983,9 @@ h2 em{color:#9a4f00}[data-theme=dark] h2 em{color:#f5b35f}
 #fStage .fpub.fsd>i>small{font-size:.95em}
 #fStage .fpub.fsd>i:nth-child(2){font-size:1em;width:1.5em;height:1.5em;margin:3px 0;color:inherit}
 #fStage .fpub.fsd>i:nth-child(2) svg{width:1.5em;height:1.5em;stroke-width:2.6;stroke:currentColor!important;color:inherit!important}
+.lcrow>button{flex:1 1 calc(50% - 4px);min-width:0;white-space:normal}
+.lsub{display:block;font-size:.9em}
+.lcrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.lcrow>button{width:100%;margin:0}
+.ln .lp{min-width:0}.lsub{overflow-wrap:anywhere}
+.ln .lp .lsub{font-size:.9em;font-style:normal;display:block}.crow.lcrow>button{white-space:normal!important;line-height:1.3;min-height:44px}
+.crow.lcrow{grid-auto-rows:1fr}.crow.lcrow>button{height:100%}
