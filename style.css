@@ -997,3 +997,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;heigh
 input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:9px;background:var(--o);border:2px solid color-mix(in srgb,#000 18%,var(--o));box-shadow:0 3px 0 color-mix(in srgb,#000 30%,var(--o))}
 input[type=range]:focus-visible{outline:2px solid var(--o);outline-offset:2px;border-radius:8px}
 @media(hover:hover){input[type=range]:hover::-webkit-slider-thumb{transform:translateY(-1px);box-shadow:0 4px 0 color-mix(in srgb,#000 30%,var(--o))}input[type=range]:hover::-moz-range-thumb{box-shadow:0 4px 0 color-mix(in srgb,#000 30%,var(--o))}}
+.lsend{display:flex;gap:6px;min-width:0}.lsend>button:first-child{flex:1;min-width:0;margin:0;white-space:normal;line-height:1.3;min-height:44px}.lsend>button+button{flex:0 0 auto;margin:0;padding-left:8px;padding-right:8px;min-height:44px}.lcrow .lc[hidden],.lcrow .lo[hidden]{display:none}
+.crow.lcrow{grid-auto-rows:auto}.crow.lcrow>button{height:auto;min-height:52px}.lsend>button{height:auto}
+@media(max-width:500px){.lsend{flex-direction:column;gap:4px}.crow:has(#lOpen) .lsend>button{width:100%;white-space:normal}.lsend>button+button{min-height:34px}}
+input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(to right,var(--o) var(--fill,0%),color-mix(in srgb,currentColor 16%,transparent) var(--fill,0%))}
+input[type=range]::-moz-range-progress{background:var(--o)}
+@media(max-width:500px){.crow.lcrow>button{min-height:58px}}
