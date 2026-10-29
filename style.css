@@ -981,3 +981,5 @@ h2 em{color:#9a4f00}[data-theme=dark] h2 em{color:#f5b35f}
 #fStage .fpub.fsd>i:nth-child(4){font-size:1em;width:1.5em;height:1.5em}
 #fStage .fpub.fsd>i:nth-child(4) svg{width:1.5em;height:1.5em}
 #fStage .fpub.fsd>i>small{font-size:.95em}
+#fStage .fpub.fsd>i:nth-child(2){font-size:1em;width:1.5em;height:1.5em;margin:3px 0;color:inherit}
+#fStage .fpub.fsd>i:nth-child(2) svg{width:1.5em;height:1.5em;stroke-width:2.6;stroke:currentColor!important;color:inherit!important}
