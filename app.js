@@ -308,7 +308,7 @@ $('iBank').onclick=()=>show(false);$('iAll').onclick=()=>show(true);show(false);
 document.querySelectorAll('.rm0').forEach(b=>b.onclick=()=>go(chs.findIndex(c=>c.dataset.t==b.dataset.g)))})();
 
 // 51% myth: catch-up chance (q/p)^z
-(()=>{const z=$('zN');if(!z)return;const t=x=>window.T?window.T(x):x;const up=()=>{const q=+$('aP').value/100,p=1-q,n=+z.value,P=q>=p?1:Math.pow(q/p,n);$('zV').textContent=n;$('zB').style.width=(P*100)+'%';$('zT').textContent=t('計算力')+` ${Math.round(q*100)}% `+t('で追いつける確率')+`: ${P>=.9995?'100':P<.0001?'0.01'+t('未満'):(P*100).toFixed(P<.1?2:1)}%`};z.oninput=up;$('aP').addEventListener('input',up);up()})();
+(()=>{const z=$('zN');if(!z)return;const t=x=>window.T?window.T(x):x;const up=()=>{const q=+$('aP').value/100,p=1-q,n=+z.value,P=q>=p?1:Math.pow(q/p,n);$('zV').textContent=n;$('zB').style.width=(P*100)+'%';$('zT').textContent=t('時間無制限なら')+' '+t('計算力')+` ${Math.round(q*100)}% `+t('でいつか追いつける確率')+`: ${P>=.9995?'100':P<.0001?'0.01'+t('未満'):(P*100).toFixed(P<.1?2:1)}%`};z.oninput=up;$('aP').addEventListener('input',up);up()})();
 // myth widgets
 (()=>{const s=$('hmS');if(s){const E=[[L('2009年ごろ','around 2009'),100],[L('2016年ごろ','around 2016'),97],[L('2024年ごろ','around 2024'),90],[L('ずっと先','far future'),55],[L('2140年ごろ以降','after ~2140'),0]];
 const u=()=>{const[e,r]=E[+s.value];$('hmE').textContent=e;$('hmR').style.width=r+'%';$('hmF').style.width=(100-r)+'%';$('hmR').textContent=r>12?L('報酬','Reward')+' '+r+'%':'';$('hmF').textContent=100-r>12?L('手数料','Fees')+' '+(100-r)+'%':''};s.oninput=u;u()}
