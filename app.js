@@ -78,7 +78,7 @@ $('cFix').hidden=broken<0;}
 $('cFix').onclick=async()=>{fixing=true;$('cFix').disabled=true;const hs=await hashes();let from=hs.findIndex((h,i)=>h!==good[i]);
 for(let i=from;i<data.length;i++){$('b'+i).querySelector('.st').textContent='⛏ 計算中…';await new Promise(r=>setTimeout(r,500));prevs[i]=i?await sha((i-1)+prevs[i-1]+data[i-1]):Z;good[i]=await sha(i+prevs[i]+data[i]);await chain()}
 fixing=false;repaired=true;$('cFix').disabled=false;await chain();$('cTake').innerHTML='💡 直せました。でも本物のビットコインでは、1ページごとに大量のマイニングが必要です。そのうえ世界中が先へ先へと書き足しているので、追いついて全部やり直すのは現実的ではありません。'};
-$('cReset').onclick=async()=>{repaired=false;amt=[...A0];data=[...init];await seal();good=await hashes();$('cTake').innerHTML='💡 1か所でも書きかえると、その先のハンコが全部合わなくなる。だから昔の記録はこっそり変えられません。';chain(true)};
+$('cReset').onclick=async()=>{repaired=false;amt=[...A0];data=[...init];await seal();good=await hashes();$('cTake').innerHTML='💡 1か所変えると、その先のハッシュが全部ずれる。実際のビットコインでは、マイニングの計算もやり直さなければならないため、過去の記録の書きかえは非常に難しくなります。';chain(true)};
 (async()=>{await seal();good=await hashes();chain(true)})();
 // 3 mining (small async batches so the UI stays responsive)
 const fmtT=s=>EN?(s<60?s.toFixed(1)+' s':s<3600?Math.floor(s/60)+' min '+Math.floor(s%60)+' s':(s/3600).toFixed(1)+' h'):s<60?s.toFixed(1)+'秒':s<3600?Math.floor(s/60)+'分'+Math.floor(s%60)+'秒':(s/3600).toFixed(1)+'時間';let mining=false,stopReq=false,rate=1e5;
