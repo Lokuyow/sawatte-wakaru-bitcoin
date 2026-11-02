@@ -16,7 +16,7 @@ $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
 (()=>{const d=SAVED;if(!d||!(d.cur>0))return;const r=$('resume');r.hidden=false;r.textContent=L('▶ 続きから('+chs[d.cur].dataset.t+')','▶ Continue ('+(window.T?T(chs[d.cur].dataset.t):chs[d.cur].dataset.t)+')');(d.seen||[]).forEach(j=>seen.add(j));r.onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(d.cur)}})();
 (()=>{let n=0;const c=document.querySelector('.hero .coin');c.onclick=()=>{if(++n%5==0){c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');confetti()}}})();
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
-$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(L('「さわってわかるビットコイン」4つのステージと3つのゲームをぜんぶクリアしました!ハッシュもマイニングも署名も、さわってみると意外とわかります ₿','I finished all 4 stages and 3 games of “Touch & Learn Bitcoin”! Hashing, mining and signatures make sense once you try them ₿'))+'&url='+encodeURIComponent(U);$('share2').onclick=()=>{const m=/text=([^&]*)/.exec($('share').href);__share(decodeURIComponent(m[1])+' '+U)};;
+{const st=()=>L('「さわってわかるビットコイン」\n4つのステージと3つのゲームをぜんぶクリアしました！\nハッシュもマイニングも署名も、さわってみると意外とわかります ₿','“Touch & Learn Bitcoin”\nI finished all 4 stages and 3 games!\nHashing, mining and signatures make sense once you try them ₿')+'\n'+U;$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(st());$('share2').onclick=()=>__share(st())};
 // quizzes
 const Q=[['試してみよう: 「。」を1個足したら、ハッシュはどうなる?',['ちょっとだけ変わる','まったく別のものになる','変わらない'],1,'1文字でも変わると、指紋はほぼ全部入れかわります。だから改ざんがすぐバレます。'],
 ['ブロック#1のデータを書きかえたら、こわれるのはどこ?',['ブロック#1だけ','#1より前ぜんぶ','#1の次から後ろぜんぶ'],2,'#1のハッシュが変わるので、それを「前のハッシュ」として持っている#2以降がつながらなくなります。'],
@@ -176,7 +176,7 @@ const rank=ok>=11?L('🏆 伝説のノード','🏆 Legendary node'):ok>=9?L('�
 if(ok>=9)confetti();e.innerHTML=`<div class="gscore">${score}<small> pt</small></div><p class="c"><b>${rank}</b></p><div class="gsum"><div><b>${ok}</b><small>/ ${TOT}</small><span>${L('正解','correct')}</span></div><div><b>🔥${best}</b><span>${L('最大コンボ','best combo')}</span></div></div>
 <div class="glvs">${LV.map((v,j)=>`<div><span>${v.i} ${v.t}</span><span>${hist[j].map(x=>x?'⭕':'❌').join('')}</span></div>`).join('')}</div>
 <div class="note"><b>${L('このゲームでわかったこと','What this game showed')}</b><br>${L('ビットコインでは、世界中のノードがあなたと同じように「残高は足りる?」「署名は本人のもの?」「同じコインを2回使っていない?」を1件ずつチェックしています。ひとつでもおかしな取引は、誰が送ってきてもブロックに入れてもらえません。','In Bitcoin, nodes all over the world check every transaction just like you did: “Is the balance enough?”, “Is the signature the owner’s?”, “Is the same coin being spent twice?” A transaction that fails even one check never gets into a block, no matter who sent it.')}</div>
-<div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(L(`「ニセ取引を見破れ!」で ${score}点(${ok}/${TOT}問正解)、${rank}でした ₿ #さわってわかるビットコイン`,`I scored ${score} pts (${ok}/${TOT}) in “Spot the fake transactions!” — ${rank} ₿`))}&url=${encodeURIComponent(U+'#quiz')}">${L('𝕏 でスコアをシェア','Share score on 𝕏')}</a><button id="gAgain" class="ghost">${L('もう一回あそぶ','Play again')}</button></div>`;$('gAgain').onclick=start}
+<div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(L(`「ニセ取引を見破れ!」で ${score}点(${ok}/${TOT}問正解)、${rank}でした ₿ #さわってわかるビットコイン`,`I scored ${score} pts (${ok}/${TOT}) in “Spot the fake transactions!” — ${rank} ₿`)+'\n'+U+'#quiz')}">${L('𝕏 でスコアをシェア','Share score on 𝕏')}</a><button id="gAgain" class="ghost">${L('もう一回あそぶ','Play again')}</button></div>`;$('gAgain').onclick=start}
 function start(){W={アリス:[1,2,3,4,5],ボブ:[6,7,8],キャロル:[9,10]};S={アリス:[],ボブ:[],キャロル:[]};lv=0;score=0;combo=0;best=0;ok=0;hist=[[],[],[]];started=true;$('gEnd').hidden=true;intro()}
 document.addEventListener('keydown',e=>{if(!$('gYes')||busy||e.target.matches('input,textarea'))return;if(e.key=='ArrowRight'){e.preventDefault();ans(true)}if(e.key=='ArrowLeft'){e.preventDefault();ans(false)}});
 W={アリス:[1,2,3,4,5],ボブ:[6,7,8],キャロル:[9,10]};S={アリス:[],ボブ:[],キャロル:[]};lv=0;draw();$('gStart').onclick=start})();
@@ -209,7 +209,7 @@ const cls=()=>{busy=true;ui();$('lSt').textContent=L('ブロックに記録中�
 // score card + share
 window.__card=(el,o)=>{const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/#'+o.k,tx=o.text+' '+L('#さわってわかるビットコイン','#TouchLearnBitcoin');
 el.innerHTML=`<div class="scard"><small>${o.label}</small><b class="sbig">${o.big}</b><span class="srank">${o.rank}</span>${o.sub?`<small class="ssub">${o.sub}</small>`:''}<div class="sshare"><a class="btn sx" target="_blank" rel="noopener" href="https://x.com/intent/post?text=${encodeURIComponent(tx+'\n'+U)}">${L('Xで共有','Share on X')}</a><button type="button" class="ghost ssh">${navigator.share?L('共有','Share'):L('コピー','Copy')}</button></div></div>`;
-const c=el.firstChild;el.querySelector('.ssh').onclick=()=>__share(tx+' '+U);
+const c=el.firstChild;el.querySelector('.ssh').onclick=()=>__share(tx+'\n'+U);
 window.__bz&&__bz([20,40,20,40,60]);window.__bu&&__bu(c,18)};
 // mining race
 (()=>{const M=[{n:'あなた',e:'🙋'},{n:'コンピューターA',e:'🤖',r:45},{n:'コンピューターB',e:'👾',r:70}];let run=false,tm,nonce=0,gen=0;
