@@ -225,11 +225,11 @@ $('rTap').onclick=()=>{if(run){tryH(M[0],12);const b=$('rTap');b.classList.remov
 // 51% attack
 (()=>{const sim=p=>{let h=0,x=0,steps=[];while(steps.length<80){const a=Math.random()<p;a?x++:h++;steps.push(a);if(h>=6&&x>h)return{ok:true,steps};if(h-x>=8)return{ok:false,steps}}return{ok:false,steps}};let tm,tries=0,best=0;
 $('aP').oninput=()=>$('aV').textContent=$('aP').value;
-$('aGo').onclick=()=>{clearInterval(tm);const p=$('aP').value/100,r=sim(p);let i=0,h=0,x=0;$('aRes').textContent='';$('aCard').innerHTML='';$('aGo').disabled=true;$('aH').innerHTML=$('aX').innerHTML='';
+$('aGo').onclick=()=>{clearInterval(tm);const p=$('aP').value/100,r=sim(p);let i=0,h=0,x=0;$('aRes').textContent='';$('aCard').innerHTML='';$('aGo').disabled=true;$('aH').innerHTML=$('aX').innerHTML='';$('aSt').textContent=L('みんな 0 ブロック / あなた 0 ブロック','Everyone 0 blocks / You 0 blocks');
 tm=setInterval(()=>{if(i>=r.steps.length){clearInterval(tm);$('aRes').innerHTML=r.ok?'<span style="color:var(--ng)">😈 追い抜きました。二重払い成功…</span>':'<span style="color:var(--ok)">🛡 追いつけず失敗。みんなのチェーンが勝ちました</span>';tries++;const pw=+$('aP').value;if(r.ok&&(!best||pw<best))best=pw;$('aGo').disabled=false;
 const rk=r.ok?(pw<=35?L('奇跡の大逆転(超ラッキー)','Miracle comeback (super lucky)'):pw<=50?L('運のいい攻撃者','Lucky attacker'):L('力ずくの51%','Brute-force 51%')):L('みんなのチェーンが守った','The network held');
 __card($('aCard'),{k:'51',label:L('51%攻撃','51% attack'),big:r.ok?L(`成功 <small>計算力${pw}%</small>`,`Success <small>${pw}% power</small>`):L(`失敗 <small>計算力${pw}%</small>`,`Failed <small>${pw}% power</small>`),rank:rk,sub:L(`挑戦${tries}回・最小の成功 ${best?best+'%':'—'}`,`${tries} ${tries>1?"tries":"try"} · lowest success ${best?best+'%':'—'}`)+'<br>'+L('少ない計算力で成功させてみよう','Try to win with less power'),text:r.ok?L(`51%攻撃に計算力${pw}%で成功!(${tries}回目)「${rk}」`,`Pulled off a 51% attack with ${pw}% power (try ${tries})! “${rk}”`):L(`51%攻撃、計算力${pw}%では失敗…みんなのチェーンは強い`,`51% attack failed with ${pw}% power. The network is strong`)});return}
-const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':'🧱';(a?$('aX'):$('aH')).appendChild(el);a?x++:h++},180)};
+const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':'🧱';(a?$('aX'):$('aH')).appendChild(el);a?x++:h++;$('aSt').textContent=L(`みんな ${h} ブロック / あなた ${x} ブロック`,`Everyone ${h} blocks / You ${x} blocks`)+(x>h?L(' — リード中!',' — you are ahead!'):x<h?L(` — 追い抜きまであと ${h-x+1} ブロック`,` — ${h-x+1} more block(s) to overtake`):L(' — 互角',' — tied'))},120)};
 $('aMany').onclick=()=>{const p=$('aP').value/100;let k=0;for(let i=0;i<100;i++)if(sim(p).ok)k++;$('aRes').innerHTML=L(`100回中 <b>${k}回</b> 成功(計算力 ${$('aP').value}%)`,`<b>${k}</b> of 100 succeeded (power ${$('aP').value}%)`)}})();
 
 // theme
