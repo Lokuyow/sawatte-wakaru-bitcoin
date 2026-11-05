@@ -169,6 +169,7 @@ if(valid){const mv=W[q.f].splice(0,q.a);W[q.to].push(...mv);S[q.f].push(...mv)}
 const fx=$('gFx');fx.textContent=valid?L('承認','OK'):L('却下','FAKE');fx.className='gfx on '+(valid?'g':'r');
 $('gCard').classList.add(right?'pass':'shake','done');$('gYes').disabled=$('gNo').disabled=true;draw();
 const c=$('gCombo');if(c){c.textContent=combo>1?'🔥'+combo:'';if(combo>1)c.classList.add('pop')}
+const pt=document.querySelector('.gpt');if(pt){pt.innerHTML=score+'<small>pt</small>';pt.classList.remove('pop');void pt.offsetWidth;pt.classList.add('pop')}
 const m=$('gMsg');m.className='gmsg '+(right?'g':'r');m.textContent=(y===null?L('⏰ 時間切れ! ','⏰ Time’s up! '):right?(combo>2?L(`⭕ ${combo}連続! `,`⭕ ${combo} in a row! `):L('⭕ せいかい! ','⭕ Correct! ')):L('😵 おしい! ','😵 Oops! '))+q.why+L('。','.');
 k++;setTimeout(next,right?1300:2400)}
 function end(){started=false;q=null;draw();$('gStage').innerHTML='';const e=$('gEnd');e.hidden=false;
@@ -179,7 +180,7 @@ if(ok>=9)confetti();e.innerHTML=`<div class="gscore">${score}<small> pt</small><
 <div class="share"><a class="btn x" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(L(`「ニセ取引を見破れ!」で ${score}点(${ok}/${TOT}問正解)、${rank}でした ₿ #さわってわかるビットコイン`,`I scored ${score} pts (${ok}/${TOT}) in “Spot the fake transactions!” — ${rank} ₿`)+'\n'+U+'#quiz')}">${L('𝕏 でスコアをシェア','Share score on 𝕏')}</a><button id="gAgain" class="ghost">${L('もう一回あそぶ','Play again')}</button></div>`;$('gAgain').onclick=start}
 function start(){W={アリス:[1,2,3,4,5],ボブ:[6,7,8],キャロル:[9,10]};S={アリス:[],ボブ:[],キャロル:[]};lv=0;score=0;combo=0;best=0;ok=0;hist=[[],[],[]];started=true;$('gEnd').hidden=true;intro()}
 document.addEventListener('keydown',e=>{if(!$('gYes')||busy||e.target.matches('input,textarea'))return;if(e.key=='ArrowRight'){e.preventDefault();ans(true)}if(e.key=='ArrowLeft'){e.preventDefault();ans(false)}});
-W={アリス:[1,2,3,4,5],ボブ:[6,7,8],キャロル:[9,10]};S={アリス:[],ボブ:[],キャロル:[]};lv=0;draw();$('gStart').onclick=start})();
+start()})();
 
 // entropy chapter
 (()=>{const g=$('eGrid');const flip=()=>{const r=crypto.getRandomValues(new Uint8Array(32));let bits='';r.forEach(x=>bits+=x.toString(2).padStart(8,'0'));g.innerHTML=[...bits].map((b,i)=>`<span class="b${b}" style="animation-delay:${i*3}ms">${b}</span>`).join('');g.classList.add('on')};
