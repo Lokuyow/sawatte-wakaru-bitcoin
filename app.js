@@ -119,7 +119,7 @@ const tx=ok?L('アリス本人の署名。支払いOK','Alice’s own signature.
 let txBr=tx;
 for(const k of (EN?['changed, so','signature.','signed with']:['ので、','秘密鍵の'])){const i=tx.indexOf(k);if(i>=0){txBr=tx.slice(0,i+k.length)+'<br class="sBr">'+tx.slice(i+k.length).trim();break}}
 res.innerHTML=`<span class="sMsg" style="color:var(--${ok?'ok':'ng'})"><i class="sIc">${ok?'✓':'✕'}</i><span class="sTx">${txBr}</span></span>`;buzz(ok?[12,40,12]:60);if(ok)burst(res,8)};
-go.onclick=async()=>{if(busy)return;busy=true;try{if(st==0){slip.classList.add('in');st=1}else if(st==1){await sign(false);st=2;hold(true)}else if(st==2){hold(true);await check();st=3;X.hidden=false}step(st);lab()}finally{busy=false}};
+go.onclick=async()=>{if(busy)return;busy=true;try{if(st==0){slip.classList.add('in');st=1}else if(st==1){await sign(false);st=2}else if(st==2){hold(true);await check();st=3;X.hidden=false}step(st);lab()}finally{busy=false}};
 q('#sgEd').onclick=async()=>{if(busy)return;busy=true;amount=amount==1?100:1;amt.textContent=amount+' BTC';amt.classList.toggle('ed',amount!=1);buzz(8);await wait(250);await check();lab();busy=false};
 q('#sgFk').onclick=async()=>{if(busy)return;busy=true;amount=1;amt.textContent='1 BTC';amt.classList.remove('ed');await sign(true);await wait(250);await check();lab();busy=false};
 q('#sgRe').onclick=reset;reset()})();
@@ -137,43 +137,46 @@ const fly=(A,B,a)=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)re
 $('people').onclick=e=>{const b=e.target.closest('button.p');if(!b||b.disabled)return;const i=+b.dataset.i;window.__bz&&__bz(8);if(b.dataset.s=='L')tF=tF==i?-1:i;else tT=tT==i?-1:i;rp()};
 $('tSend').onclick=()=>{if(tF<0||tT<0||tBusy)return;const f=tF,t=tT,ok=bal[ppl[f][0]]>=tA,A=$('tL').children[f+1],B=$('tR').children[t+1];if(ok)fly(A,B,tA);tBusy=1;tHint();const t1=setTimeout(()=>{const accepted=tx(ppl[f][0],ppl[t][0],tA);rp();const r=$('tR').children[t+1],l=$('tL').children[f+1];if(accepted){r.classList.add('got');l.classList.add('fr');window.__bu&&__bu(r,10);window.__bz&&__bz(15)}else{l.classList.add('ng');window.__bz&&__bz(60)}ldSync(accepted);const t2=setTimeout(()=>{tBusy=0;tF=-1;tT=-1;tA=1;tAgain=1;$('tAmtC').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.a=='1'));rp()},1100);tSendT.push(t2)},ok?480:0);tSendT.push(t1)};
 function tx(f,t,a){const li=document.createElement('li');if(f==t||!(a>0)){li.className='ng';li.textContent=L(`❌ ${f}→${t} ${a}: おかしな取引です`,`❌ ${nm(f)}→${nm(t)} ${a}: invalid transaction`)}else if(bal[f]<a){li.className='ng';li.textContent=L(`❌ ${f}→${t} ${a}コイン: 台帳を見たら${f}は${bal[f]}コインしか持っていません。却下!`,`❌ ${nm(f)}→${nm(t)} ${a} coins: the ledger shows ${nm(f)} has only ${bal[f]}. Rejected!`)}else{bal[f]-=a;bal[t]+=a;li.className='ok';li.textContent=L(`✅ ${f}→${t} ${a}コイン: みんなで確認してOK。台帳に記録しました`,`✅ ${nm(f)}→${nm(t)} ${a} coins: verified by everyone and recorded`)}$('log').prepend(li);rp();if(li.className=='ng')document.querySelectorAll('.p')[ppl.findIndex(p=>p[0]==f)]&&document.querySelectorAll(".p")[ppl.findIndex(p=>p[0]==f)].classList.add('bump');return li.className=='ok'}
-const ldIni=n=>EN?{アリス:'A',ボブ:'B',キャロル:'C',デイブ:'D'}[n]:{アリス:'ア',ボブ:'ボ',キャロル:'キ',デイブ:'デ'}[n];
 const ldRM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let ldG=0,ldTm=[],tSendT=[];
+let ldG=0,ldTm=[],tSendT=[],ldPrev={...bal};
 const ldWait=ms=>new Promise(r=>{const t=setTimeout(r,ldRM?0:ms);ldTm.push(t)});
 const ldClr=()=>{ldTm.forEach(clearTimeout);ldTm=[];tSendT.forEach(clearTimeout);tSendT=[]};
-const ldNodes=()=>[...document.querySelectorAll('#ldNet .ldN')];
-const ldBook=b=>ppl.map(([n])=>`<li><i>${ldIni(n)}</i><b>${b[n]}</b></li>`).join('');
-const ldPaint=(b,el)=>{const list=el?[el]:ldNodes();list.forEach(n=>{const book=n.querySelector('.ldBook');if(book)book.innerHTML=ldBook(b)})};
+const ldNodes=()=>[...document.querySelectorAll('#ldNs .ldN')];
+const ldPins=()=>[...document.querySelectorAll('#ldPins .ldPin')];
+const ldIni=n=>EN?{アリス:'A',ボブ:'B',キャロル:'C',デイブ:'D'}[n]:{アリス:'ア',ボブ:'ボ',キャロル:'キ',デイブ:'デ'}[n];
+const ldBook=(b,hi)=>ppl.map(([n])=>`<li data-n="${n}"${hi&&hi.has(n)?' class="hi"':''}><span class="ldPe" aria-hidden="true">${ldIni(n)}</span><span class="ldNm">${nm(n)}</span><b>${b[n]}</b></li>`).join('');
+const ldPaint=(b,el,hi)=>{const list=el?[el]:ldNodes();list.forEach(n=>{const book=n.querySelector('.ldBook');if(book)book.innerHTML=ldBook(b,hi)})};
 const ldHold=on=>{const s=$('ldSt');if(s)s.classList.toggle('hold',!!on)};
-const ldMsg=t=>{const s=$('ldSt');if(!s)return;s.textContent=t||'';if(t)ldHold(true)};
-(()=>{const ns=$('ldNs');if(!ns)return;
-const POS=[[16,48],[39,20],[62,28],[40,80],[88,64]];
-ns.innerHTML=POS.map(([x,y],i)=>`<span class="ldN" style="left:${x}%;top:${y}%">${ND()}<b>${L('ノード','Node')} ${'ABCDE'[i]}</b><ul class="ldBook"></ul></span>`).join('');
+const ldMsg=(t,ok)=>{const s=$('ldSt');if(!s)return;s.classList.remove('ok','ng');if(!t){s.innerHTML='';return}let br=t;for(const k of (EN?['work, so']:['ので、'])){const i=t.indexOf(k);if(i>=0){br=t.slice(0,i+k.length)+'<br class="ldBr"> '+t.slice(i+k.length).trim();break}}s.innerHTML=`<span class="ldSm"><i class="ldSi">${ok?'✓':'✕'}</i><span>${br}</span></span>`;s.classList.add(ok?'ok':'ng');ldHold(true)};
+(()=>{const pins=$('ldPins'),ns=$('ldNs');if(!pins||!ns)return;
+const POS=[[22,46],[40,26],[72,30],[58,72]];
+pins.innerHTML=POS.map(([x,y],i)=>`<span class="ldPin" style="left:${x}%;top:${y}%" data-i="${i}"><i class="ldPd">${ND()}</i><b>${'ABCD'[i]}</b></span>`).join('');
+ns.innerHTML=[0,1,2,3].map(i=>`<div class="ldN" data-i="${i}"><span class="ldHd">${ND()}<b>${L('ノード','Node')} ${'ABCD'[i]}</b><i class="ldMk" aria-hidden="true"></i></span><ul class="ldBook"></ul></div>`).join('');
 ldPaint(bal);
-const cap=$('ldCap');if(cap)cap.textContent=L('世界中のノードが、同じ台帳のコピーを持っています','Nodes worldwide each hold the same copy of the ledger');
+const cap=$('ldCap');if(cap)cap.innerHTML=L('世界中のノードが、','Nodes worldwide each hold ')+'<br class="ldBr">'+L('同じ台帳のコピーを持っています','the same copy of the ledger');
 })();
 async function ldSync(ok){
   const net=$('ldNet');if(!net)return;
-  const g=++ldG,nodes=ldNodes(),box=$('ldPkts'),world=$('ldWorld')||net;
-  nodes.forEach(n=>n.className='ldN');
-  const snap={...bal};
-  if(ldRM){ldPaint(snap);nodes.forEach(n=>n.classList.add(ok?'ok':'ng'));ldMsg(ok?L('全員の台帳が同じになりました','Every node now has the same ledger'):L('台帳を見たら足りないので、全員が却下','The ledgers showed it would not work, so every node rejected it'));return}
+  const g=++ldG,nodes=ldNodes(),pins=ldPins(),box=$('ldPkts'),world=$('ldWorld')||net;
+  nodes.forEach(n=>n.className='ldN');pins.forEach(p=>p.className='ldPin');
+  const snap={...bal},changed=new Set(ppl.filter(([n])=>ldPrev[n]!==snap[n]).map(([n])=>n));
+  const okT=L('全員の台帳が同じになりました','Every node now has the same ledger'),ngT=L('台帳を見たら足りないので、全員が却下','The ledgers showed it would not work, so every node rejected it');
+  if(ldRM){if(ok){ldPaint(snap,null,changed);ldPrev={...snap}}nodes.forEach(n=>n.classList.add(ok?'ok':'ng'));pins.forEach(p=>p.classList.add(ok?'ok':'ng'));ldMsg(ok?okT:ngT,ok);return}
   if(box&&world){
     box.innerHTML='';
-    const wr=world.getBoundingClientRect(),O={x:wr.width/2,y:wr.height*.18};
-    nodes.forEach(()=>{const p=document.createElement('i');p.className='ldPkt cub '+(ok?'new':'bad')+' flash';p.style.left=O.x+'px';p.style.top=O.y+'px';box.appendChild(p)});
+    const wr=world.getBoundingClientRect(),O={x:wr.width/2,y:wr.height*.18},targets=pins.length?pins:nodes;
+    targets.forEach(()=>{const p=document.createElement('i');p.className='ldPkt cub '+(ok?'new':'bad')+' flash';p.style.left=O.x+'px';p.style.top=O.y+'px';box.appendChild(p)});
     void box.offsetWidth;
-    nodes.forEach((n,i)=>{const r=n.getBoundingClientRect(),p=box.children[i];if(!p)return;p.classList.remove('flash');p.style.left=(r.left+r.width/2-wr.left)+'px';p.style.top=(r.top+r.height/2-wr.top)+'px'});
+    targets.forEach((n,i)=>{const r=n.getBoundingClientRect(),p=box.children[i];if(!p)return;p.classList.remove('flash');p.style.left=(r.left+r.width/2-wr.left)+'px';p.style.top=(r.top+r.height/2-wr.top)+'px'});
     await ldWait(420);if(g!==ldG)return;box.innerHTML='';
   }
-  for(const n of nodes){if(g!==ldG)return;n.classList.add('chk');await ldWait(110);if(g!==ldG)return;if(ok)ldPaint(snap,n);n.classList.remove('chk');n.classList.add(ok?'ok':'ng');await ldWait(70)}
+  for(let i=0;i<nodes.length;i++){if(g!==ldG)return;const n=nodes[i],p=pins[i];n.classList.add('chk');if(p)p.classList.add('chk');await ldWait(160);if(g!==ldG)return;if(ok)ldPaint(snap,n,changed);n.classList.remove('chk');n.classList.add(ok?'ok':'ng');if(p){p.classList.remove('chk');p.classList.add(ok?'ok':'ng')}await ldWait(120)}
   if(g!==ldG)return;
-  ldMsg(ok?L('全員の台帳が同じになりました','Every node now has the same ledger'):L('台帳を見たら足りないので、全員が却下','The ledgers showed it would not work, so every node rejected it'));
-  if(ok)nodes.forEach(n=>n.classList.add('sync'));
+  if(ok){ldPrev={...snap};nodes.forEach(n=>n.classList.add('sync'))}
+  ldMsg(ok?okT:ngT,ok);
 }
 $('tDouble').onclick=async()=>{if(tBusy)return;const a=bal['アリス'];if(!a){tx('アリス','ボブ',1);ldSync(false);return}tx('アリス','ボブ',a);await ldSync(true);tx('アリス','キャロル',a);await ldSync(false)};rp();
-onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPaint(bal);ldMsg('')});
+onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPins().forEach(p=>p.className='ldPin');ldPaint(bal);ldPrev={...bal};ldMsg('');ldHold(false)});
 
 // 6 halving
 function hv(q){const h=+$('hgt').value,n=Math.floor(h/210000);let r=n<64?Math.floor(5e9/2**n):0,s=0;for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),blocks=i<n?210000:h-i*210000+1;s+=sat*blocks}
