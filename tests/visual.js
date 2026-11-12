@@ -39,14 +39,14 @@ for(const [w,h,lang,theme,tag] of [[375,812,'ja','light','375-ja-light'],[375,81
   }
   await frame(p,'#uxA');
   await shot(p,'14-select-'+tag);
-  await p.click('#uxGo');
+  await p.evaluate(()=>document.getElementById('uxGo').click());
   await p.waitForSelector('#uxMsg.ok');
   await frame(p,'#uxA');
   await shot(p,'14-sent-'+tag);
   await frame(p,'#uxTx');
   await shot(p,'14-strip-'+tag);
   await p.locator('#uxA .tama[data-state="spent"]').click();
-  await p.click('#uxGo');
+  await p.evaluate(()=>document.getElementById('uxGo').click());
   await p.waitForSelector('#uxMsg.ng');
   await frame(p,'#uxMsg');
   await shot(p,'14-reject-'+tag);

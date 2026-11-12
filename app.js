@@ -196,7 +196,7 @@ function paint(){
   const old=new Map();
   if(!uxRM)document.querySelectorAll('#uxPs .tama').forEach(el=>old.set(+el.dataset.id,{r:el.getBoundingClientRect(),s:el.dataset.state}));
   const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');
-    el.innerHTML=list.length?list.map(c=>{const spent=c.state==='spent',label=spent?L(`${pj(c.u)}、使い済み`,`${pe(c.u)}, spent`):piece(c.u);return `<button type="button" class="tama${sel===c.id?' on':''}${spent?' spent':''}" style="--u:${c.u}" data-id="${c.id}" data-u="${c.u}" data-amt="${canon(c.u)}" data-state="${c.state}" data-who="${c.who}" aria-pressed="${sel===c.id}" aria-label="${label}"><span class="disc">${mint(c.id)}<b>${face(c.u)}</b></span>${spent?`<em class="use">${L('使い済み','Spent')}</em>`:''}</button>`}).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
+    el.innerHTML=list.length?list.map(c=>{const spent=c.state==='spent',label=spent?L(`${pj(c.u)}、使い済み`,`${pe(c.u)}, spent`):piece(c.u)+(c.chg?L('（おつり）',' (change)'):'');return `<button type="button" class="tama${sel===c.id?' on':''}${spent?' spent':''}${c.chg?' chg':''}" style="--u:${c.u}" data-id="${c.id}" data-u="${c.u}" data-amt="${canon(c.u)}" data-state="${c.state}" data-who="${c.who}" aria-pressed="${sel===c.id}" aria-label="${label}"><span class="disc">${mint(c.id)}<b>${face(c.u)}</b></span>${c.chg?'<i class="chgB" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.6 4.6 4.2 9l4.4 4.4"/><path d="M4.2 9h7.3a4.5 4.5 0 0 1 4.5 4.5v1.6"/></svg></i>':''}${spent?`<em class="use">${L('使い済み','Spent')}</em>`:''}</button>`}).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
   pile('アリス');pile('ボブ');
   const c=coins.find(x=>x.id===sel);
   if(sendU!=null&&c&&c.state!=='spent'&&sendU>c.u)sendU=null;
@@ -209,7 +209,7 @@ function paint(){
   else if(sendU==null){go.disabled=true;go.textContent=L('額を選ぶ','Pick an amount')}
   else{const to=c.who==='アリス'?'ボブ':'アリス';go.disabled=busy||sendU>c.u;go.textContent=L(`${wj(to)}へ ${face(sendU)} 送る`,`Send ${face(sendU)} to ${we(to)}`)}
   const hint=$('uxHint');
-  if(hint)hint.textContent=!c?L('まず、送るコイン玉をタップ','First, tap a coin to send'):c.state==='spent'?L('使い済みの玉です。ボタンを押してみよう','This coin is spent — press the button to see'):sendU==null?L('次に、送る額を選んでください','Next, pick an amount'):L('あとはボタンを押して送るだけ','Now just press the button to send');
+  if(hint)hint.textContent=!c?L('送るコイン玉をタップ','Tap a coin to send'):c.state==='spent'?L('使い済みの玉です。ボタンを押してみよう','This coin is spent — press the button to see'):sendU==null?L('次に、送る額を選んでください','Next, pick an amount'):L('あとはボタンを押して送るだけ','Now just press the button to send');
   root.dataset.step=!c?'coins':(c.state==='spent'||sendU!=null)?'go':'amt';
   paintTx();
   if(!uxRM)requestAnimationFrame(()=>{document.querySelectorAll('#uxPs .tama').forEach(el=>{const o=old.get(+el.dataset.id),r=el.getBoundingClientRect();if(!r.width)return;
@@ -226,8 +226,9 @@ function act(){
   const from=c.who,to=from==='アリス'?'ボブ':'アリス',whole=c.u,give=sendU,change=whole-give;
   if(give>whole||give<1)return;
   c.state='spent';
+  coins.forEach(x=>{delete x.chg});
   coins.push({id:++seq,u:give,who:to,state:'live'});
-  if(change>0)coins.splice(coins.indexOf(c)+1,0,{id:++seq,u:change,who:from,state:'live'});
+  if(change>0)coins.splice(coins.indexOf(c)+1,0,{id:++seq,u:change,who:from,state:'live',chg:true});
   lastTx={spent:whole,from,to,give,change};
   sel=null;
   say('ok',change>0
@@ -243,14 +244,15 @@ onEnter(()=>{if(chs[cur].dataset.t=='かたまり')fit()});
 })();
 (()=>{const box=$('aAdj');if(!box)return;const myth=$('dMyth'),sec=box.closest('section');
 let pow=1,diff=1,n=0,acc=0,per=0;
+const H0=919296;
 const fmt=x=>{const v=Math.round(x*100)/100;return Number.isInteger(v)?String(v):String(v).replace(/0+$/,'').replace(/\.$/,'')};
 const iv=()=>10*diff/pow;
 box.innerHTML=`<div class="seg" id="djPow" role="group" aria-label="${L('計算力','Mining power')}">${[[0.5,L('半分','Half')],[1,L('今と同じ','Same as now')],[2,L('2倍','2×')],[4,L('4倍','4×')]].map(([m,t])=>`<button type="button" data-m="${m}" class="${m===1?'on':''}" aria-pressed="${m===1}">${t}</button>`).join('')}</div><div class="aStats"><div><small>${L('ブロック間隔','Block interval')}</small><b id="djInt"></b></div><div><small>${L('採掘難易度','Mining difficulty')}</small><b id="djDiff"></b></div></div><div class="aRow" id="djRow" aria-hidden="true"></div><p class="aCnt" id="djCnt"></p><p class="aCnt" id="djAdj"></p><button type="button" id="djGo"></button><p class="aMsg" id="djMsg" role="status"></p>`;
 const msg=t=>{$('djMsg').textContent=t};
-const cnt=()=>{$('djCnt').textContent=L(`掘れたブロック: ${n}`,`Blocks mined: ${n}`);$('djAdj').textContent=L(`難易度調整は 2016ブロックごと（約2週間）。あと ${2016-per} ブロックで調整です。`,`Difficulty adjusts every 2016 blocks (about two weeks) — ${2016-per} blocks to go.`)};
+const cnt=()=>{$('djCnt').textContent=L(`ブロック番号: ${(H0+n).toLocaleString(LOC)}`,`Block height: ${(H0+n).toLocaleString(LOC)}`);$('djAdj').textContent=L(`難易度調整は 2016ブロックごと（約2週間）。あと ${2016-per} ブロックで調整です。`,`Difficulty adjusts every 2016 blocks (about two weeks) — ${2016-per} blocks to go.`)};
 function paint(){$('djInt').textContent=L(`約${fmt(iv())}分`,`about ${fmt(iv())} min`);$('djDiff').textContent='×'+fmt(diff);cnt();const go=$('djGo');go.disabled=pow===diff;go.textContent=L('難易度調整まで早送り','Fast-forward to the difficulty adjustment')}
 box.querySelector('#djPow').onclick=e=>{const b=e.target.closest('button');if(!b)return;pow=+b.dataset.m;box.querySelectorAll('#djPow button').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});msg(pow===diff?L('計算力と採掘難易度がつり合っています。間隔は約10分です。','Mining power and difficulty are balanced — blocks come about every 10 minutes.'):L(`計算力が変わりました。難易度調整までは、間隔が約${fmt(iv())}分になります。`,`Mining power changed. Until the adjustment, blocks come about every ${fmt(iv())} minutes.`));paint()};
-box.querySelector('#djGo').onclick=()=>{diff=pow;per=0;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`));paint()};
+box.querySelector('#djGo').onclick=()=>{n+=2016-per;diff=pow;per=0;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`));paint()};
 setInterval(()=>{if(!myth.open||!sec.classList.contains('on'))return;acc+=100/(iv()*55);while(acc>=1){acc--;n++;per++;const row=$('djRow');if(row.children.length>=28)row.innerHTML='';const i=document.createElement('i');row.appendChild(i);cnt()}if(per>=2016){per-=2016;if(diff!==pow){diff=pow;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`))}paint()}},100);
 msg(L('計算力を変えてみてください。調整が入ると、間隔は約10分にもどります。','Try changing the mining power. After the adjustment, blocks are back to about every 10 minutes.'));paint();
 })();

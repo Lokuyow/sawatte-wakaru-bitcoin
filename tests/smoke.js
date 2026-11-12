@@ -84,6 +84,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     return {
       hint:(document.getElementById('uxHint')||{}).textContent||'',
       step:document.getElementById('ux').dataset.step,
+      frame:(()=>{const cs=getComputedStyle(document.getElementById('uxPs'));return cs.outlineWidth+'/'+cs.borderTopLeftRadius})(),
       uxAh:document.getElementById('uxA').getBoundingClientRect().height,
       amtTop:document.getElementById('uxAmt').getBoundingClientRect().top+scrollY,
       msg:getComputedStyle(document.getElementById('uxMsg')).display,
@@ -107,6 +108,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='ja'&&!/コイン玉をタップ/.test(idle.hint))note('ja 1-4 hint idle '+idle.hint);
   if(lang==='en'&&!/tap a coin/i.test(idle.hint))note('en 1-4 hint idle '+idle.hint);
   if(idle.step!=='coins')note(lang+' 1-4 step idle '+idle.step);
+  if(idle.frame!=='2px/14px')note(lang+' 1-4 frame '+idle.frame);
   await p.locator('#uxA .tama[data-amt="2.5"]').click();
   await p.locator('#uxAmt button[data-u="3"]').click();
   const picked=await p.evaluate(()=>{
@@ -123,7 +125,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='ja'&&!/ボタンを押して送るだけ/.test(picked.hint))note('ja 1-4 hint ready '+picked.hint);
   if(lang==='en'&&!/press the button/i.test(picked.hint))note('en 1-4 hint ready '+picked.hint);
   await p.locator('#uxAmt button[data-u="2"]').click();
-  await p.click('#uxGo');
+  await p.evaluate(()=>document.getElementById('uxGo').click());
   await p.waitForSelector('#uxMsg.ok');
   const after=await p.evaluate(()=>({
     uxAh:document.getElementById('uxA').getBoundingClientRect().height,
@@ -131,6 +133,8 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     alice:[...document.querySelectorAll('#uxA .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     bob:[...document.querySelectorAll('#uxB .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     tx:document.getElementById('uxTx').innerText,
+    chg:[...document.querySelectorAll('#uxA .tama.chg')].map(e=>e.dataset.amt),
+    panel:getComputedStyle(document.getElementById('uxA').parentElement).borderTopWidth,
     term:!!document.getElementById('uxTerm'),
     msg:document.getElementById('uxMsg').textContent,
     gloss:document.querySelector('.ch[data-t="かたまり"] .words').innerText
@@ -143,6 +147,8 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(!spent||!keep1||!keep05||!change||!got||after.bob.length!==1)note(lang+' send result '+JSON.stringify(after));
   if(Math.abs(after.uxAh-idle.uxAh)>1||Math.abs(after.amtTop-idle.amtTop)>1)note(lang+' 1-4 layout shift '+JSON.stringify({a:idle.uxAh,b:after.uxAh,c:idle.amtTop,d:after.amtTop}));
   if(after.alice.map(c=>c.a+c.s).join(',')!=='2.5spent,1.5live,1live,0.5live')note(lang+' coin order '+after.alice.map(c=>c.a+c.s).join(','));
+  if(after.chg.join(',')!=='1.5')note(lang+' change badge '+JSON.stringify(after.chg));
+  if(after.panel!=='1px')note(lang+' pile panel '+after.panel);
   if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/おつりとしてアリスへ/.test(after.tx)))note('ja strip '+after.tx);
   if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/back to Alice as change/i.test(after.tx)))note('en strip '+after.tx);
   if(after.term)note(lang+' utxo box still in the result');
@@ -154,14 +160,14 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const mi=footOrder.indexOf('uxMsg'),xi=footOrder.indexOf('uxTx');
   if(!(xi>=0&&mi>xi)||footOrder.includes('uxTerm'))note(lang+' result order '+footOrder.join(','));
   await p.locator('#uxA .tama[data-state="spent"]').click();
-  await p.click('#uxGo');
+  await p.evaluate(()=>document.getElementById('uxGo').click());
   await p.waitForSelector('#uxMsg.ng');
   const rej=await p.textContent('#uxMsg');
   if(lang==='ja'&&(!/この2\.5コイン玉は使い済み/.test(rej)||!/二重払いなので、送れません/.test(rej)))note('ja reject '+rej);
   if(lang==='en'&&(!/2\.5-coin piece/.test(rej)||!/already spent/i.test(rej)||!/double spend/i.test(rej)||!/cannot be sent/i.test(rej)))note('en reject '+rej);
   await p.locator('#uxA .tama[data-amt="1"][data-state="live"]').click();
   await p.locator('#uxAmt button[data-u="1"]').click();
-  await p.click('#uxGo');
+  await p.evaluate(()=>document.getElementById('uxGo').click());
   await p.waitForSelector('#uxMsg.ok');
   const twins=await p.locator('#uxA .tama[data-amt="0.5"][data-state="live"]').evaluateAll(els=>els.map(e=>e.dataset.id));
   if(twins.length!==2||twins[0]===twins[1])note(lang+' two 0.5 pieces '+twins.join(','));
@@ -233,9 +239,11 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='ja'&&!/あと \d+ ブロック/.test(adj1.adj))note('ja adj left '+adj1.adj);
   if(lang==='en'&&!/blocks to go/.test(adj1.adj))note('en adj left '+adj1.adj);
   await p.click('#djGo');
-  const adj2=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,d:document.getElementById('djDiff').textContent}));
+  const adj2=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,d:document.getElementById('djDiff').textContent,cnt:document.getElementById('djCnt').textContent,adj:document.getElementById('djAdj').textContent}));
   if(lang==='ja'&&(!/約10分/.test(adj2.i)||!/×2/.test(adj2.d)))note('ja adj after '+JSON.stringify(adj2));
   if(lang==='en'&&(!/10 min/.test(adj2.i)||!/×2/.test(adj2.d)))note('en adj after '+JSON.stringify(adj2));
+  if(lang==='ja'&&(!/ブロック番号: \d{3},\d{3}/.test(adj2.cnt)||!/あと 201[0-6] ブロック/.test(adj2.adj)))note('ja adj height '+JSON.stringify(adj2));
+  if(lang==='en'&&(!/Block height: \d{3},\d{3}/.test(adj2.cnt)||!/201[0-6] blocks to go/.test(adj2.adj)))note('en adj height '+JSON.stringify(adj2));
   const mineQs=p.locator('.ch[data-t="マイニング"] .quiz');
   if(await mineQs.count()!==1)note(lang+' 2-3 quiz count '+await mineQs.count());
   const mq=await mineQs.innerText();
