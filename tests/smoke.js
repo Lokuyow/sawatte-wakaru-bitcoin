@@ -10,7 +10,7 @@ async function boot(w,h,lang,theme,extra={}){
 }
 async function halvingWords(p){
   return p.evaluate(()=>{
-    const ALLOW='この、報酬が半分になることをハービング（halving）と呼びます。半減期とも呼ばれます。';
+    const ALLOW='報酬が半分になることを、ハルビング（halving）と言います。半減期とも呼ばれます。';
     const bad=[];
     const w=document.createTreeWalker(document.body,4);
     let n;while(n=w.nextNode()){
@@ -307,7 +307,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     await go('報酬半減');
     const intro=await p.locator('.ch[data-t="報酬半減"]').innerText();
     const title=await p.locator('.ch[data-t="報酬半減"] h2').innerText();
-    if(!intro.includes('マイニングで、ブロックを追加した人がもらう報酬は、最初は50BTCです')||!intro.includes('ハービング（halving）')||!intro.includes('半減期とも呼ばれます')||!intro.includes('報酬半減'))note('3-2 wording');
+    if(!intro.includes('マイニングで、ブロックを追加した人がもらう報酬は、最初は50BTCです')||!intro.includes('ハルビング（halving）')||!intro.includes('半減期とも呼ばれます')||!intro.includes('報酬半減'))note('3-2 wording');
     if(title.includes('半減期')||intro.replace('半減期とも呼ばれます','').includes('半減期'))note('3-2 extra 半減期');
     await p.click('#hPlay');
     // 実測 (2026-11-12, このVM): #hPlay から最初の「報酬半減」バッジ表示まで約2.3秒（全再生は約15秒だが、本 assert は最初のバッジのみ）。
