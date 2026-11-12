@@ -600,7 +600,7 @@ await scenario('z100-b09',async()=>{
   try{
     const go=t=>utilGo(p,t);
     if(await p.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches))note('z100-b09 precondition: unexpectedly reduced');
-    await go('まとめ');
+    await go('おわりに');
     await p.waitForSelector('.confetti',{timeout:TIMEOUT}).catch(()=>{});
     if(!await p.evaluate(()=>!!document.querySelector('.confetti')))note('z100-b09 control: confetti did not fire with RM off');
     await go('マイニング');
@@ -615,7 +615,7 @@ await scenario('z100-b09',async()=>{
     if(!await p.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches))note('z100-b09 toggle did not take effect');
     await p.evaluate(()=>document.querySelector('.confetti')?.remove());
     await go('はじめに');
-    await go('まとめ');
+    await go('おわりに');
     await p.waitForTimeout(400);
     if(await p.evaluate(()=>!!document.querySelector('.confetti')))note('z100-b09 confetti fired after toggle to reduce');
     await go('マイニング');
