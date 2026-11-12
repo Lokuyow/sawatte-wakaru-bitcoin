@@ -52,12 +52,12 @@ const esc=c=>c.replace(/[&<>"]/g,x=>'&#'+x.charCodeAt(0)+';');
 $('hwP').innerHTML=P.map(p=>`<button class="ghost" data-p="${esc(p)}">${esc(p)}</button>`).join('');$('hwPl').textContent=L('前の指紋','Previous');$('hwNl').textContent=L('いまの指紋','Now');
 const grid=h=>{let o='';for(let r=0;r<8;r++)for(let c=0;c<8;c++){const cc=c<4?c:7-c,v=parseInt(h[r*4+cc],16);o+=`<i class="g${v>11?3:v>7?2:v>3?1:0}"></i>`}return o};
 const rng=(a,b)=>{a=[...a];b=[...b];let s=0;while(s<a.length&&s<b.length&&a[s]==b[s])s++;let e=0;while(e<a.length-s&&e<b.length-s&&a[a.length-1-e]==b[b.length-1-e])e++;return[s,b.length-e,Math.max(a.length-s-e,b.length-s-e)]};
-const bz=p=>window.__bz&&__bz(p),bu=(e,n)=>window.__bu&&__bu(e,n);
+const bz=p=>window.__bz&&__bz(p);
 const showIn=()=>{const t=inp.value,ch=[...t],[s,e,n]=prevT==null?[0,0,0]:rng(prevT,t);$('hwIn').innerHTML=ch.map((c,i)=>`<span class="${prevT!=null&&i>=s&&i<e?'chg':''}" style="--d:${i*40}ms">${esc(c==' '?'\u00a0':c)}</span>`).join('')||'&nbsp;';$('hwGo').classList.toggle('pls',prevT!=null&&t!=prevT);return n};
 $('hwGo').innerHTML='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="3"/><path d="M20 17C18 9 22 4 27 6M23 20c8-2 13 2 11 7M20 23c2 8-2 13-7 11M17 20C9 22 4 18 6 13"/></svg><span>'+L('ハッシュする','Hash it')+'</span>';
 async function run(anim){const my=++seq,t=inp.value,ch=[...t],h=await sha(t);if(my!=seq)return;const n=showIn();$('hwGo').classList.remove('pls');
 const M=$('hwM'),G=$('hwGo');if(anim&&!RM){const cs=ch.slice(0,10);$('hwFl').innerHTML=cs.map((c,i)=>`<span style="--d:${i*30}ms">${esc(c)}</span>`).join('');let fr='';cs.forEach((c,i)=>{for(const k of [0,1]){fr+=`<span class="${k?'b':'t'}" style="--a:${Math.random()*360|0}deg;--r:${14+Math.random()*16|0}px;--d:${280+i*20}ms;--s:${Math.random()<.5?1:-1}">${esc(c)}</span>`}});for(let i=0;i<10;i++)fr+=`<i style="--a:${Math.random()*360|0}deg;--r:${10+Math.random()*22|0}px;--d:${300+i*25}ms;--s:${i%2?1:-1}"></i>`;$('hwMx').innerHTML=fr;[M,G].forEach(e=>e.classList.remove('go'));void M.offsetWidth;M.classList.add('go');G.classList.add('go');window.__bz&&__bz(15)}
-const same=prevH&&prevH!=h;$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
+$('hwG0').innerHTML=prevH?grid(prevH):'';$('hwH0').innerHTML=prevH?[...prevH].map((c,i)=>c!=h[i]?`<i>${c}</i>`:c).join(''):'';
 $('hwG1').innerHTML=grid(h);const fin=[...h].map((c,i)=>prevH&&c!=prevH[i]?`<i>${c}</i>`:c).join('');const H1=$('hwH1');
 H1.innerHTML=fin;
 const O=document.querySelector('.hwO');O.classList.toggle('one',!prevH);const C=document.querySelector('.hwC.now');if(anim&&!RM){C.classList.remove('st');void C.offsetWidth;C.classList.add('st')}
@@ -158,12 +158,12 @@ ns.innerHTML=[0,1,2,3].map(i=>`<div class="ldN" data-i="${i}"><span class="ldHd"
 ldPaint(bal);
 const cap=$('ldCap');if(cap)cap.innerHTML=L('世界中のノードが、','Nodes worldwide each hold ')+'<br class="ldBr">'+L('同じ台帳のコピーを持っています','the same copy of the ledger');
 })();
-async function ldSync(ok,ngMsg){
+async function ldSync(ok){
   const net=$('ldNet');if(!net)return;
   const g=++ldG,nodes=ldNodes(),pins=ldPins(),box=$('ldPkts'),world=$('ldWorld')||net;
   nodes.forEach(n=>n.className='ldN');pins.forEach(p=>p.className='ldPin');
   const snap={...bal},changed=new Set(ppl.filter(([n])=>ldPrev[n]!==snap[n]).map(([n])=>n));
-  const okT=L('全員の台帳が同じになりました','Every node now has the same ledger'),ngT=ngMsg||L('台帳を見たら足りないので、全員が却下','The ledgers showed it would not work, so every node rejected it');
+  const okT=L('全員の台帳が同じになりました','Every node now has the same ledger'),ngT=L('台帳を見たら足りないので、全員が却下','The ledgers showed it would not work, so every node rejected it');
   if(ldRM){if(ok){ldPaint(snap,null,changed);ldPrev={...snap}}nodes.forEach(n=>n.classList.add(ok?'ok':'ng'));pins.forEach(p=>p.classList.add(ok?'ok':'ng'));ldMsg(ok?okT:ngT,ok);return}
   if(box&&world){
     box.innerHTML='';
@@ -181,7 +181,7 @@ async function ldSync(ok,ngMsg){
 rp();
 onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPins().forEach(p=>p.className='ldPin');ldPaint(bal);ldPrev={...bal};ldMsg('');ldHold(false)});
 (()=>{const root=$('ux');if(!root)return;
-let seq=3,sel=[],sendU=null,busy=false,lastTx=null;
+let seq=3,sel=[],sendU=null,lastTx=null;
 const uxRM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let coins=[{id:1,u:5,who:'アリス',state:'live'},{id:2,u:2,who:'アリス',state:'live'},{id:3,u:1,who:'アリス',state:'live'}];
 const face=u=>{const n=u/2;return n.toLocaleString(LOC,{maximumFractionDigits:1,minimumFractionDigits:Number.isInteger(n)?0:1})};
@@ -204,9 +204,9 @@ function paint(){
   $('uxAmt').innerHTML=`<span>${L('送る額','Amount')}</span>`+steps.map(u=>`<button type="button" data-u="${u}"${sendU!=null&&u===sendU?' class="on"':''}>${face(u)}</button>`).join('');
   const go=$('uxGo');
   if(!sc.length){go.disabled=true;go.textContent=L('玉を選ぶ','Pick a coin')}
-  else if(spentSel){go.disabled=busy;go.textContent=L('この玉をもう一度使う','Try this coin again')}
+  else if(spentSel){go.disabled=false;go.textContent=L('この玉をもう一度使う','Try this coin again')}
   else if(sendU==null){go.disabled=true;go.textContent=L('額を選ぶ','Pick an amount')}
-  else{const to=sc[0].who==='アリス'?'ボブ':'アリス';go.disabled=busy||sendU>total;go.textContent=L(`${wj(to)}へ ${face(sendU)} 送る`,`Send ${face(sendU)} to ${we(to)}`)}
+  else{const to=sc[0].who==='アリス'?'ボブ':'アリス';go.disabled=sendU>total;go.textContent=L(`${wj(to)}へ ${face(sendU)} 送る`,`Send ${face(sendU)} to ${we(to)}`)}
   const hint=$('uxHint');
   if(hint)hint.textContent=!sc.length?L('送るコイン玉をタップ','Tap a coin to send'):spentSel?L('使い済みの玉です。ボタンを押してみよう','This coin is spent — press the button to see'):sendU==null?L('次に、送る額を選んでください','Next, pick an amount'):L('あとはボタンを押して送るだけ','Now just press the button to send');
   root.dataset.step=!sc.length?'coins':(spentSel||sendU!=null)?'go':'amt';
@@ -219,7 +219,7 @@ function paint(){
 }
 function say(kind,text){const m=$('uxMsg');m.className='uxMsg hold '+kind;m.textContent=text}
 function act(){
-  const sc=sel.map(id=>coins.find(x=>x.id===id)).filter(Boolean);if(!sc.length||busy)return;
+  const sc=sel.map(id=>coins.find(x=>x.id===id)).filter(Boolean);if(!sc.length)return;
   const sp=sc.find(x=>x.state==='spent');
   if(sp){say('ng',L(`この${pj(sp.u)}は使い済みです。同じ玉を二度使おうとするのは二重払いなので、送れません。`,`This ${pe(sp.u)} is already spent. Trying to use the same piece twice is a double spend, so it cannot be sent.`));fit();return}
   if(sendU==null)return;
@@ -239,8 +239,8 @@ function act(){
   paint();fit();
 }
 $('uxAmt').setAttribute('aria-label',L('送る額','Amount to send'));
-$('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled||busy)return;sendU=+b.dataset.u;paint()};
-$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b||busy)return;const id=+b.dataset.id,cn=coins.find(x=>x.id===id);if(!cn)return;
+$('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;sendU=+b.dataset.u;paint()};
+$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b)return;const id=+b.dataset.id,cn=coins.find(x=>x.id===id);if(!cn)return;
   if(cn.state==='spent')sel=sel.length===1&&sel[0]===id?[]:[id];
   else if(sel.some(x=>{const y=coins.find(z=>z.id===x);return y&&y.state==='spent'}))sel=[id];
   else if(!sel.length)sel=[id];
@@ -281,10 +281,10 @@ msg(L('計算力を変えてみてください。調整が入ると、間隔は�
 })();
 
 // 6 halving
-function hv(q){const h=+$('hgt').value,n=Math.floor(h/210000);let r=n<64?Math.floor(5e9/2**n):0,s=0;for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),blocks=i<n?210000:h-i*210000+1;s+=sat*blocks}
+function hv(q){const h=+$('hgt').value,n=Math.floor(h/210000);let r=n<64?Math.floor(5e9/2**n):0,s=supplySat(h);
 $('hH').textContent=h.toLocaleString(LOC);$('hTimes').textContent=L(`報酬半減 ${n.toLocaleString(LOC)}回`,`Cut in half ${n.toLocaleString(LOC)} ${n===1?'time':'times'}`);$('hR').textContent=(r/1e8).toLocaleString(LOC,{maximumFractionDigits:8});$('hS').textContent=(s/1e8).toLocaleString(LOC,{maximumFractionDigits:8});if(!q)drawC(h);{const k=h/210000,Y=[2009,2012,2016,2020,2024],e=h>840000,i=Math.min(Math.floor(k),3),y=Math.round(e?2024+(k-4)*4:Y[i]+(Y[i+1]-Y[i])*(k-i)),x=!e&&h%210000==0&&h>0;$('hY').innerHTML=EN?` (<b>${e?'~'+y+' est.':x?y:'around '+y}</b>)`:`(<b>${e?'約'+y+'年・推定':x?y+'年':y+'年ごろ'}</b>)`}}
-function supply(h){let s=0,n=Math.floor(h/210000);for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),b=i<n?210000:h-i*210000+1;s+=sat*b}return s/1e8}
-let hC=null;function drawC(h,cur){const W=320,H=150,P=24,mx=7e6,x=v=>P+v/mx*(W-P-6),y=v=>H-18-v/21e6*(H-34);if(!hC){let d='';for(let v=0;v<=mx;v+=25000)d+=(v?'L':'M')+x(v).toFixed(1)+' '+y(supply(v)).toFixed(1);const sv=$('hCurve');sv.innerHTML=`<defs><clipPath id="hClip"><rect id="hClipR" x="${P}" y="0" width="0" height="${H}"/></clipPath></defs><line x1="${P}" x2="${W-6}" y1="${y(21e6)}" y2="${y(21e6)}" class="cap"/><text x="${W-6}" y="${y(21e6)-4}" text-anchor="end">2100万</text><path d="${d}" class="ln0"/><path d="${d}" class="ln1" clip-path="url(#hClip)"/><circle id="hDot" cx="0" cy="0" r="5"/>${[2009,2050,2100,2140].map(yr=>`<text x="${x((yr-2009)*52596)}" y="${H-4}" text-anchor="middle">${yr}</text>`).join('')}`;hC={r:$('hClipR'),c:$('hDot')}}const X=x(h);const Yd=y(supply(h));hC.r.setAttribute('width',Math.max(0,X-P));hC.r.setAttribute('y',Yd);hC.r.setAttribute('height',Math.max(0,H-Yd));hC.c.style.transform=`translate(${X.toFixed(2)}px,${y(supply(h)).toFixed(2)}px)`}
+function supplySat(h){let s=0,n=Math.floor(h/210000);for(let i=0;i<=n&&i<64;i++){const sat=Math.floor(5e9/2**i),b=i<n?210000:h-i*210000+1;s+=sat*b}return s}function supply(h){return supplySat(h)/1e8}
+let hC=null;function drawC(h){const W=320,H=150,P=24,mx=7e6,x=v=>P+v/mx*(W-P-6),y=v=>H-18-v/21e6*(H-34);if(!hC){let d='';for(let v=0;v<=mx;v+=25000)d+=(v?'L':'M')+x(v).toFixed(1)+' '+y(supply(v)).toFixed(1);const sv=$('hCurve');sv.innerHTML=`<defs><clipPath id="hClip"><rect id="hClipR" x="${P}" y="0" width="0" height="${H}"/></clipPath></defs><line x1="${P}" x2="${W-6}" y1="${y(21e6)}" y2="${y(21e6)}" class="cap"/><text x="${W-6}" y="${y(21e6)-4}" text-anchor="end">2100万</text><path d="${d}" class="ln0"/><path d="${d}" class="ln1" clip-path="url(#hClip)"/><circle id="hDot" cx="0" cy="0" r="5"/>${[2009,2050,2100,2140].map(yr=>`<text x="${x((yr-2009)*52596)}" y="${H-4}" text-anchor="middle">${yr}</text>`).join('')}`;hC={r:$('hClipR'),c:$('hDot')}}const X=x(h);const Yd=y(supply(h));hC.r.setAttribute('width',Math.max(0,X-P));hC.r.setAttribute('y',Yd);hC.r.setAttribute('height',Math.max(0,H-Yd));hC.c.style.transform=`translate(${X.toFixed(2)}px,${y(supply(h)).toFixed(2)}px)`}
 $('hgt').oninput=()=>{cancelAnimationFrame(hT);document.querySelectorAll('#hCurve .hBadge').forEach(e=>e.remove());hv()};hv();
 let hT=0;onLeave(()=>cancelAnimationFrame(hT));$('hPlay').onclick=()=>{cancelAnimationFrame(hT);const g=$('hgt'),M=+g.max,MV=10000,PZ=900,RMq=matchMedia('(prefers-reduced-motion: reduce)').matches,sv=$('hCurve'),NS='http://www.w3.org/2000/svg',W=320,H=150,P=24,xs=v=>P+v/7e6*(W-P-6);g.value=0;hv();sv.querySelectorAll('.hMk,.hBadge').forEach(e=>e.remove());const YR=[2012,2016,2020,2024];let st=performance.now(),off=0,pzEnd=0,last=0,lt=0;
 const mark=k=>{const X=xs(k*210000),ln=document.createElementNS(NS,'line');ln.setAttribute('class','hMk');ln.setAttribute('x1',X);ln.setAttribute('x2',X);ln.setAttribute('y1',16);ln.setAttribute('y2',H-18);sv.insertBefore(ln,sv.querySelector('.ln0'));const gg=document.createElementNS(NS,'g');gg.setAttribute('class','hBadge');const a=50/2**(k-1),b2=50/2**k,tx=document.createElementNS(NS,'text');tx.setAttribute('x',W/2+20);tx.setAttribute('y',36);tx.setAttribute('text-anchor','middle');tx.textContent=L(`報酬半減! ${a}→${b2} BTC(${YR[k-1]}年)`,`Reward halved! ${a}→${b2} BTC (${YR[k-1]})`);gg.appendChild(tx);sv.appendChild(gg);const bb=tx.getBBox(),r=document.createElementNS(NS,'rect');r.setAttribute('x',bb.x-8);r.setAttribute('y',bb.y-4);r.setAttribute('width',bb.width+16);r.setAttribute('height',bb.height+8);r.setAttribute('rx',8);gg.insertBefore(r,tx);if(!RMq){gg.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:220,easing:'ease-out'});ln.animate([{opacity:0},{opacity:1}],{duration:200});$('hR').animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:450,easing:'ease-out'})}return gg};let badge=null;
@@ -347,7 +347,7 @@ while(id==run){const tb=performance.now();while(performance.now()-tb<12){if(k==t
 
 // 2-4 block spread
 (()=>{const net=$('spNet');if(!net)return;
-const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,ids=['spN0','spN1','spN2','spN3','spN4','spN5'],HOPS=[[0,1],[0,2],[1,3],[1,4],[2,5]];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,ids=['spN0','spN1','spN2','spN3','spN4','spN5'];
 document.querySelectorAll('#spNet .ndw').forEach(e=>{e.outerHTML=ND(e.dataset.k||'')});
 let gen=0,busy=false,bad=false;
 const wait=ms=>new Promise(r=>{const t=setTimeout(r,RM?0:ms);(wait._t=wait._t||[]).push(t)});
@@ -423,11 +423,11 @@ $('rTap').onclick=()=>{if(run){tryH(M[0],12);const b=$('rTap');b.classList.remov
 // 51% attack
 (()=>{const sim=p=>{let h=0,x=0,steps=[];while(steps.length<80){const a=Math.random()<p;a?x++:h++;steps.push(a);if(h>=6&&x>h)return{ok:true,steps};if(h-x>=8)return{ok:false,steps}}return{ok:false,steps}};let tm,tries=0,best=0;onLeave(()=>{if(!tm)return;clearInterval(tm);tm=0;if($('aGo').disabled){$('aGo').disabled=false;$('aRes').textContent='';$('aH').innerHTML=$('aX').innerHTML=''}});
 $('aP').oninput=()=>$('aV').textContent=$('aP').value;
-$('aGo').onclick=()=>{clearInterval(tm);const p=$('aP').value/100,r=sim(p);let i=0,h=0,x=0;$('aRes').textContent='';$('aCard').innerHTML='';$('aGo').disabled=true;$('aH').innerHTML=$('aX').innerHTML='';
+$('aGo').onclick=()=>{clearInterval(tm);const p=$('aP').value/100,r=sim(p);let i=0;$('aRes').textContent='';$('aCard').innerHTML='';$('aGo').disabled=true;$('aH').innerHTML=$('aX').innerHTML='';
 tm=setInterval(()=>{if(i>=r.steps.length){clearInterval(tm);$('aRes').innerHTML=r.ok?'<span style="color:var(--ng)">😈 追い抜きました。二重払い成功…</span>':'<span style="color:var(--ok)">🛡 追いつけず失敗。みんなのチェーンが勝ちました</span>';tries++;const pw=+$('aP').value;if(r.ok&&(!best||pw<best))best=pw;gameBest['51%攻撃']={best:best||null,tries,ok:!!(gameBest['51%攻撃']&&gameBest['51%攻撃'].ok||r.ok)};saveGames();$('aGo').disabled=false;
 const rk=r.ok?(pw<=35?L('奇跡の大逆転(超ラッキー)','Miracle comeback (super lucky)'):pw<=50?L('運のいい攻撃者','Lucky attacker'):L('力ずくの51%','Brute-force 51%')):L('みんなのチェーンが守った','The network held');
 __card($('aCard'),{k:'51',label:L('51%攻撃','51% attack'),big:r.ok?L(`成功 <small>計算力${pw}%</small>`,`Success <small>${pw}% power</small>`):L(`失敗 <small>計算力${pw}%</small>`,`Failed <small>${pw}% power</small>`),rank:rk,sub:L(`挑戦${tries}回・最小の成功 ${best?best+'%':'—'}`,`${tries} ${tries>1?"tries":"try"} · lowest success ${best?best+'%':'—'}`)+'<br>'+L('少ない計算力で成功させてみよう','Try to win with less power'),text:r.ok?L(`51%攻撃に計算力${pw}%で成功!(${tries}回目)「${rk}」`,`Pulled off a 51% attack with ${pw}% power (try ${tries})! “${rk}”`):L(`51%攻撃、計算力${pw}%では失敗…みんなのチェーンは強い`,`51% attack failed with ${pw}% power. The network is strong`)});return}
-const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':'🧱';(a?$('aX'):$('aH')).appendChild(el);a?x++:h++},180)};
+const a=r.steps[i++],el=document.createElement('i');el.textContent=a?'😈':'🧱';(a?$('aX'):$('aH')).appendChild(el)},180)};
 $('aMany').onclick=()=>{const p=$('aP').value/100;let k=0;for(let i=0;i<100;i++)if(sim(p).ok)k++;$('aRes').innerHTML=L(`100回中 <b>${k}回</b> 成功(計算力 ${$('aP').value}%)`,`<b>${k}</b> of 100 succeeded (power ${$('aP').value}%)`)}})();
 
 // theme
@@ -473,7 +473,7 @@ P('fC1',89,85,k>=6?1:0);P('fC2',77,85,k>=6?1:0);
 P('fBk',k>=7?61:42,85,k>=6?1:0);$('fBk').classList.toggle('fnd2',k>=7);$('fBk').classList.toggle('lk',k>=7);if(k==6||k==7)requestAnimationFrame(()=>{const bk=$('fBk'),c2=$('fC2'),c1=$('fC1'),W=bk.parentNode.clientWidth,L=e=>parseFloat(e.style.left)/100*W,bx=Math.min(L(bk),W-4-c1.offsetWidth-8-c2.offsetWidth-8-bk.offsetWidth/2),_=(bk.style.left=bx/W*100+'%'),x2=Math.max(L(c2),L(bk)+bk.offsetWidth/2+8+c2.offsetWidth/2),x1=Math.max(L(c1),x2+c2.offsetWidth/2+8+c1.offsetWidth/2);const ov=Math.max(0,x1+c1.offsetWidth/2+4-W);c2.style.left=(x2-ov)/W*100+'%';c1.style.left=(x1-ov)/W*100+'%'});
 const nn=$('fNn');if(k==6&&!RM){let n=0;const sp=()=>{nn.textContent=hx(8);nn.classList.remove('ok');if(++n<28)at(70,sp);else{nn.textContent='0000'+hx(4);nn.classList.add('ok');window.__bu&&__bu($('fBk'),10);window.__bz&&__bz([10,30,10])}};at(600,sp)}else{nn.textContent=k>=6?'0000'+hx(4):'';nn.classList.toggle('ok',k>=6)}
 $('fBn').textContent=L('ブロック #3','Block #3');$('fBk').classList.toggle('htx',k>=6);
-const cf=$('fCf');P('fCf',50,50,0);const cr=$('fCr');P('fCr',50,85,k>=8?1:0);{const bk=$('fBk'),mp=$('fMp'),L0=bk.offsetLeft-bk.offsetWidth/2,mr=mp.offsetLeft+mp.offsetWidth/2,dv=$('fDv');dv.style.left=Math.min((mr+L0)/2,mr+12)+'px';dv.style.top=bk.offsetTop+'px';dv.style.opacity=k>=7?1:0;
+P('fCf',50,50,0);const cr=$('fCr');P('fCr',50,85,k>=8?1:0);{const bk=$('fBk'),mp=$('fMp'),L0=bk.offsetLeft-bk.offsetWidth/2,mr=mp.offsetLeft+mp.offsetWidth/2,dv=$('fDv');dv.style.left=Math.min((mr+L0)/2,mr+12)+'px';dv.style.top=bk.offsetTop+'px';dv.style.opacity=k>=7?1:0;
 if(k>=8){['fC1','fC2','fBk'].forEach(i=>{const e=$(i);e.style.transition='none';e.style.opacity=0;void e.offsetWidth;setTimeout(()=>e.style.transition='',60)});cr.style.transition='none';setTimeout(()=>cr.style.transition='',60);cr.classList.remove('cmp','cmp2','cmp3');const D0=Math.min((mr+L0)/2,mr+12);cr.style.left=(D0+8)+'px';cr.style.right='0';cr.style.top=bk.offsetTop+'px';cr.style.transform='translateY(calc(-50% - 11px))';
 const ba=$('fBal');ba.classList.add('pend');cr.innerHTML=`<div class="fwr">${[8,7,6,5,4].map(n=>`<div class="fch lk fh">#${n}</div>`).join('')}<div class="fblk htx lk"><small>${L('ブロック #3','Block #3')}</small><code class="ok">${nn.textContent}</code><span class="ftx">0.01 BTC</span><em id="fCn">${L('承認 1','1 conf')}</em></div><div class="fch lk">#2</div><div class="fch">#1</div></div>`;
 const wr=cr.firstChild,b3=wr.querySelector('.fblk'),hs=[...wr.querySelectorAll('.fh')].reverse(),L0r=L0-(D0+8);let s=0,f3=0;
@@ -592,7 +592,7 @@ const fix=t=>{const v=t.nodeValue;RE.lastIndex=0;if(!RE.test(v))return;const p=t
  const solo=!v.replace(RE,'').trim();const f=document.createDocumentFragment();let i=0;v.replace(RE,(m,k,o)=>{if(o>i)f.appendChild(document.createTextNode(v.slice(i,o).replace(/ $/,'')));f.appendChild(mk(M[k],solo));i=o+m.length});
  if(i<v.length)f.appendChild(document.createTextNode(v.slice(i).replace(/^ /,'')));p.replaceChild(f,t)};
 const walk=r=>{if(r.nodeType==3)return fix(r);if(r.nodeType!=1||/^(SCRIPT|STYLE|svg)$/i.test(r.tagName))return;const w=document.createTreeWalker(r,4),a=[];let n;while(n=w.nextNode())a.push(n);a.forEach(fix)};
-setTimeout(()=>{walk(document.body);const SK={contains:n=>{const e=n.nodeType==1?n:n.parentElement;return !!(e&&e.closest('#hH,#hY,#hR,#hN,#hS,#hCurve'))}};new MutationObserver(ms=>{for(const m of ms){if(SK&&SK.contains(m.target))continue;if(m.type=='characterData')fix(m.target);else m.addedNodes.forEach(walk)}}).observe(document.body,{childList:true,subtree:true,characterData:true});});
+setTimeout(()=>{walk(document.body);const SK={contains:n=>{const e=n.nodeType==1?n:n.parentElement;return !!(e&&e.closest('#hH,#hY,#hR,#hS,#hCurve'))}};new MutationObserver(ms=>{for(const m of ms){if(SK&&SK.contains(m.target))continue;if(m.type=='characterData')fix(m.target);else m.addedNodes.forEach(walk)}}).observe(document.body,{childList:true,subtree:true,characterData:true});});
 })();
 
 /* intro network animation */
