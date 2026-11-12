@@ -19,18 +19,21 @@ async function boot(w,h,lang,theme){
 }
 async function halvingWords(p){
   return p.evaluate(()=>{
+    const ALLOW='この、報酬が半分になることをハービング（halving）と呼びます。半減期とも呼ばれます。';
     const bad=[];
     const w=document.createTreeWalker(document.body,4);
     let n;while(n=w.nextNode()){
       const pe=n.parentElement;
       if(pe&&pe.closest('script,style'))continue;
-      if((n.nodeValue||'').includes('半減期'))bad.push((n.nodeValue||'').trim().slice(0,90));
+      const t=(n.nodeValue||'');
+      if(!t.includes('半減期')||t.trim()===ALLOW)continue;
+      bad.push(t.trim().slice(0,90));
     }
     for(const e of document.querySelectorAll('*')){
       if(!e.getAttribute)continue;
       for(const a of ['aria-label','title','alt','placeholder']){
         const v=e.getAttribute(a);
-        if(v&&v.includes('半減期'))bad.push('@'+a+':'+v.slice(0,90));
+        if(v&&v.includes('半減期')&&v.trim()!==ALLOW)bad.push('@'+a+':'+v.slice(0,90));
       }
     }
     return bad;
@@ -68,32 +71,53 @@ for(const [w,h,lang,theme] of [[375,812,'ja','light'],[375,812,'en','light'],[12
 for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const {p,c,errs}=await boot(375,h,lang,'light');
   const go=async t=>p.evaluate(t=>{const i=[...document.querySelectorAll('.ch')].findIndex(c=>c.dataset.t===t);document.querySelectorAll('#prog span')[i].click()},t);
-  // 1-4 idle is compact, then send 1 from the 3-coin
+  // 1-4 idle is compact, then send 1 from the 2.5-coin piece
   await go('かたまり');
   const idle=await p.evaluate(()=>({
     msg:getComputedStyle(document.getElementById('uxMsg')).display,
     term:getComputedStyle(document.getElementById('uxTerm')).display,
-    coins:[...document.querySelectorAll('#ux .lump')].map(e=>e.dataset.amt+e.dataset.who)
+    tx:document.getElementById('uxTx').hidden,
+    alice:[...document.querySelectorAll('#uxA .tama')].map(e=>e.dataset.amt+e.dataset.state),
+    bob:document.querySelectorAll('#uxB .tama').length,
+    letters:/コイン[A-Z]/.test(document.querySelector('.ch[data-t="かたまり"]').innerText)
   }));
-  if(idle.msg!=='none'||idle.term!=='none')note(lang+' 1-4 idle gap '+JSON.stringify(idle));
-  if(idle.coins.join(',')!=='3アリス,2アリス'&&idle.coins.join(',')!=='3Alice,2Alice')note(lang+' start coins '+idle.coins.join(','));
-  await p.locator('#uxA .lump[data-amt="3"]').click();
+  if(idle.msg!=='none'||idle.term!=='none'||idle.tx!==true)note(lang+' 1-4 idle gap '+JSON.stringify(idle));
+  if(idle.alice.join(',')!=='2.5live,1live,0.5live'||idle.bob!==0||idle.letters)note(lang+' start coins '+JSON.stringify(idle));
+  await p.locator('#uxA .tama[data-amt="2.5"]').click();
   await p.click('#uxGo');
   await p.waitForSelector('#uxMsg.ok');
-  const after=await p.evaluate(()=>[...document.querySelectorAll('#ux .lump')].map(e=>({a:e.dataset.amt,s:e.dataset.state,o:e.dataset.origin,w:e.dataset.who})));
-  const spent=after.find(c=>c.s==='spent'&&c.a==='3');
-  const change=after.find(c=>c.o==='change'&&c.a==='2');
-  const keep=after.find(c=>c.o==='start'&&c.a==='2'&&c.s==='live');
-  const got=after.find(c=>c.o==='new'&&c.a==='1');
-  if(!spent||!change||!keep||!got)note(lang+' send result '+JSON.stringify(after));
-  const term=await p.textContent('#uxTerm');
-  if(!/UTXO/.test(term)||!/Unspent Transaction Output/.test(term))note(lang+' term '+term);
-  await p.locator('#uxA .lump[data-state="spent"]').click();
+  const after=await p.evaluate(()=>({
+    alice:[...document.querySelectorAll('#uxA .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
+    bob:[...document.querySelectorAll('#uxB .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
+    tx:document.getElementById('uxTx').innerText,
+    term:document.getElementById('uxTerm').textContent,
+    msg:document.getElementById('uxMsg').textContent
+  }));
+  const spent=after.alice.find(c=>c.s==='spent'&&c.a==='2.5');
+  const keep1=after.alice.find(c=>c.s==='live'&&c.a==='1');
+  const keep05=after.alice.find(c=>c.s==='live'&&c.a==='0.5');
+  const change=after.alice.find(c=>c.s==='live'&&c.a==='1.5');
+  const got=after.bob.find(c=>c.s==='live'&&c.a==='1');
+  if(!spent||!keep1||!keep05||!change||!got||after.bob.length!==1)note(lang+' send result '+JSON.stringify(after));
+  if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/お釣り/.test(after.tx)))note('ja strip '+after.tx);
+  if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/change/i.test(after.tx)))note('en strip '+after.tx);
+  if(!/UTXO/.test(after.term)||!/Unspent Transaction Output/.test(after.term))note(lang+' term '+after.term);
+  if(/取引の出力|will be rejected|拒否されます/.test(after.msg))note(lang+' result previews rejection '+after.msg);
+  const footOrder=await p.evaluate(()=>{const f=document.getElementById('uxFoot');return [...f.children].map(e=>e.id).filter(Boolean)});
+  const mi=footOrder.indexOf('uxMsg'),ti=footOrder.indexOf('uxTerm'),xi=footOrder.indexOf('uxTx');
+  if(!(xi<mi&&mi<ti))note(lang+' result order '+footOrder.join(','));
+  await p.locator('#uxA .tama[data-state="spent"]').click();
   await p.click('#uxGo');
   await p.waitForSelector('#uxMsg.ng');
   const rej=await p.textContent('#uxMsg');
-  if(lang==='ja'&&!/二度使えません/.test(rej))note('ja reject '+rej);
-  if(lang==='en'&&!/cannot be used twice/i.test(rej))note('en reject '+rej);
+  if(lang==='ja'&&(!/この2\.5コイン玉は使い済み/.test(rej)||!/二度使えません/.test(rej)))note('ja reject '+rej);
+  if(lang==='en'&&(!/2\.5-coin piece/.test(rej)||!/already spent/i.test(rej)||!/cannot be used twice/i.test(rej)))note('en reject '+rej);
+  await p.locator('#uxA .tama[data-amt="1"][data-state="live"]').click();
+  await p.locator('#uxAmt button[data-u="1"]').click();
+  await p.click('#uxGo');
+  await p.waitForSelector('#uxMsg.ok');
+  const twins=await p.locator('#uxA .tama[data-amt="0.5"][data-state="live"]').evaluateAll(els=>els.map(e=>e.dataset.id));
+  if(twins.length!==2||twins[0]===twins[1])note(lang+' two 0.5 pieces '+twins.join(','));
   if(await p.locator('.ch[data-t="かたまり"] .quiz').count()!==1)note(lang+' 1-4 quiz count');
   const q=p.locator('.ch[data-t="かたまり"] .quiz').first();
   await q.locator('button').nth(0).click();
@@ -125,21 +149,17 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(hit(db,nx)||hit(db,ft))note(lang+' h'+h+' 1-3 overlap dbl '+JSON.stringify(db)+' next '+JSON.stringify(nx)+' foot '+JSON.stringify(ft));
   const clip=await p.evaluate(()=>{const e=document.getElementById('tDouble');return e.scrollWidth>e.clientWidth+2});
   if(clip)note(lang+' tDouble text clipped');
-  // 2-3 adjustment + myth, 2-4 does not restate the 2016 mechanism
+  // 2-3 prose stays, the adjustment widget is gone, myth is short
   await go('マイニング');
-  const before=await p.evaluate(()=>getComputedStyle(document.getElementById('dNote')).display);
-  if(before!=='none')note(lang+' dNote idle '+before);
-  const rule=await p.textContent('#dRule');
-  if(!/2,016|2016/.test(rule))note(lang+' rule '+rule);
+  if(await p.locator('#dAdj,#dHr,#dNote,#dRule').count())note(lang+' 2-3 widget still present');
+  const mineBody=await p.locator('.ch[data-t="マイニング"]').innerText();
+  if(/およそ10分を保つ|Keeping about 10 minutes/.test(mineBody))note(lang+' widget heading remains');
+  if(lang==='ja'&&(!/およそ10分/.test(mineBody)||!/2,016/.test(mineBody)||!/およそ2週間/.test(mineBody)))note('ja 2-3 prose');
+  if(lang==='en'&&(!/10 minutes/.test(mineBody)||!/2,016/.test(mineBody)||!/two weeks/.test(mineBody)))note('en 2-3 prose');
   if(await p.locator('#dMyth').evaluate(e=>e.open))note(lang+' myth starts open');
-  await p.click('#dHr button[data-h="many"]');
-  const lv=await p.textContent('#dLv'),iv=await p.textContent('#dIv'),dn=await p.textContent('#dNote');
-  if(lang==='ja'&&(lv!=='上げる'||!/10分/.test(iv)))note('ja adj '+lv+' '+iv);
-  if(lang==='en'&&(lv!=='Higher'||!/10 min/.test(iv)))note('en adj '+lv+' '+iv);
-  if(!dn||dn.length<8)note(lang+' empty adj note');
   const myth=await p.textContent('#dMyth');
-  if(lang==='ja'&&(!/掘りつくさ/.test(myth)||!/止まりません/.test(myth)||!/2,016/.test(myth)))note('ja myth '+myth.slice(0,80));
-  if(lang==='en'&&(!/mined out/i.test(myth)||!/does not halt/i.test(myth)||!/2,016/.test(myth)))note('en myth '+myth.slice(0,80));
+  if(lang==='ja'&&(!/難易度調整/.test(myth)||!/止まりません/.test(myth)||!/報酬半減/.test(myth)||/半減期/.test(myth)||/ほんとう/.test(myth)))note('ja myth '+myth.slice(0,120));
+  if(lang==='en'&&(!/10 minutes/.test(myth)||!/does not stop/i.test(myth)||!/21 million/.test(myth)||/半減期/.test(myth)))note('en myth '+myth.slice(0,140));
   await p.click('#dMyth summary');
   const ovM=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   if(ovM>1)note(lang+' myth open overflow');
@@ -173,13 +193,15 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const bt=await bq.innerText();
   if(lang==='ja'&&(!/1問クイズ/.test(bt)||!/枝分かれ/.test(bt)||/ノードはどうする/.test(bt)))note('ja 2-4 quiz '+bt.slice(0,100));
   if(lang==='en'&&(!/fork/i.test(bt)||/what does a node do/i.test(bt)))note('en 2-4 quiz '+bt.slice(0,120));
-  if(lang==='ja'&&(!/フォーク/.test(sp)||!/マイニング/.test(sp)))note('ja 2-4 '+sp.slice(0,120));
-  if(lang==='en'&&(!/fork/i.test(sp)||!/Mining/.test(sp)))note('en 2-4 missing fork/mining');
+  if(lang==='ja'&&(!/もっと短いと、届く前に次が見つかり/.test(sp)||/フォーク：チェーンが二つに分かれる/.test(sp)||/2-3「マイニング」で見ました/.test(sp)))note('ja 2-4 '+sp.slice(0,160));
+  if(lang==='en'&&(!/chain splits more easily/i.test(sp)||/chain splitting in two/i.test(sp)))note('en 2-4 '+sp.slice(0,160));
   if(/2,016|2016/.test(sp))note(lang+' 2-4 repeats 2016 mechanism');
   if(lang==='ja'){
     await go('報酬半減');
     const intro=await p.locator('.ch[data-t="報酬半減"]').innerText();
-    if(!intro.includes('報酬半減')||!intro.includes('ハービング（halving）')||intro.includes('半減期'))note('3-2 wording');
+    const title=await p.locator('.ch[data-t="報酬半減"] h2').innerText();
+    if(!intro.includes('マイニングで、ブロックを追加した人がもらう報酬は、最初は50BTCです')||!intro.includes('ハービング（halving）')||!intro.includes('半減期とも呼ばれます')||!intro.includes('報酬半減'))note('3-2 wording');
+    if(title.includes('半減期')||intro.replace('半減期とも呼ばれます','').includes('半減期'))note('3-2 extra 半減期');
     await p.click('#hPlay');
     await p.waitForFunction(()=>[...document.querySelectorAll('#hCurve text')].some(t=>/報酬半減/.test(t.textContent)),{timeout:15000});
     const left=await halvingWords(p);
@@ -187,7 +209,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   }else{
     await go('報酬半減');
     const intro=await p.locator('.ch[data-t="報酬半減"]').innerText();
-    if(!/halving/i.test(intro)||intro.includes('半減期'))note('en 3-2 '+intro.slice(0,100));
+    if(!/reward miners receive for adding a block/i.test(intro)||!/halving/i.test(intro)||intro.includes('半減期'))note('en 3-2 '+intro.slice(0,140));
   }
   const miss=lang==='en'?await p.evaluate(()=>[...window.__miss]):[];
   if(miss.length)note(lang+' h'+h+' miss '+JSON.stringify(miss.slice(0,15)));

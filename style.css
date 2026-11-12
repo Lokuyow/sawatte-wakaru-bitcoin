@@ -1228,32 +1228,38 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .tFoot #tDouble:disabled{opacity:.45;cursor:not-allowed}
 .tx2[data-st=a] .tMid,.tx2[data-st=b] .tMid{opacity:.5}
 /* z83: keep the floating next button off the 1-3 send / double-spend controls */
-.tFoot #tSend,.tFoot #tDouble,.tFoot #tAmtC,.tFoot #tAmtC button,#uxGo,#uxMsg,#uxTerm,#uxAmt button,.lump,.quiz{scroll-margin-top:88px;scroll-margin-bottom:calc(104px + env(safe-area-inset-bottom))}
+.tFoot #tSend,.tFoot #tDouble,.tFoot #tAmtC,.tFoot #tAmtC button,#uxGo,#uxMsg,#uxTerm,#uxTx,#uxAmt button,.tama,.quiz{scroll-margin-top:88px;scroll-margin-bottom:calc(104px + env(safe-area-inset-bottom))}
 .tFoot #tDouble{max-width:100%;width:100%;white-space:normal;text-wrap:balance;line-height:1.35}
 /* z83: 1-4 coin lumps */
 .ux{margin:12px 0 0}
 .uxPs{display:grid;gap:14px}
 .uxNm{display:block;font-size:1rem;line-height:1.4;margin:0 0 6px}
-.uxCs{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;min-height:64px}
-.uxEmpty{flex:1 1 100%;min-height:64px;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--mut);font-weight:700;font-size:1rem;padding:8px 12px;background:var(--soft)}
-.lump{display:flex;flex:0 0 auto;flex-direction:row;align-items:center;gap:8px;width:calc(46% - 4px);min-width:0;max-width:100%;min-height:64px;margin:0;padding:8px 10px;border-radius:12px;border:1.5px solid transparent;background:var(--accent);color:var(--onb,#fff);box-shadow:var(--bsh);text-align:left;line-height:1.25}
-.lump.v1{width:calc(42% - 4px)}.lump.v2{width:calc(44% - 4px)}.lump.v3{width:calc(56% - 4px)}
-.lumpIc{width:36px;height:24px;flex:none;display:block}
-.lumpIc rect{fill:currentColor}
-.lumpTx{display:flex;flex-flow:row wrap;align-items:center;gap:2px 6px;min-width:0}
-.lumpTx b{font-size:1.45rem;line-height:1;font-variant-numeric:tabular-nums}
-.lumpTx i{font-style:normal;font-size:1rem;font-weight:700}
-.lumpTag{display:inline-block;flex-basis:100%;width:max-content;max-width:100%;margin:0;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--card) 92%,transparent);color:var(--ink);font-style:normal;font-size:1rem;font-weight:700;line-height:1.45;white-space:nowrap}
-.lump.on{box-shadow:var(--bsh),0 0 0 3px var(--card),0 0 0 6px var(--accent)}
-.lump.fresh .lumpTag{background:var(--okbg);color:var(--ok)}
-.lump.spent{background:transparent;color:var(--mut);box-shadow:none;border:1.5px dashed var(--mut)}
-.lump.spent .lumpIc{opacity:.45}
-.lump.spent .lumpTag{background:var(--ngbg);color:var(--ng)}
-.lump.spent.on{outline:3px solid var(--ng);outline-offset:2px}
+.uxCs{display:flex;flex-wrap:wrap;gap:14px 12px;align-items:flex-end;min-height:72px}
+.uxEmpty{flex:1 1 100%;min-height:72px;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--mut);font-weight:700;font-size:1rem;padding:8px 12px;background:var(--soft)}
+.tama{display:flex;flex:0 0 auto;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%;margin:0;padding:0;border:0;border-radius:0;background:transparent;color:var(--onb,#fff);box-shadow:none;line-height:1}
+.tama .disc{position:relative;width:calc(56px + var(--u) * 12px);height:calc(56px + var(--u) * 12px);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 30%,color-mix(in srgb,#fff 46%,var(--accent2)),var(--accent) 42%,color-mix(in srgb,#000 16%,var(--accent)));box-shadow:inset 0 0 0 3px color-mix(in srgb,#fff 32%,var(--accent)),inset 0 -7px 0 color-mix(in srgb,#000 20%,var(--accent)),0 3px 0 color-mix(in srgb,#000 16%,var(--line2))}
+.tama .mint{position:absolute;inset:0;width:100%;height:100%;color:color-mix(in srgb,#000 45%,var(--accent))}
+.tama .mint .dot{fill:currentColor}
+.tama b{position:relative;z-index:1;font-size:1rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.tama[style*="--u:3"] b,.tama[style*="--u:4"] b,.tama[style*="--u:5"] b,.tama[style*="--u:6"] b{font-size:1.15rem}
+.tama .use{display:block;font-style:normal;font-size:1rem;font-weight:800;line-height:1.2;color:var(--ng)}
+.tama.on .disc{box-shadow:inset 0 0 0 3px color-mix(in srgb,#fff 32%,var(--accent)),inset 0 -7px 0 color-mix(in srgb,#000 20%,var(--accent)),0 0 0 3px var(--card),0 0 0 6px var(--accent)}
+.tama.spent{opacity:.8}
+.tama.spent .disc{background:transparent;color:var(--mut);box-shadow:none;border:1.5px dashed var(--mut)}
+.tama.spent b{text-decoration:line-through}
+.tama.spent .mint{color:var(--mut)}
+.tama.spent.on .disc{outline:3px solid var(--ng);outline-offset:3px}
 .uxFoot{display:grid;gap:10px;margin-top:14px}
-.uxAmt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.uxAmt span{grid-column:1/-1;font-size:1rem;font-weight:800;line-height:1.4}
-.uxAmt button{min-height:46px;margin:0;padding:8px 6px;font-size:1rem;font-weight:800;border-radius:10px;white-space:nowrap}
+.uxAmt{display:flex;flex-wrap:wrap;gap:8px}
+.uxAmt span{flex:1 0 100%;font-size:1rem;font-weight:800;line-height:1.4}
+.uxAmt button{flex:1 1 52px;min-width:52px;min-height:46px;margin:0;padding:8px 4px;font-size:1rem;font-weight:800;border-radius:10px;white-space:nowrap}
+.uxTx{padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--soft)}
+.uxTxH{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:1rem;font-weight:800;line-height:1.35;margin-bottom:6px}
+.uxTxB{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:1rem;font-weight:700;line-height:1.45}
+.uxTxB .line{display:inline-flex;flex-wrap:wrap;max-width:100%}
+.uxTxB .nm,.uxTxB .who,.uxTxH span{white-space:nowrap}
+.uxArr{font-weight:800}
+#dMyth>summary{word-break:keep-all}
 .uxAmt button.on,.uxAmt button.on:is(:hover,:active,:focus-visible){background:var(--btn);color:var(--onb,#fff)}
 #uxGo{min-height:50px;width:100%;margin:0;padding:10px 16px;font-size:1.05rem;font-weight:800;border-radius:10px;white-space:normal;text-wrap:balance;line-height:1.35}
 #uxGo:disabled{opacity:.45}
@@ -1265,14 +1271,7 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 @media(min-width:720px){.uxPs{grid-template-columns:1fr 1fr;align-items:start}}
 @media(hover:hover){
 .uxAmt button:not(.on):not(:disabled):hover{background:var(--soft);color:var(--ink)}
-.lump:not(.spent):not(:disabled):hover{background:var(--btnh)}
-.lump.spent:hover{background:transparent;color:var(--mut)}
+.tama:not(.spent):hover .disc{filter:brightness(.96)}
+.tama.spent:hover{background:transparent}
 }
-/* z83: 2-3 difficulty stays near 10 minutes */
-#dAdj .mstats{grid-template-columns:1fr 1fr}
-#dAdj .mstats small,#dAdj .mstats b{font-size:1rem;line-height:1.35}
-#dAdj .mstats b{font-family:inherit;font-weight:800}
-#dRule{margin:8px 0 0;font-size:1rem;line-height:1.6}
-#dNote{display:none;margin:8px 0 0;font-size:1rem;line-height:1.6;color:var(--ink)}
-#dNote.hold{display:block}
-@media(prefers-reduced-motion:reduce){.lump{transition:none}}
+@media(prefers-reduced-motion:reduce){.tama{transition:none}}

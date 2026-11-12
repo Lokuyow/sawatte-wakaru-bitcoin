@@ -33,7 +33,7 @@ const Q=[['試してみよう: 「。」を1個足したら、ハッシュはど
 ['アリスは5コインしか持っていません。その5コインを、ボブとキャロルに同時に5コインずつ送ろうとしたら?',['両方とおる','先に記録された方だけとおる','両方はじかれる'],1,'みんなの台帳で先に記録された方が有効です。2つ目は「もう持っていない」のではじかれます。'],
 ['発行されるビットコインの合計は?',['無限に増える','ぴったり2100万BTC','2100万BTC少し手前で止まる'],2,'報酬が半分ずつになっていくので、合計は2100万BTCにじわじわ近づき、わずかに下回る約2099万9999.97BTCで止まります。']];
 Q.push(['秘密鍵が他人に当てられないいちばんの理由は?',['ひみつの計算式で作るから','組み合わせが数えきれないほど多いから','銀行が守っているから'],1,'秘密鍵はただのランダムな数。でも組み合わせが約10の77乗通りもあるので、総当たりでは当てられません。']);Q.push(['混んでいるとき、早くブロックに入れてもらうには?',['手数料を高くする','取引を何回も送る','金額を小さくする'],0,'マイナーはサイズあたりの手数料(手数料率)が高い取引から順にブロックに入れます。'],['ライトニングで100回払ったら、ブロックに記録されるのは?',['100回','開く・閉じるの2回だけ','0回'],1,'チャンネルの中の支払いはブロックの外。記録されるのは開くときと閉じるときだけです。']);const QI=['ハッシュ','チェーン','署名','台帳','報酬半減','鍵の強さ','手数料','ライトニング'].map(t=>chs.findIndex(c=>c.dataset.t==t));
-[[ 'かたまり',[L('3コインから1コインだけ送ると、その3コインはどうなる?','If you send only 1 coin from a 3-coin, what happens to that 3-coin?'),[L('2コインに小さくなる','It shrinks into a 2-coin'),L('消えて、おつりの2コインが新しくできる','It disappears, and a new 2-coin of change is created'),L('残高の数字が1減るだけ','Only a balance number goes down by 1')],1,L('コインはかたまりなので、一部だけ削ることはできません。3コインは使われて消え、送った1コインとおつりの2コインが、まだ使われていない新しいかたまり（UTXO）として生まれます。','A coin is a lump, so you cannot shave a piece off it. The 3-coin is spent and gone. The 1 coin you sent and the 2-coin of change are born as new unspent lumps (UTXOs).')]],
+[[ 'かたまり',[L('2.5コイン玉から1だけ送ると、その玉はどうなる?','If you send 1 from a 2.5-coin piece, what happens to that piece?'),[L('1.5コイン玉に小さくなる','It shrinks into a 1.5-coin piece'),L('使い済みになり、おつりの1.5は新しいコイン玉になる','It is spent, and the 1.5 of change is a new coin'),L('1玉と0.5玉が1.5に合体する','The 1-coin and the 0.5-coin merge into 1.5')],1,L('玉は削れません。2.5コイン玉はまるごと使われ、ボブに新しい1コイン玉、アリスに新しい1.5コイン玉ができます。同じ額の玉が2枚あっても、それは2枚の別々の玉です。','A piece cannot be shaved down. The 2.5-coin piece is spent whole. Bob gets a new 1-coin piece, and Alice gets a new 1.5-coin piece. Two pieces with the same amount are still two separate coins.')]],
 ['マイニング',[L('マイナーが急に増えたとき、ブロックの間隔をおよそ10分に保つには?','When the number of miners suddenly jumps, what keeps blocks about 10 minutes apart?'),[L('むずかしさを上げる','Difficulty goes up'),L('むずかしさを下げる','Difficulty goes down'),L('むずかしさは変えない','Difficulty stays the same')],0,L(`計算する人が増えると、調整しなければブロックは早く見つかります。むずかしさを上げて、目標のおよそ10分に戻します。調整は${(2016).toLocaleString(LOC)}ブロックごとです。目標どおりならおよそ2週間に1回で、そのあいだに計算力が変わると実際の日数は前後します。`,`More miners would find blocks faster if difficulty stayed put. Difficulty is raised so the target returns to about 10 minutes. The adjustment happens every ${(2016).toLocaleString(LOC)} blocks. If blocks stay on target that is about once every two weeks, and if hashrate changes during those blocks the actual number of days varies.`)]],
 ['ブロックが届く',[L('ブロックの間隔が数秒しかなかったら、何が増える?','If blocks came only seconds apart, what would increase?'),[L('届く前に次が見つかり、枝分かれが増える','The next block is often found before the last one arrives, so forks increase'),L('手数料だけが増える','Only fees increase'),L('2100万枚の上限が増える','The 21 million cap increases')],0,L('前のブロックが世界のノードに届く前に次が見つかると、チェーンが枝分かれ（フォーク）しやすくなります。およそ10分という間隔は、届く時間を確保するための目標です。その間隔を保つ調整は、2-3で見たとおりです。','If the next block is found before the previous one has reached nodes around the world, the chain forks more often. The roughly 10-minute gap is the target that leaves time for a block to arrive. How that gap is kept is the adjustment from 2-3.')]]
 ].forEach(([t,q])=>{Q.push(q);QI.push(chs.findIndex(c=>c.dataset.t==t))});
@@ -95,18 +95,6 @@ $('cReset').onclick=async()=>{const g=++cgen;fixing=false;$('cFix').disabled=fal
 const fmtT=s=>EN?(s<60?s.toFixed(1)+' s':s<3600?Math.floor(s/60)+' min '+Math.floor(s%60)+' s':(s/3600).toFixed(1)+' h'):s<60?s.toFixed(1)+'秒':s<3600?Math.floor(s/60)+'分'+Math.floor(s%60)+'秒':(s/3600).toFixed(1)+'時間';let mining=false,stopReq=false,rate=1e5;
 function dUp(){const n=+$('diff').value,e=16**n;$('dV').textContent=n;$('mExp').textContent=e.toLocaleString(LOC);const w=$('mWarn');w.textContent=n<5?'':L(`⏳ このむずかしさだと、この端末では平均${fmtT(e/rate)}くらいかかりそうです。途中でストップもできます。`,`⏳ At this difficulty, this device needs about ${fmtT(e/rate)} on average. You can stop anytime.`);if(n>=5)w.classList.add('hold')}
 $('diff').oninput=dUp;dUp();
-(()=>{const root=$('dAdj');if(!root)return;
-const rows=[['few',L('少ない','Fewer')],['mid',L('ふつう','Typical')],['many',L('多い','More')]];
-root.innerHTML=`<div class="seg" id="dHr" role="group" aria-label="${L('マイナーの数','Number of miners')}">${rows.map(([k,t])=>`<button type="button" data-h="${k}"${k==='mid'?' class="on"':''}>${t}</button>`).join('')}</div><div class="mstats"><div><small>${L('むずかしさ','Difficulty')}</small><b id="dLv"></b></div><div><small>${L('ブロックの間隔','Block interval')}</small><b id="dIv"></b></div></div><p id="dRule"></p><p class="note" id="dNote"></p>`;
-$('dRule').textContent=L(`調整は${(2016).toLocaleString(LOC)}ブロックごとです。目標の約10分が守られていれば、およそ2週間に1回になります。そのあいだに計算力が変わると、実際の日数は前後します。`,`It adjusts every ${(2016).toLocaleString(LOC)} blocks. If blocks stay on the 10-minute target, that is about once every two weeks. If hashrate changes during those blocks, the actual number of days varies.`);
-const INFO={
-few:[L('下げる','Lower'),L('約10分','about 10 min'),L('計算する人が少ないと、調整しなければ間隔は長くなります。むずかしさを下げて、およそ10分に戻します。','With fewer miners, blocks would take longer if difficulty stayed put. Difficulty is lowered so the interval comes back to about 10 minutes.')],
-mid:[L('基準','Baseline'),L('約10分','about 10 min'),L('ふつうの計算力なら、むずかしさは基準のままです。間隔の目標はおよそ10分です。','With a typical number of miners, difficulty stays at the baseline. The target interval is still about 10 minutes.')],
-many:[L('上げる','Higher'),L('約10分','about 10 min'),L('計算する人が多いと、調整しなければ間隔は短くなります。むずかしさを上げて、およそ10分に戻します。','With more miners, blocks would come faster if difficulty stayed put. Difficulty is raised so the interval comes back to about 10 minutes.')]};
-let touched=false;
-const set=h=>{root.querySelectorAll('#dHr button').forEach(b=>b.classList.toggle('on',b.dataset.h===h));const [lv,iv,note]=INFO[h];$('dLv').textContent=lv;$('dIv').textContent=iv;const n=$('dNote');if(h!=='mid')touched=true;if(!touched){n.textContent='';n.classList.remove('hold');return}n.textContent=note;n.classList.add('hold')};
-root.querySelector('#dHr').onclick=e=>{const b=e.target.closest('button');if(!b)return;set(b.dataset.h)};
-set('mid')})();
 $('mStop').onclick=()=>stopReq=true;onLeave(()=>{if(mining)stopReq=true;if(+$('diff').value<5)$('mWarn').classList.remove('hold')});
 $('mGo').onclick=async()=>{if(mining)return;mining=true;stopReq=false;$('mGo').hidden=true;$('mStop').hidden=false;$('diff').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h,found=false;const t0=performance.now();
 const ui=()=>{const s=(performance.now()-t0)/1000;$('mNonce').textContent=nonce;$('mTry').textContent=(nonce+1).toLocaleString(LOC);$('mTime').textContent=fmtT(s);if(s>.3){rate=nonce/s;$('mRate').textContent=Math.round(rate).toLocaleString(LOC)}};
@@ -196,44 +184,51 @@ const t3=setTimeout(()=>{tBusy=0;tF=-1;tT=-1;tA=1;$('tAmtC').querySelectorAll('b
 onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPins().forEach(p=>p.className='ldPin');ldPaint(bal);ldPrev={...bal};ldMsg('');ldHold(false);tDbl()});
 onEnter(()=>{if(chs[cur].dataset.t=='台帳'){const d=$('tDouble');if(d&&!d.hidden)requestAnimationFrame(()=>keepClear(d))}});
 (()=>{const root=$('ux');if(!root)return;
-const bits=n=>Array.from({length:Math.min(n,3)},(_,i)=>`<rect x="${2+i*12}" y="${i===1?8:4}" width="10" height="10" rx="2"/>`).join('');
-let seq=2,sel=null,amt=1,busy=false,told=false;
-let coins=[{id:1,amt:3,who:'アリス',state:'live',origin:'start'},{id:2,amt:2,who:'アリス',state:'live',origin:'start'}];
-const cw=n=>EN?(n===1?'coin':'coins'):'コイン';
-const tagOf=c=>c.state==='spent'?L('使用済み','Spent'):c.origin==='change'?L('おつり','Change'):c.origin==='new'?L('新しい','New'):L('未使用','Unspent');
-const fit=()=>requestAnimationFrame(()=>{['uxTerm','uxMsg','uxGo'].some(id=>{const e=$(id);if(!e||!e.getClientRects().length)return false;const foot=document.querySelector('#app footer');if(!foot)return false;if(e.getBoundingClientRect().bottom>foot.getBoundingClientRect().top-12){keepClear(e);return true}return false})});
+let seq=3,sel=null,sendU=2,busy=false,told=false,lastTx=null;
+let coins=[{id:1,u:5,who:'アリス',state:'live'},{id:2,u:2,who:'アリス',state:'live'},{id:3,u:1,who:'アリス',state:'live'}];
+const face=u=>{const n=u/2;return n.toLocaleString(LOC,{maximumFractionDigits:1,minimumFractionDigits:Number.isInteger(n)?0:1})};
+const canon=u=>{const n=u/2;return Number.isInteger(n)?String(n):n.toFixed(1)};
+const pj=u=>`${face(u)}コイン玉`,pe=u=>`${face(u)}-coin piece`,piece=u=>EN?pe(u):pj(u);
+const wj=w=>w,we=w=>w==='アリス'?'Alice':w==='ボブ'?'Bob':w;
+const mint=id=>{let s='';const n=(id%4)+2;for(let i=0;i<n;i++){const a=((id*53+i*70)%360)*Math.PI/180;s+=`<circle class="dot" cx="${(50+Math.cos(a)*30).toFixed(1)}" cy="${(50+Math.sin(a)*30).toFixed(1)}" r="3.2"/>`}return `<svg class="mint" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3" opacity=".45"/><circle cx="50" cy="50" r="36" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6"/>${s}</svg>`};
+const fit=()=>requestAnimationFrame(()=>{['uxTerm','uxMsg','uxTx','uxGo'].some(id=>{const e=$(id);if(!e||e.hidden||!e.getClientRects().length)return false;const foot=document.querySelector('#app footer');if(!foot)return false;if(e.getBoundingClientRect().bottom>foot.getBoundingClientRect().top-12){keepClear(e);return true}return false})});
+function line(u,who,change){const nm=EN?pe(u):pj(u),whoT=EN?(change?` (${we(who)}, change)`:` (${we(who)})`):(change?`（${wj(who)}、お釣り）`:`（${wj(who)}）`);return `<span class="line"><span class="nm">${nm}</span><span class="who">${whoT}</span></span>`}
+function paintTx(){const box=$('uxTx');if(!lastTx){box.hidden=true;$('uxTxB').innerHTML='';return}box.hidden=false;const t=lastTx;let outs=line(t.give,t.to,false);if(t.change)outs+=line(t.change,t.from,true);$('uxTxB').innerHTML=`<span class="nm">${piece(t.spent)}</span><span class="uxArr" aria-hidden="true">→</span>${outs}`}
 function paint(){
   const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');
-    el.innerHTML=list.length?list.map(c=>`<button type="button" class="lump v${Math.min(c.amt,3)}${sel===c.id?' on':''}${c.state==='spent'?' spent':''}${c.origin==='new'||c.origin==='change'?' fresh':''}" data-id="${c.id}" data-amt="${c.amt}" data-state="${c.state}" data-origin="${c.origin}" data-who="${c.who}" aria-pressed="${sel===c.id}"><svg class="lumpIc" viewBox="0 0 40 28" aria-hidden="true">${bits(c.amt)}</svg><span class="lumpTx"><b>${c.amt.toLocaleString(LOC)}</b><i>${L('コイン','coin')}</i><em class="lumpTag">${tagOf(c)}</em></span></button>`).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
+    el.innerHTML=list.length?list.map(c=>{const spent=c.state==='spent',label=spent?L(`${pj(c.u)}、使い済み`,`${pe(c.u)}, spent`):piece(c.u);return `<button type="button" class="tama${sel===c.id?' on':''}${spent?' spent':''}" style="--u:${c.u}" data-id="${c.id}" data-u="${c.u}" data-amt="${canon(c.u)}" data-state="${c.state}" data-who="${c.who}" aria-pressed="${sel===c.id}" aria-label="${label}"><span class="disc">${mint(c.id)}<b>${face(c.u)}</b></span>${spent?`<em class="use">${L('使い済み','Spent')}</em>`:''}</button>`}).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
   pile('アリス');pile('ボブ');
   const c=coins.find(x=>x.id===sel);
-  if(c&&c.state!=='spent'&&amt>c.amt)amt=c.amt;
-  root.querySelectorAll('#uxAmt button').forEach(b=>{const a=+b.dataset.a;b.classList.toggle('on',a===amt);b.disabled=!!(c&&c.state!=='spent'&&a>c.amt)});
+  if(c&&c.state!=='spent'&&sendU>c.u)sendU=c.u;
+  const max=c&&c.state!=='spent'?c.u:5,steps=[];for(let i=1;i<=max;i++)steps.push(i);
+  if(!steps.includes(sendU))sendU=Math.min(2,max);
+  $('uxAmt').innerHTML=`<span>${L('送る額','Amount')}</span>`+steps.map(u=>`<button type="button" data-u="${u}"${u===sendU?' class="on"':''}>${face(u)}</button>`).join('');
   const go=$('uxGo');
-  if(!c){go.disabled=true;go.textContent=L('コインを選ぶ','Pick a coin')}
-  else if(c.state==='spent'){go.disabled=busy;go.textContent=L('このコインをもう一度使う','Try spending this coin again')}
-  else{const to=c.who==='アリス'?'ボブ':'アリス';go.disabled=busy||amt>c.amt;go.textContent=L(`${nm(to)}へ ${amt}コイン送る`,`Send ${amt} ${cw(amt)} to ${nm(to)}`)}
+  if(!c){go.disabled=true;go.textContent=L('玉を選ぶ','Pick a coin')}
+  else if(c.state==='spent'){go.disabled=busy;go.textContent=L('この玉をもう一度使う','Try this coin again')}
+  else{const to=c.who==='アリス'?'ボブ':'アリス';go.disabled=busy||sendU>c.u;go.textContent=L(`${wj(to)}へ ${face(sendU)} 送る`,`Send ${face(sendU)} to ${we(to)}`)}
+  paintTx();
 }
 function say(kind,text){const m=$('uxMsg');m.className='uxMsg hold '+kind;m.textContent=text}
-function term(){if(told)return;told=true;const t=$('uxTerm');t.classList.add('on');t.textContent=L('この、まだ使われていないコインのかたまりを UTXO と呼びます。UTXO は Unspent Transaction Output（まだ使われていない取引の出力）のことです。','These still-unspent lumps are called UTXOs. UTXO is short for Unspent Transaction Output: a piece of bitcoin that has not been spent yet.')}
+function term(){if(told)return;told=true;const t=$('uxTerm');t.classList.add('on');t.textContent=L('取引で新しくできた、まだ使われていないコインを UTXO と呼びます（Unspent Transaction Output）。','A coin newly made by a transaction, and not yet spent, is called a UTXO (Unspent Transaction Output).')}
 function act(){
   const c=coins.find(x=>x.id===sel);if(!c||busy)return;
-  if(c.state==='spent'){say('ng',L(`この${c.amt}コインはもう使われています。同じコインは二度使えません。1-3の二重払いが拒否されるのも、このためです。おつりや、残っている別のコインは、まだ使える別のかたまりです。`,`This ${c.amt}-coin is already spent. The same coin cannot be used twice. That is why the double spend in 1-3 is rejected. Change, and any other coin still unused, are separate lumps you can still spend.`));fit();return}
-  const from=c.who,to=from==='アリス'?'ボブ':'アリス',whole=c.amt,give=amt,change=whole-give;
+  if(c.state==='spent'){say('ng',L(`この${pj(c.u)}は使い済みです。同じ玉は二度使えません。`,`This ${pe(c.u)} is already spent. The same piece cannot be used twice.`));fit();return}
+  const from=c.who,to=from==='アリス'?'ボブ':'アリス',whole=c.u,give=sendU,change=whole-give;
   if(give>whole||give<1)return;
   c.state='spent';
-  coins.push({id:++seq,amt:give,who:to,state:'live',origin:'new'});
-  if(change>0)coins.push({id:++seq,amt:change,who:from,state:'live',origin:'change'});
+  coins.push({id:++seq,u:give,who:to,state:'live'});
+  if(change>0)coins.push({id:++seq,u:change,who:from,state:'live'});
+  lastTx={spent:whole,from,to,give,change};
   sel=null;
   say('ok',change>0
-    ?L(`${nm(from)}の${whole}コインはまるごと消えました。${nm(to)}に新しい${give}コイン、${nm(from)}におつりの${change}コインができました。うすくなったコインは、もう一度選ぶと拒否されます。`,`${nm(from)}’s ${whole}-coin is gone. ${nm(to)} has a new ${give}-coin, and ${nm(from)} has a new ${change}-coin as change. Select the faded coin and it will be rejected.`)
-    :L(`${nm(from)}の${whole}コインはまるごと消え、${nm(to)}の新しい${give}コインになりました。うすくなった元のコインは、もう一度選ぶと拒否されます。`,`${nm(from)}’s ${whole}-coin is gone. ${nm(to)} has a new ${give}-coin. Select the faded original and it will be rejected.`));
+    ?L(`${pj(whole)}を使いました。${wj(to)}に${pj(give)}、${wj(from)}におつりの${pj(change)}ができました。`,`The ${pe(whole)} was used up. ${we(to)} got a new ${pe(give)}, and ${we(from)} got a new ${pe(change)} as change.`)
+    :L(`${pj(whole)}を使いました。${wj(to)}に新しい${pj(give)}ができました。`,`The ${pe(whole)} was used up. ${we(to)} got a new ${pe(give)}.`));
   term();paint();fit();
 }
 $('uxAmt').setAttribute('aria-label',L('送る額','Amount to send'));
-$('uxAmt').innerHTML=`<span>${L('送る額','Amount')}</span>`+[1,2,3].map(a=>`<button type="button" data-a="${a}"${a===amt?' class="on"':''}>${a} ${L('コイン',cw(a))}</button>`).join('');
-$('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled||busy)return;amt=+b.dataset.a;paint()};
-$('uxPs').onclick=e=>{const b=e.target.closest('.lump');if(!b||busy)return;const id=+b.dataset.id;sel=sel===id?null:id;paint()};
+$('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled||busy)return;sendU=+b.dataset.u;paint()};
+$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b||busy)return;const id=+b.dataset.id;sel=sel===id?null:id;paint()};
 $('uxGo').onclick=act;paint();
 onEnter(()=>{if(chs[cur].dataset.t=='かたまり')fit()});
 })();
