@@ -150,6 +150,8 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(after.chg.join(',')!=='1.5')note(lang+' change badge '+JSON.stringify(after.chg));
   if(after.panel!=='1px')note(lang+' pile panel '+after.panel);
   if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/おつりとしてアリスへ/.test(after.tx)))note('ja strip '+after.tx);
+  if(lang==='ja'&&!/2\.5コイン玉\s*（アリス）/.test(after.tx))note('ja strip input owner '+after.tx);
+  if(lang==='en'&&!/2\.5-coin piece\s*\(Alice\)/.test(after.tx))note('en strip input owner '+after.tx);
   if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/back to Alice as change/i.test(after.tx)))note('en strip '+after.tx);
   if(after.term)note(lang+' utxo box still in the result');
   if(!/UTXO/.test(after.gloss)||!/Unspent Transaction Output/.test(after.gloss))note(lang+' glossary after send '+after.gloss);
@@ -239,6 +241,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='ja'&&!/あと \d+ ブロック/.test(adj1.adj))note('ja adj left '+adj1.adj);
   if(lang==='en'&&!/blocks to go/.test(adj1.adj))note('en adj left '+adj1.adj);
   await p.click('#djGo');
+  await p.waitForFunction(()=>document.getElementById('djDiff').textContent==='×2',{timeout:6000});
   const adj2=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,d:document.getElementById('djDiff').textContent,cnt:document.getElementById('djCnt').textContent,adj:document.getElementById('djAdj').textContent}));
   if(lang==='ja'&&(!/約10分/.test(adj2.i)||!/×2/.test(adj2.d)))note('ja adj after '+JSON.stringify(adj2));
   if(lang==='en'&&(!/10 min/.test(adj2.i)||!/×2/.test(adj2.d)))note('en adj after '+JSON.stringify(adj2));
