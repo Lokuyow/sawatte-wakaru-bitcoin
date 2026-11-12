@@ -1206,3 +1206,24 @@ input[type=range]::-moz-range-progress{background:var(--o)}
   .gico-mine .gm-blk rect{stroke:var(--o)}
   .gico-51 .g5-secret,.gico-51 .g5-up{transform:none;opacity:1}
 }
+
+/* z82: 1-1 check status line (no empty reserve) */
+#sRes .sMsg.sWait{color:var(--mut);font-weight:700}
+#sRes .sWait .sIc{animation:sWt 1s ease-in-out infinite}
+@keyframes sWt{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){#sRes .sWait .sIc{animation:none}}
+#sRes.res.hold{min-height:calc(2.9em + 12px);margin:6px 0 2px}
+@media(min-width:600px){#sRes.res.hold{min-height:calc(1.45em + 12px)}}
+/* z82: 1-3 amount + send below the people */
+.people.tx2{grid-template-columns:1fr auto 1fr}
+.tMid{align-self:center}
+.tFoot{display:grid;justify-items:stretch;gap:10px;margin-top:10px;width:100%;max-width:480px;justify-self:center}
+.tFoot #tAmtC{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0}
+.tFoot #tAmtC button{min-height:46px;padding:8px 6px;font-size:1rem;font-weight:800;margin:0;border-radius:10px;white-space:nowrap}
+.tFoot #tSend{min-height:50px;width:100%;padding:10px 16px;font-size:1.1rem;font-weight:800;margin:0;border-radius:10px}
+.tFoot #tSend:disabled{opacity:.45}
+.tFoot .tHint{justify-self:center}
+.tFoot #tDouble{justify-self:center;min-height:44px;padding:10px 18px;font-size:.95rem;font-weight:700;margin:0;border-radius:10px}
+.tFoot #tDouble[hidden]{display:none}
+.tFoot #tDouble:disabled{opacity:.45;cursor:not-allowed}
+.tx2[data-st=a] .tMid,.tx2[data-st=b] .tMid{opacity:.5}
