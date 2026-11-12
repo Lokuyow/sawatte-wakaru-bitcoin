@@ -507,6 +507,91 @@ await scenario('reduced-motion',async()=>{
   }finally{await c.close().catch(()=>{})}
 });
 
+// ===== z98 回帰 (findings-B) =====
+// B-01: ニセ取引を始めたあと他章へ移動して ArrowRight/Left を送っても、ゲームが回答済みにならない
+await scenario('z98-b01',async()=>{
+  const {p,c,errs}=await boot(375,812,'ja','light');
+  try{
+    const go=t=>utilGo(p,t);
+    const snap=()=>p.evaluate(()=>({fx:document.querySelector('.gfx')?.className||'',dis:document.querySelector('#gYes')?.disabled??null,hud:document.querySelector('.ghud')?.textContent||''}));
+    await go('ニセ取引');
+    await p.locator('#gStart').click({timeout:TIMEOUT});
+    await p.waitForSelector('#gGo',{timeout:TIMEOUT});
+    await p.locator('#gGo').click({timeout:TIMEOUT});
+    await p.waitForSelector('#gYes',{timeout:TIMEOUT});
+    const before=await snap();
+    if(before.fx.includes(' on ')||before.dis)note('z98-b01 precondition answered '+JSON.stringify(before));
+    await go('はじめに');
+    await p.evaluate(()=>{document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));document.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true}))});
+    await p.waitForTimeout(600);
+    const stealth=await snap();
+    if(stealth.fx.includes(' on ')||stealth.dis)note('z98-b01 answered from another chapter (while away) '+JSON.stringify(stealth));
+    await go('ニセ取引');
+    const after=await snap();
+    if(after.fx!==before.fx||after.dis!==before.dis||after.hud!==before.hud)note('z98-b01 game state advanced by stray keys '+JSON.stringify({before,after}));
+    if(errs.length)note('z98-b01 errors '+errs.join('|'));
+  }finally{await c.close().catch(()=>{})}
+});
+
+// B-02: 保存済みベスト(20%)/挑戦回数(7)がある状態で1回プレイしても、ベストが巻き戻らず回数だけ増える
+await scenario('z98-b02',async()=>{
+  const {p,c,errs}=await boot(375,812,'ja','light',{seed:{'sw-btc2':JSON.stringify({cur:'51%攻撃',seen:[],games:{'51%攻撃':{best:20,tries:7,ok:true}}})}});
+  try{
+    const go=t=>utilGo(p,t);
+    await go('51%攻撃');
+    await p.locator('#aGo').click({timeout:TIMEOUT});
+    await p.waitForFunction(()=>{const g=JSON.parse(localStorage.getItem('sw-btc2')||'{}').games?.['51%攻撃'];return g&&g.tries===8},null,{timeout:30000});
+    const g=await p.evaluate(()=>JSON.parse(localStorage.getItem('sw-btc2')).games['51%攻撃']);
+    if(g.best!==20)note('z98-b02 best rolled back '+JSON.stringify(g));
+    if(g.ok!==true)note('z98-b02 ok flag lost '+JSON.stringify(g));
+    if(errs.length)note('z98-b02 errors '+errs.join('|'));
+  }finally{await c.close().catch(()=>{})}
+});
+
+// B-03: 実行中はスライダーと「たくさん」ボタンが無効。途中でスライダーを動かしても結果カードは開始時の値(30%)で出る
+await scenario('z98-b03',async()=>{
+  const {p,c,errs}=await boot(375,812,'ja','light');
+  try{
+    const go=t=>utilGo(p,t);
+    await go('51%攻撃');
+    await p.evaluate(()=>{const s=document.querySelector('#aP');s.value='30';s.dispatchEvent(new Event('input',{bubbles:true}))});
+    await p.locator('#aGo').click({timeout:TIMEOUT});
+    const dis=await p.evaluate(()=>({p:document.querySelector('#aP').disabled,many:document.querySelector('#aMany').disabled,go:document.querySelector('#aGo').disabled}));
+    if(!dis.p||!dis.many||!dis.go)note('z98-b03 controls not disabled during run '+JSON.stringify(dis));
+    await p.evaluate(()=>{document.querySelector('#aP').value='70'});
+    await p.waitForFunction(()=>!document.querySelector('#aGo').disabled,null,{timeout:30000});
+    const card=await p.evaluate(()=>document.querySelector('#aCard').textContent||'');
+    if(card.includes('70%'))note('z98-b03 card used moved slider 70%: '+card.slice(0,120));
+    if(!card.includes('30%'))note('z98-b03 card missing start value 30%: '+card.slice(0,120));
+    const re=await p.evaluate(()=>({p:document.querySelector('#aP').disabled,many:document.querySelector('#aMany').disabled}));
+    if(re.p||re.many)note('z98-b03 controls not re-enabled '+JSON.stringify(re));
+    if(errs.length)note('z98-b03 errors '+errs.join('|'));
+  }finally{await c.close().catch(()=>{})}
+});
+
+// B-04: チェーン修復の実行中は .bed と #cReset が無効化され、完了後に戻る
+await scenario('z98-b04',async()=>{
+  const {p,c,errs}=await boot(375,812,'ja','light');
+  try{
+    const go=t=>utilGo(p,t);
+    await go('チェーン');
+    await p.waitForFunction(()=>!!document.querySelector('#chain .bed'),null,{timeout:TIMEOUT});
+    await p.locator('#chain .bed').first().click({timeout:TIMEOUT});
+    await p.waitForFunction(()=>!document.getElementById('cFix').hidden,null,{timeout:TIMEOUT});
+    await p.locator('#cFix').click({timeout:TIMEOUT});
+    const locked=await p.evaluate(()=>({beds:[...document.querySelectorAll('#chain .bed')].map(b=>b.disabled),reset:document.querySelector('#cReset').disabled,fix:document.querySelector('#cFix').disabled}));
+    if(locked.beds.some(d=>!d))note('z98-b04 beds not locked '+JSON.stringify(locked));
+    if(!locked.reset)note('z98-b04 reset not locked '+JSON.stringify(locked));
+    if(!locked.fix)note('z98-b04 fix not disabled '+JSON.stringify(locked));
+    await p.waitForFunction(()=>document.getElementById('cFix').hidden&&[...document.querySelectorAll('#chain .bed')].every(b=>!b.disabled)&&!document.querySelector('#cReset').disabled,null,{timeout:30000});
+    const after=await p.evaluate(()=>({beds:[...document.querySelectorAll('#chain .bed')].map(b=>b.disabled),reset:document.querySelector('#cReset').disabled,bad:document.querySelectorAll('#chain .blk.bad').length}));
+    if(after.beds.some(d=>d))note('z98-b04 beds still locked '+JSON.stringify(after));
+    if(after.reset)note('z98-b04 reset still locked');
+    if(after.bad)note('z98-b04 chain still broken after fix');
+    if(errs.length)note('z98-b04 errors '+errs.join('|'));
+  }finally{await c.close().catch(()=>{})}
+});
+
 await b.close();
 if(bad.length){console.log('FAIL',bad.length);process.exit(1)}
 console.log('ALL PASS');
