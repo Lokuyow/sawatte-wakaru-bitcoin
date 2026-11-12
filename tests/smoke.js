@@ -592,6 +592,41 @@ await scenario('z98-b04',async()=>{
   }finally{await c.close().catch(()=>{})}
 });
 
+// ===== z100 (findings-B 見送り分) =====
+// B-09: reduced-motion は共通ヘルパー rmNow() に統一。セッション途中で OS 設定を
+// 切り替えたら、旧スナップショット組（難易度調整の早送り）も都度評価組（紙吹雪）も追従する
+await scenario('z100-b09',async()=>{
+  const {p,c,errs}=await boot(375,812,'ja','light');
+  try{
+    const go=t=>utilGo(p,t);
+    if(await p.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches))note('z100-b09 precondition: unexpectedly reduced');
+    await go('まとめ');
+    await p.waitForSelector('.confetti',{timeout:TIMEOUT}).catch(()=>{});
+    if(!await p.evaluate(()=>!!document.querySelector('.confetti')))note('z100-b09 control: confetti did not fire with RM off');
+    await go('マイニング');
+    await p.click('#dMyth summary',{timeout:TIMEOUT});
+    await p.locator('#djPow button[data-m="2"]').click({timeout:TIMEOUT});
+    await p.click('#djGo',{timeout:TIMEOUT});
+    await p.waitForTimeout(350);
+    if(await p.evaluate(()=>document.getElementById('djDiff').textContent==='×2'))note('z100-b09 control: dj fast-forward was instant with RM off');
+    await p.waitForFunction(()=>document.getElementById('djDiff').textContent==='×2',null,{timeout:TIMEOUT});
+    const cdp=await p.context().newCDPSession(p);
+    await cdp.send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+    if(!await p.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches))note('z100-b09 toggle did not take effect');
+    await p.evaluate(()=>document.querySelector('.confetti')?.remove());
+    await go('はじめに');
+    await go('まとめ');
+    await p.waitForTimeout(400);
+    if(await p.evaluate(()=>!!document.querySelector('.confetti')))note('z100-b09 confetti fired after toggle to reduce');
+    await go('マイニング');
+    await p.locator('#djPow button[data-m="4"]').click({timeout:TIMEOUT});
+    await p.click('#djGo',{timeout:TIMEOUT});
+    const instant=await p.waitForFunction(()=>document.getElementById('djDiff').textContent==='×4',null,{timeout:400}).then(()=>true).catch(()=>false);
+    if(!instant)note('z100-b09 dj fast-forward not instant after toggle to reduce');
+    if(errs.length)note('z100-b09 errors '+errs.join('|'));
+  }finally{await c.close().catch(()=>{})}
+});
+
 await b.close();
 if(bad.length){console.log('FAIL',bad.length);process.exit(1)}
 console.log('ALL PASS');
