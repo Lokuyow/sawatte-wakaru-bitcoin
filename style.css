@@ -23,7 +23,9 @@ h2 em{font-style:normal;flex:none;width:32px;height:32px;border-radius:50%;backg
 h2.c{justify-content:center}.trophy{font-size:56px;text-align:center;animation:float 3s ease-in-out infinite}
 p{margin:10px 0}
 textarea,input,select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:1rem;margin:6px 0;background:var(--card);color:inherit;transition:border-color .2s}
-textarea:focus,input:focus,select:focus{outline:0;border-color:var(--o)}
+textarea:focus,input:focus,select:focus{border-color:var(--o)}
+textarea:focus:not(:focus-visible),input:focus:not(:focus-visible),select:focus:not(:focus-visible){outline:0}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 button,.btn{font:inherit;background:var(--o);color:var(--onb,#fff);border:0;border-radius:99px;padding:10px 20px;font-size:.95rem;font-weight:700;cursor:pointer;margin:6px 0;text-decoration:none;display:inline-block;transition:transform .1s,background .2s}
 @media(hover:hover){button:hover,.btn:hover{background:var(--btnh)}}button:active{transform:scale(.96)}button:disabled{opacity:.35;cursor:default}
@@ -100,13 +102,14 @@ footer{padding-left:max(40px,calc((100vw - 240px - 880px)/2 + 40px));padding-rig
 @media(min-width:1024px){.chain2 .blk{display:grid;grid-template-columns:150px 1fr 220px;gap:14px;align-items:center}.bh{flex-direction:column;align-items:flex-start}}
 .mexp{font-size:.9rem;color:var(--mut);margin:4px 0}.mexp b{color:var(--ink);font-family:var(--m)}
 .warn{font-size:.85rem;background:var(--soft);color:var(--od);border-radius:10px;padding:8px 12px}
-.mstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.mstats div{background:var(--soft);border-radius:12px;padding:8px;text-align:center}.mstats small{display:block;font-size:.72rem;color:var(--mut)}.mstats b{font-family:var(--m);font-size:.95rem}
+.mstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.mstats div{background:var(--soft);border-radius:12px;padding:8px;text-align:center}.mstats small{display:block;font-size:.72rem;color:var(--mut)}.mstats b{font-family:var(--m);font-size:.95rem;overflow-wrap:anywhere}
 .terms{margin:12px 0;display:grid;gap:6px}.terms div{border-left:3px solid var(--line2);padding:2px 0 2px 12px;font-size:.86rem;line-height:1.6}.terms dt{display:inline;font-weight:700;color:var(--od)}.terms dt::after{content:"："}.terms dd{display:inline;margin:0;color:var(--ink)}
 .sub3{font-size:1rem;margin:24px 0 8px}
 .bits{display:grid;grid-template-columns:repeat(16,1fr);gap:2px;font-family:var(--m);font-size:.7rem;margin:8px 0}.bits span{text-align:center;border-radius:3px;padding:1px 0;animation:flip .3s backwards}.bits .b1{background:var(--o);color:var(--onb,#fff)}.bits .b0{background:var(--soft);color:var(--od)}
 @media(min-width:1024px){.bits{grid-template-columns:repeat(32,1fr);font-size:.75rem}}
 .seg{display:flex;gap:6px}.seg button{flex:1;background:var(--card);color:var(--od);box-shadow:inset 0 0 0 1.5px var(--line2)}.seg button.on{background:var(--o);color:var(--onb,#fff)}
 .etable{font-size:.8rem;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0}.etable .eh,.etable #eRows div{display:grid;grid-template-columns:5.5em 1fr 1.3fr;gap:8px;padding:6px 10px}.eh{background:var(--soft);color:var(--mut);font-weight:700}#eRows div+div{border-top:1px solid var(--line)}#eRows .hl{background:var(--soft);font-weight:700;color:var(--od)}
+.etable span{overflow-wrap:anywhere}
 :focus-visible{outline:3px solid #1d6fd8;outline-offset:2px}
 button,.btn,.seg button.on,h2 em,.bits .b1{background:var(--btn)}@media(hover:hover){button:hover,.btn:hover{background:var(--btnh)}}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:99;overflow:hidden}.confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;animation:fall 1.8s cubic-bezier(.25,.6,.4,1) forwards}
@@ -122,7 +125,7 @@ button,.btn,.seg button.on,h2 em,.bits .b1{background:var(--btn)}@media(hover:ho
 .lch{text-align:center;border-top:3px dashed var(--line);padding-top:6px}.lch.on{border-top:3px solid var(--o)}.lch span{font-size:1.6rem;display:inline-block}.lch small{display:block;color:var(--mut);font-size:.8rem}.zap{animation:zap .4s ease}@keyframes zap{50%{transform:scale(1.6) rotate(-10deg)}}
 .log{font-size:.85rem;padding-left:1.2em;color:var(--mut)}.crow button{margin-right:6px}
 .rboard{display:grid;gap:8px;margin:10px 0}.rm{display:grid;grid-template-columns:2em 1fr auto;gap:2px 8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}.rm>span:first-child{font-size:1.5rem;grid-row:span 2}.rm small{color:var(--mut);font-family:var(--m)}.rm .blks{letter-spacing:2px}.rm code{font-size:.75rem;color:var(--mut)}
-.tap.pop{animation:pop .15s}
+.tap.pop{animation:tapPop .15s}
 .race{display:grid;gap:8px;margin:10px 0}.race small{color:var(--mut)}.row{min-height:30px;display:flex;flex-wrap:wrap;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px}.row i{font-style:normal;animation:chin .2s}
 
 @media(max-width:1023px){header{padding-right:134px;padding-left:16px;text-align:left}.brand{text-align:left}#prog{justify-content:flex-start}}
@@ -157,8 +160,9 @@ button,.btn,.seg button.on,h2 em,.bits .b1{background:var(--btn)}@media(hover:ho
 
 .cmp{display:flex;gap:8px;margin:12px 0 0}.cmp button{flex:1;margin:0;font-size:.85rem;padding:10px 6px;white-space:nowrap}.cmp button[aria-pressed=true]{background:var(--btn);color:var(--onb,#fff);border-color:var(--btn)}
 .cmpv{background:var(--soft);border-radius:14px;padding:12px;margin:8px 0 12px;text-align:center}.cmpv p{margin:6px 0 0;font-size:.86rem;color:var(--ink)}
-.net{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;font-size:1.3rem}.net span{animation:pop .4s both}.net .big{font-size:1.9rem}
-@keyframes pop{from{opacity:0;transform:scale(.6)}}
+.net{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;font-size:1.3rem}.net span{animation:netPop .4s both}.net .big{font-size:1.9rem}
+@keyframes netPop{from{opacity:0;transform:scale(.6)}}
+@keyframes tapPop{50%{transform:scale(.92)}}
 .road{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px;margin:8px 0}
 .rm0{margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;padding:10px 12px;border-radius:12px;background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--line);transition:transform .15s,box-shadow .2s}
 @media(hover:hover){.rm0:hover{transform:translateY(-2px);box-shadow:0 0 0 1px var(--o),0 4px 12px var(--glow);background:var(--card)}}.rm0 span{font-size:1.2rem}.rm0 b{font-size:.9rem}.rm0 small{font-size:.76rem;color:var(--mut)}
@@ -313,7 +317,7 @@ input[type=range]:active::-moz-range-thumb{box-shadow:0 0 0 8px color-mix(in srg
 
 @media(prefers-reduced-motion:reduce){button,button:active{transition:none;transform:none}.rip,.spark,.roll,.vb,.crack,.snap{animation:none!important}}
 
-:root{--bg:#fafaf8;--card:#ffffff;--soft:#f3f2ef;--line:#e6e4df;--line2:#d9d6cf;--ink:#1f1d1a;--mut:#6b665e;--accent:#E07800;--accent2:#F59A2E;--o:var(--accent);--od:var(--accent);--btn:#E07800;--btnh:#C46A00;--ok:#1f7a4d;--ng:#c43a3f;--okbg:#ffffff;--ngbg:#ffffff;--okline:#1f7a4d;--ngline:#c43a3f;--glow:transparent;--hashbg:#f3f2ef;--hashfg:#1f1d1a;--hdr:rgba(250,250,248,.92);--onb:#ffffff;--okh:#196640;--ngh:#a83035;--tint:color-mix(in srgb,var(--accent) 12%,transparent);--r:16px;--f:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",system-ui,sans-serif;--m:ui-monospace,"SFMono-Regular",Menlo,monospace;color-scheme:light}
+:root{--bg:#fafaf8;--card:#ffffff;--soft:#f3f2ef;--line:#e6e4df;--line2:#d9d6cf;--ink:#1f1d1a;--mut:#6b665e;--accent:#E07800;--accent2:#F59A2E;--o:var(--accent);--od:var(--accent);--btn:#E07800;--btnh:#C46A00;--ok:#1f7a4d;--ng:#c43a3f;--okbg:#ffffff;--ngbg:#ffffff;--okline:#1f7a4d;--ngline:#c43a3f;--glow:transparent;--hashbg:#f3f2ef;--hashfg:#1f1d1a;--hdr:rgba(250,250,248,.92);--onb:#1f1d1a;--okh:#196640;--ngh:#a83035;--tint:color-mix(in srgb,var(--accent) 12%,transparent);--r:16px;--f:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP",system-ui,sans-serif;--m:ui-monospace,"SFMono-Regular",Menlo,monospace;color-scheme:light}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111214;--card:#18191c;--soft:#202226;--line:#2c2e33;--line2:#3a3d43;--ink:#e9e8e5;--mut:#9b988f;--accent:#f2a03d;--accent2:#f5b35f;--o:var(--accent);--od:#f2a03d;--btn:#f2a03d;--btnh:#f5b35f;--ok:#5fbf8f;--ng:#e5797d;--okbg:#18191c;--ngbg:#18191c;--okline:#5fbf8f;--ngline:#e5797d;--hashbg:#0d0e10;--hashfg:#e9e8e5;--hdr:rgba(17,18,20,.88);--onb:#111214;--okh:#6fcb9c;--ngh:#ec8a8e;--tint:rgba(242,160,61,.14);--glow:transparent;color-scheme:dark}}
 :root[data-theme=dark]{--bg:#111214;--card:#18191c;--soft:#202226;--line:#2c2e33;--line2:#3a3d43;--ink:#e9e8e5;--mut:#9b988f;--accent:#f2a03d;--accent2:#f5b35f;--o:var(--accent);--od:#f2a03d;--btn:#f2a03d;--btnh:#f5b35f;--ok:#5fbf8f;--ng:#e5797d;--okbg:#18191c;--ngbg:#18191c;--okline:#5fbf8f;--ngline:#e5797d;--hashbg:#0d0e10;--hashfg:#e9e8e5;--hdr:rgba(17,18,20,.88);--onb:#111214;--okh:#6fcb9c;--ngh:#ec8a8e;--tint:rgba(242,160,61,.14);--glow:transparent;color-scheme:dark}
 button,.btn{background:var(--btn)}@media(hover:hover){button:hover,.btn:hover{background:var(--btnh)}}
@@ -513,8 +517,8 @@ h2 em{font-size:.66em}
 .bed{font-size:.8rem;padding:5px 12px;min-height:0;margin:0}
 @media (prefers-reduced-motion:reduce){.bmx.go svg,.bc.chg{animation:none}}
 
-@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:var(--accent);--btnh:#C46A00;--onb:#fff}}
-:root[data-theme=light]{--btn:var(--accent);--btnh:#C46A00;--onb:#fff}
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]){--btn:var(--accent);--btnh:#C46A00;--onb:#1f1d1a}}
+:root[data-theme=light]{--btn:var(--accent);--btnh:#C46A00;--onb:#1f1d1a}
 .bc{white-space:normal;overflow:visible;font-size:.85rem;line-height:1.35}
 
 .scard{margin:12px auto 4px;max-width:340px;text-align:center;border:1.5px solid var(--line2);border-radius:20px;padding:18px 16px;background:var(--card);animation:hwPop .45s}
@@ -689,8 +693,10 @@ details.more>summary:has(>.ic){text-align:left;justify-content:flex-start;align-
 #home{display:inline-flex;align-items:center;gap:.45em;line-height:1.2}#home .bm{width:1.45em;height:1.45em;flex:none;display:block}
 
 /* small orange text -> neutral in light (AA); graphics stay --accent */
-@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]) nav span.seen b,:root:not([data-theme=dark]) nav span.on i,:root:not([data-theme=dark]) .sgS li.on,:root:not([data-theme=dark]) .sgKey,:root:not([data-theme=dark]) .bits.on .b0,:root:not([data-theme=dark]) .bits.on .b1,:root:not([data-theme=dark]) .bits .b0,:root:not([data-theme=dark]) #eRows .hl,:root:not([data-theme=dark]) #eRows .hl span,:root:not([data-theme=dark]) #eRows .hl sup,:root:not([data-theme=dark]) .tHint,:root:not([data-theme=dark]) .brF,:root:not([data-theme=dark]) .hwC.now small,:root:not([data-theme=dark]) .roll .fp,:root:not([data-theme=dark]) .warn,:root:not([data-theme=dark]) .flow .more,:root:not([data-theme=dark]) #fMore,:root:not([data-theme=dark]) .fpp code,:root:not([data-theme=dark]) .fnd em,:root:not([data-theme=dark]) .fblk small,:root:not([data-theme=dark]) .fcf,:root:not([data-theme=dark]) .fdk,:root:not([data-theme=dark]) .fkey small,:root:not([data-theme=dark]) .hash i,:root:not([data-theme=dark]) .pt.seen .ph b,:root:not([data-theme=dark]) .bc.chg,:root:not([data-theme=dark]) .blk.edit .st,:root:not([data-theme=dark]) .why{color:var(--ink)}}
-:root[data-theme=light] nav span.seen b,:root[data-theme=light] nav span.on i,:root[data-theme=light] .sgS li.on,:root[data-theme=light] .sgKey,:root[data-theme=light] .bits.on .b0,:root[data-theme=light] .bits.on .b1,:root[data-theme=light] .bits .b0,:root[data-theme=light] #eRows .hl,:root[data-theme=light] #eRows .hl span,:root[data-theme=light] #eRows .hl sup,:root[data-theme=light] .tHint,:root[data-theme=light] .brF,:root[data-theme=light] .hwC.now small,:root[data-theme=light] .roll .fp,:root[data-theme=light] .warn,:root[data-theme=light] .flow .more,:root[data-theme=light] #fMore,:root[data-theme=light] .fpp code,:root[data-theme=light] .fnd em,:root[data-theme=light] .fblk small,:root[data-theme=light] .fcf,:root[data-theme=light] .fdk,:root[data-theme=light] .fkey small,:root[data-theme=light] .hash i,:root[data-theme=light] .pt.seen .ph b,:root[data-theme=light] .bc.chg,:root[data-theme=light] .blk.edit .st,:root[data-theme=light] .why{color:var(--ink)}
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]) nav span.seen b,:root:not([data-theme=dark]) nav span.on i,:root:not([data-theme=dark]) .sgS li.on,:root:not([data-theme=dark]) .sgKey,:root:not([data-theme=dark]) .bits.on .b0,:root:not([data-theme=dark]) .bits.on .b1,:root:not([data-theme=dark]) .bits .b0,:root:not([data-theme=dark]) #eRows .hl,:root:not([data-theme=dark]) #eRows .hl span,:root:not([data-theme=dark]) #eRows .hl sup,:root:not([data-theme=dark]) .tHint,:root:not([data-theme=dark]) .brF,:root:not([data-theme=dark]) .hwC.now small,:root:not([data-theme=dark]) .roll .fp,:root:not([data-theme=dark]) .warn,:root:not([data-theme=dark]) .flow .more,:root:not([data-theme=dark]) #fMore,:root:not([data-theme=dark]) .fpp code,:root:not([data-theme=dark]) .fnd em,:root:not([data-theme=dark]) .fblk small,:root:not([data-theme=dark]) .fcf,:root:not([data-theme=dark]) .fdk,:root:not([data-theme=dark]) .fkey small,:root:not([data-theme=dark]) .hash i,:root:not([data-theme=dark]) .pt.seen .ph b,:root:not([data-theme=dark]) .bc.chg,:root:not([data-theme=dark]) .blk.edit .st,:root:not([data-theme=dark]) .why,:root:not([data-theme=dark]) .brand,:root:not([data-theme=dark]) .quiz h3,:root:not([data-theme=dark]) .steps li.on,:root:not([data-theme=dark]) .ecap,:root:not([data-theme=dark]) .spmp-tx,:root:not([data-theme=dark]) .games .gbadge,:root:not([data-theme=dark]) .people button.p b,:root:not([data-theme=dark]) .bits .b1{color:var(--ink)}}
+:root[data-theme=light] nav span.seen b,:root[data-theme=light] nav span.on i,:root[data-theme=light] .sgS li.on,:root[data-theme=light] .sgKey,:root[data-theme=light] .bits.on .b0,:root[data-theme=light] .bits.on .b1,:root[data-theme=light] .bits .b0,:root[data-theme=light] #eRows .hl,:root[data-theme=light] #eRows .hl span,:root[data-theme=light] #eRows .hl sup,:root[data-theme=light] .tHint,:root[data-theme=light] .brF,:root[data-theme=light] .hwC.now small,:root[data-theme=light] .roll .fp,:root[data-theme=light] .warn,:root[data-theme=light] .flow .more,:root[data-theme=light] #fMore,:root[data-theme=light] .fpp code,:root[data-theme=light] .fnd em,:root[data-theme=light] .fblk small,:root[data-theme=light] .fcf,:root[data-theme=light] .fdk,:root[data-theme=light] .fkey small,:root[data-theme=light] .hash i,:root[data-theme=light] .pt.seen .ph b,:root[data-theme=light] .bc.chg,:root[data-theme=light] .blk.edit .st,:root[data-theme=light] .why,:root[data-theme=light] .brand,:root[data-theme=light] .quiz h3,:root[data-theme=light] .steps li.on,:root[data-theme=light] .ecap,:root[data-theme=light] .spmp-tx,:root[data-theme=light] .games .gbadge,:root[data-theme=light] .people button.p b,:root[data-theme=light] .bits .b1{color:var(--ink)}
+@media not (prefers-color-scheme:dark){:root:not([data-theme=dark]) :focus-visible{outline-color:#9a4f00}}
+:root[data-theme=light] :focus-visible{outline-color:#9a4f00}
 
 /* ===== block motif ===== */
 .hero{position:relative;isolation:isolate}
