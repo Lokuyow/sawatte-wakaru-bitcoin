@@ -181,18 +181,21 @@ async function ldSync(ok,ngMsg){
 rp();
 onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPins().forEach(p=>p.className='ldPin');ldPaint(bal);ldPrev={...bal};ldMsg('');ldHold(false)});
 (()=>{const root=$('ux');if(!root)return;
-let seq=3,sel=null,picked=false,sendU=null,busy=false,lastTx=null;
+let seq=3,sel=null,sendU=null,busy=false,lastTx=null;
+const uxRM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let coins=[{id:1,u:5,who:'アリス',state:'live'},{id:2,u:2,who:'アリス',state:'live'},{id:3,u:1,who:'アリス',state:'live'}];
 const face=u=>{const n=u/2;return n.toLocaleString(LOC,{maximumFractionDigits:1,minimumFractionDigits:Number.isInteger(n)?0:1})};
 const canon=u=>{const n=u/2;return Number.isInteger(n)?String(n):n.toFixed(1)};
 const pj=u=>`${face(u)}コイン玉`,pe=u=>`${face(u)}-coin piece`,piece=u=>EN?pe(u):pj(u);
 const wj=w=>w,we=w=>w==='アリス'?'Alice':w==='ボブ'?'Bob':w;
-const mint=id=>{let s='';const n=(id%4)+2;for(let i=0;i<n;i++){const a=((id*53+i*70)%360)*Math.PI/180;s+=`<circle class="dot" cx="${(50+Math.cos(a)*30).toFixed(1)}" cy="${(50+Math.sin(a)*30).toFixed(1)}" r="3.2"/>`}return `<svg class="mint" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3" opacity=".45"/><circle cx="50" cy="50" r="36" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6"/>${s}</svg>`};
+const mint=id=>{let s='';for(let i=0;i<16;i++){const a=(i*22.5+id*11)*Math.PI/180;s+=`<circle class="dot" cx="${(50+Math.cos(a)*41).toFixed(1)}" cy="${(50+Math.sin(a)*41).toFixed(1)}" r="1.8"/>`}return `<svg class="mint" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3" opacity=".45"/><circle cx="50" cy="50" r="36" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6"/>${s}</svg>`};
 const fit=()=>requestAnimationFrame(()=>{['uxMsg','uxTx','uxGo'].some(id=>{const e=$(id);if(!e||e.hidden||!e.getClientRects().length)return false;const foot=document.querySelector('#app footer');if(!foot)return false;if(e.getBoundingClientRect().bottom>foot.getBoundingClientRect().top-12){keepClear(e);return true}return false})});
 function line(u,who,change){const nm=EN?pe(u):pj(u),pn=EN?we(who):wj(who),whoT=EN?(change?` (back to <span class="pn">${pn}</span> as change)`:` (<span class="pn">${pn}</span>)`):(change?`（おつりとして<span class="pn">${pn}</span>へ）`:`（<span class="pn">${pn}</span>）`);return `<span class="line"><span class="nm">${nm}</span><span class="who">${whoT}</span></span>`}
 function paintTx(){const box=$('uxTx');if(!lastTx){box.hidden=true;$('uxTxB').innerHTML='';return}box.hidden=false;const t=lastTx;let outs=line(t.give,t.to,false);if(t.change)outs+=line(t.change,t.from,true);$('uxTxB').innerHTML=`<span class="nm">${piece(t.spent)}</span><span class="uxArr" aria-hidden="true">→</span><div class="uxOut">${outs}</div>`}
 function paint(){
-  const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');el.classList.toggle('many',list.length>=4);
+  const old=new Map();
+  if(!uxRM)document.querySelectorAll('#uxPs .tama').forEach(el=>old.set(+el.dataset.id,{r:el.getBoundingClientRect(),s:el.dataset.state}));
+  const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');
     el.innerHTML=list.length?list.map(c=>{const spent=c.state==='spent',label=spent?L(`${pj(c.u)}、使い済み`,`${pe(c.u)}, spent`):piece(c.u);return `<button type="button" class="tama${sel===c.id?' on':''}${spent?' spent':''}" style="--u:${c.u}" data-id="${c.id}" data-u="${c.u}" data-amt="${canon(c.u)}" data-state="${c.state}" data-who="${c.who}" aria-pressed="${sel===c.id}" aria-label="${label}"><span class="disc">${mint(c.id)}<b>${face(c.u)}</b></span>${spent?`<em class="use">${L('使い済み','Spent')}</em>`:''}</button>`}).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
   pile('アリス');pile('ボブ');
   const c=coins.find(x=>x.id===sel);
@@ -207,8 +210,13 @@ function paint(){
   else{const to=c.who==='アリス'?'ボブ':'アリス';go.disabled=busy||sendU>c.u;go.textContent=L(`${wj(to)}へ ${face(sendU)} 送る`,`Send ${face(sendU)} to ${we(to)}`)}
   const hint=$('uxHint');
   if(hint)hint.textContent=!c?L('まず、送るコイン玉をタップ','First, tap a coin to send'):c.state==='spent'?L('使い済みの玉です。ボタンを押してみよう','This coin is spent — press the button to see'):sendU==null?L('次に、送る額を選んでください','Next, pick an amount'):L('あとはボタンを押して送るだけ','Now just press the button to send');
-  root.classList.toggle('fresh',!picked);
+  root.dataset.step=!c?'coins':(c.state==='spent'||sendU!=null)?'go':'amt';
   paintTx();
+  if(!uxRM)requestAnimationFrame(()=>{document.querySelectorAll('#uxPs .tama').forEach(el=>{const o=old.get(+el.dataset.id),r=el.getBoundingClientRect();if(!r.width)return;
+    if(o&&o.r.width){const dx=o.r.left-r.left,dy=o.r.top-r.top;
+      if(o.s!==el.dataset.state)el.animate([{transform:'scale(1.14)'},{transform:'scale(1)'}],{duration:280,easing:'ease-out'});
+      else if(Math.abs(dx)>2||Math.abs(dy)>2)el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'translate(0,0)'}],{duration:340,easing:'cubic-bezier(.2,.7,.3,1)'})}
+    else el.animate([{transform:'scale(.3)',opacity:'0'},{transform:'scale(1)',opacity:'1'}],{duration:300,easing:'cubic-bezier(.2,.7,.3,1.15)'})})});
 }
 function say(kind,text){const m=$('uxMsg');m.className='uxMsg hold '+kind;m.textContent=text}
 function act(){
@@ -219,7 +227,7 @@ function act(){
   if(give>whole||give<1)return;
   c.state='spent';
   coins.push({id:++seq,u:give,who:to,state:'live'});
-  if(change>0)coins.push({id:++seq,u:change,who:from,state:'live'});
+  if(change>0)coins.splice(coins.indexOf(c)+1,0,{id:++seq,u:change,who:from,state:'live'});
   lastTx={spent:whole,from,to,give,change};
   sel=null;
   say('ok',change>0
@@ -229,21 +237,21 @@ function act(){
 }
 $('uxAmt').setAttribute('aria-label',L('送る額','Amount to send'));
 $('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled||busy)return;sendU=+b.dataset.u;paint()};
-$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b||busy)return;const id=+b.dataset.id;sel=sel===id?null:id;picked=true;paint()};
+$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b||busy)return;const id=+b.dataset.id;sel=sel===id?null:id;paint()};
 $('uxGo').onclick=act;paint();
 onEnter(()=>{if(chs[cur].dataset.t=='かたまり')fit()});
 })();
 (()=>{const box=$('aAdj');if(!box)return;const myth=$('dMyth'),sec=box.closest('section');
-let pow=1,diff=1,n=0,acc=0;
+let pow=1,diff=1,n=0,acc=0,per=0;
 const fmt=x=>{const v=Math.round(x*100)/100;return Number.isInteger(v)?String(v):String(v).replace(/0+$/,'').replace(/\.$/,'')};
 const iv=()=>10*diff/pow;
-box.innerHTML=`<div class="seg" id="djPow" role="group" aria-label="${L('計算力','Mining power')}">${[[0.5,L('半分','Half')],[1,L('今と同じ','Same as now')],[2,L('2倍','2×')],[4,L('4倍','4×')]].map(([m,t])=>`<button type="button" data-m="${m}" class="${m===1?'on':''}" aria-pressed="${m===1}">${t}</button>`).join('')}</div><div class="aStats"><div><small>${L('ブロック間隔','Block interval')}</small><b id="djInt"></b></div><div><small>${L('採掘難易度','Mining difficulty')}</small><b id="djDiff"></b></div></div><div class="aRow" id="djRow" aria-hidden="true"></div><p class="aCnt" id="djCnt"></p><button type="button" id="djGo"></button><p class="aMsg" id="djMsg" role="status"></p>`;
+box.innerHTML=`<div class="seg" id="djPow" role="group" aria-label="${L('計算力','Mining power')}">${[[0.5,L('半分','Half')],[1,L('今と同じ','Same as now')],[2,L('2倍','2×')],[4,L('4倍','4×')]].map(([m,t])=>`<button type="button" data-m="${m}" class="${m===1?'on':''}" aria-pressed="${m===1}">${t}</button>`).join('')}</div><div class="aStats"><div><small>${L('ブロック間隔','Block interval')}</small><b id="djInt"></b></div><div><small>${L('採掘難易度','Mining difficulty')}</small><b id="djDiff"></b></div></div><div class="aRow" id="djRow" aria-hidden="true"></div><p class="aCnt" id="djCnt"></p><p class="aCnt" id="djAdj"></p><button type="button" id="djGo"></button><p class="aMsg" id="djMsg" role="status"></p>`;
 const msg=t=>{$('djMsg').textContent=t};
-const cnt=()=>{$('djCnt').textContent=L(`掘れたブロック: ${n}`,`Blocks mined: ${n}`)};
+const cnt=()=>{$('djCnt').textContent=L(`掘れたブロック: ${n}`,`Blocks mined: ${n}`);$('djAdj').textContent=L(`難易度調整は 2016ブロックごと（約2週間）。あと ${2016-per} ブロックで調整です。`,`Difficulty adjusts every 2016 blocks (about two weeks) — ${2016-per} blocks to go.`)};
 function paint(){$('djInt').textContent=L(`約${fmt(iv())}分`,`about ${fmt(iv())} min`);$('djDiff').textContent='×'+fmt(diff);cnt();const go=$('djGo');go.disabled=pow===diff;go.textContent=L('難易度調整まで早送り','Fast-forward to the difficulty adjustment')}
 box.querySelector('#djPow').onclick=e=>{const b=e.target.closest('button');if(!b)return;pow=+b.dataset.m;box.querySelectorAll('#djPow button').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});msg(pow===diff?L('計算力と採掘難易度がつり合っています。間隔は約10分です。','Mining power and difficulty are balanced — blocks come about every 10 minutes.'):L(`計算力が変わりました。難易度調整までは、間隔が約${fmt(iv())}分になります。`,`Mining power changed. Until the adjustment, blocks come about every ${fmt(iv())} minutes.`));paint()};
-box.querySelector('#djGo').onclick=()=>{diff=pow;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`));paint()};
-setInterval(()=>{if(!myth.open||!sec.classList.contains('on'))return;acc+=100/(iv()*55);while(acc>=1){acc--;n++;const row=$('djRow');if(row.children.length>=28)row.innerHTML='';const i=document.createElement('i');row.appendChild(i);cnt()}},100);
+box.querySelector('#djGo').onclick=()=>{diff=pow;per=0;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`));paint()};
+setInterval(()=>{if(!myth.open||!sec.classList.contains('on'))return;acc+=100/(iv()*55);while(acc>=1){acc--;n++;per++;const row=$('djRow');if(row.children.length>=28)row.innerHTML='';const i=document.createElement('i');row.appendChild(i);cnt()}if(per>=2016){per-=2016;if(diff!==pow){diff=pow;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`))}paint()}},100);
 msg(L('計算力を変えてみてください。調整が入ると、間隔は約10分にもどります。','Try changing the mining power. After the adjustment, blocks are back to about every 10 minutes.'));paint();
 })();
 

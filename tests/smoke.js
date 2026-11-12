@@ -83,6 +83,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     const off=btns.filter(b=>!b.classList.contains('on'));
     return {
       hint:(document.getElementById('uxHint')||{}).textContent||'',
+      step:document.getElementById('ux').dataset.step,
       uxAh:document.getElementById('uxA').getBoundingClientRect().height,
       amtTop:document.getElementById('uxAmt').getBoundingClientRect().top+scrollY,
       msg:getComputedStyle(document.getElementById('uxMsg')).display,
@@ -105,6 +106,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(idle.amtOn.length||idle.amtSame)note(lang+' amount highlight '+JSON.stringify(idle.amtOn)+' same '+idle.amtSame);
   if(lang==='ja'&&!/コイン玉をタップ/.test(idle.hint))note('ja 1-4 hint idle '+idle.hint);
   if(lang==='en'&&!/tap a coin/i.test(idle.hint))note('en 1-4 hint idle '+idle.hint);
+  if(idle.step!=='coins')note(lang+' 1-4 step idle '+idle.step);
   await p.locator('#uxA .tama[data-amt="2.5"]').click();
   await p.locator('#uxAmt button[data-u="3"]').click();
   const picked=await p.evaluate(()=>{
@@ -112,10 +114,12 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     const bg=b=>getComputedStyle(b).backgroundColor;
     const on=btns.filter(b=>b.classList.contains('on'));
     const off=btns.filter(b=>!b.classList.contains('on'));
-    return {on:on.map(b=>b.textContent.trim()),same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0]))),go:document.getElementById('uxGo').textContent,tamaBg:getComputedStyle(document.querySelector('.tama.on')).backgroundColor,hint:document.getElementById('uxHint').textContent};
+    return {on:on.map(b=>b.textContent.trim()),same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0]))),go:document.getElementById('uxGo').textContent,tamaBg:getComputedStyle(document.querySelector('.tama.on')).backgroundColor,hint:document.getElementById('uxHint').textContent,discShadow:getComputedStyle(document.querySelector('.tama.on .disc')).boxShadow,step:document.getElementById('ux').dataset.step};
   });
   if(picked.on.join(',')!=='1.5'||picked.same||!/1\.5/.test(picked.go))note(lang+' amount 1.5 '+JSON.stringify(picked));
   if(picked.tamaBg!=='rgba(0, 0, 0, 0)')note(lang+' tama selected bg '+picked.tamaBg);
+  if(picked.step!=='go')note(lang+' 1-4 step picked '+picked.step);
+  if(!picked.discShadow.includes('0px 0px 0px 7px'))note(lang+' selection ring missing '+picked.discShadow);
   if(lang==='ja'&&!/ボタンを押して送るだけ/.test(picked.hint))note('ja 1-4 hint ready '+picked.hint);
   if(lang==='en'&&!/press the button/i.test(picked.hint))note('en 1-4 hint ready '+picked.hint);
   await p.locator('#uxAmt button[data-u="2"]').click();
@@ -138,6 +142,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const got=after.bob.find(c=>c.s==='live'&&c.a==='1');
   if(!spent||!keep1||!keep05||!change||!got||after.bob.length!==1)note(lang+' send result '+JSON.stringify(after));
   if(Math.abs(after.uxAh-idle.uxAh)>1||Math.abs(after.amtTop-idle.amtTop)>1)note(lang+' 1-4 layout shift '+JSON.stringify({a:idle.uxAh,b:after.uxAh,c:idle.amtTop,d:after.amtTop}));
+  if(after.alice.map(c=>c.a+c.s).join(',')!=='2.5spent,1.5live,1live,0.5live')note(lang+' coin order '+after.alice.map(c=>c.a+c.s).join(','));
   if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/おつりとしてアリスへ/.test(after.tx)))note('ja strip '+after.tx);
   if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/back to Alice as change/i.test(after.tx)))note('en strip '+after.tx);
   if(after.term)note(lang+' utxo box still in the result');
@@ -221,9 +226,12 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const ovM=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   if(ovM>1)note(lang+' myth open overflow');
   await p.locator('#djPow button[data-m="2"]').click();
-  const adj1=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,g:document.getElementById('djGo').disabled}));
+  const adj1=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,g:document.getElementById('djGo').disabled,adj:document.getElementById('djAdj').textContent}));
   if(lang==='ja'&&(!/約5分/.test(adj1.i)||adj1.g))note('ja adj pow2 '+JSON.stringify(adj1));
   if(lang==='en'&&(!/5 min/.test(adj1.i)||adj1.g))note('en adj pow2 '+JSON.stringify(adj1));
+  if(!/2016/.test(adj1.adj))note(lang+' adj 2016 line '+adj1.adj);
+  if(lang==='ja'&&!/あと \d+ ブロック/.test(adj1.adj))note('ja adj left '+adj1.adj);
+  if(lang==='en'&&!/blocks to go/.test(adj1.adj))note('en adj left '+adj1.adj);
   await p.click('#djGo');
   const adj2=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,d:document.getElementById('djDiff').textContent}));
   if(lang==='ja'&&(!/約10分/.test(adj2.i)||!/×2/.test(adj2.d)))note('ja adj after '+JSON.stringify(adj2));
