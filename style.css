@@ -1227,3 +1227,52 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .tFoot #tDouble[hidden]{display:none}
 .tFoot #tDouble:disabled{opacity:.45;cursor:not-allowed}
 .tx2[data-st=a] .tMid,.tx2[data-st=b] .tMid{opacity:.5}
+/* z83: keep the floating next button off the 1-3 send / double-spend controls */
+.tFoot #tSend,.tFoot #tDouble,.tFoot #tAmtC,.tFoot #tAmtC button,#uxGo,#uxMsg,#uxTerm,#uxAmt button,.lump,.quiz{scroll-margin-top:88px;scroll-margin-bottom:calc(104px + env(safe-area-inset-bottom))}
+.tFoot #tDouble{max-width:100%;width:100%;white-space:normal;text-wrap:balance;line-height:1.35}
+/* z83: 1-4 coin lumps */
+.ux{margin:12px 0 0}
+.uxPs{display:grid;gap:14px}
+.uxNm{display:block;font-size:1rem;line-height:1.4;margin:0 0 6px}
+.uxCs{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;min-height:64px}
+.uxEmpty{flex:1 1 100%;min-height:64px;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--mut);font-weight:700;font-size:1rem;padding:8px 12px;background:var(--soft)}
+.lump{display:flex;flex:0 0 auto;flex-direction:row;align-items:center;gap:8px;width:calc(46% - 4px);min-width:0;max-width:100%;min-height:64px;margin:0;padding:8px 10px;border-radius:12px;border:1.5px solid transparent;background:var(--accent);color:var(--onb,#fff);box-shadow:var(--bsh);text-align:left;line-height:1.25}
+.lump.v1{width:calc(42% - 4px)}.lump.v2{width:calc(44% - 4px)}.lump.v3{width:calc(56% - 4px)}
+.lumpIc{width:36px;height:24px;flex:none;display:block}
+.lumpIc rect{fill:currentColor}
+.lumpTx{display:flex;flex-flow:row wrap;align-items:center;gap:2px 6px;min-width:0}
+.lumpTx b{font-size:1.45rem;line-height:1;font-variant-numeric:tabular-nums}
+.lumpTx i{font-style:normal;font-size:1rem;font-weight:700}
+.lumpTag{display:inline-block;flex-basis:100%;width:max-content;max-width:100%;margin:0;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--card) 92%,transparent);color:var(--ink);font-style:normal;font-size:1rem;font-weight:700;line-height:1.45;white-space:nowrap}
+.lump.on{box-shadow:var(--bsh),0 0 0 3px var(--card),0 0 0 6px var(--accent)}
+.lump.fresh .lumpTag{background:var(--okbg);color:var(--ok)}
+.lump.spent{background:transparent;color:var(--mut);box-shadow:none;border:1.5px dashed var(--mut)}
+.lump.spent .lumpIc{opacity:.45}
+.lump.spent .lumpTag{background:var(--ngbg);color:var(--ng)}
+.lump.spent.on{outline:3px solid var(--ng);outline-offset:2px}
+.uxFoot{display:grid;gap:10px;margin-top:14px}
+.uxAmt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.uxAmt span{grid-column:1/-1;font-size:1rem;font-weight:800;line-height:1.4}
+.uxAmt button{min-height:46px;margin:0;padding:8px 6px;font-size:1rem;font-weight:800;border-radius:10px;white-space:nowrap}
+.uxAmt button.on,.uxAmt button.on:is(:hover,:active,:focus-visible){background:var(--btn);color:var(--onb,#fff)}
+#uxGo{min-height:50px;width:100%;margin:0;padding:10px 16px;font-size:1.05rem;font-weight:800;border-radius:10px;white-space:normal;text-wrap:balance;line-height:1.35}
+#uxGo:disabled{opacity:.45}
+#uxTerm,#uxMsg{display:none;margin:0;font-size:1rem;line-height:1.6;font-weight:700}
+#uxTerm.on{display:block;padding:10px 12px;border-radius:12px;background:var(--soft);color:var(--ink);font-weight:500}
+#uxMsg.hold{display:block;padding:10px 12px;border-radius:10px}
+#uxMsg.ok{background:var(--okbg);color:var(--ok)}
+#uxMsg.ng{background:var(--ngbg);color:var(--ng)}
+@media(min-width:720px){.uxPs{grid-template-columns:1fr 1fr;align-items:start}}
+@media(hover:hover){
+.uxAmt button:not(.on):not(:disabled):hover{background:var(--soft);color:var(--ink)}
+.lump:not(.spent):not(:disabled):hover{background:var(--btnh)}
+.lump.spent:hover{background:transparent;color:var(--mut)}
+}
+/* z83: 2-3 difficulty stays near 10 minutes */
+#dAdj .mstats{grid-template-columns:1fr 1fr}
+#dAdj .mstats small,#dAdj .mstats b{font-size:1rem;line-height:1.35}
+#dAdj .mstats b{font-family:inherit;font-weight:800}
+#dRule{margin:8px 0 0;font-size:1rem;line-height:1.6}
+#dNote{display:none;margin:8px 0 0;font-size:1rem;line-height:1.6;color:var(--ink)}
+#dNote.hold{display:block}
+@media(prefers-reduced-motion:reduce){.lump{transition:none}}
