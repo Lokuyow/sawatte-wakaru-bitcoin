@@ -94,6 +94,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const rej=await p.textContent('#uxMsg');
   if(lang==='ja'&&!/二度使えません/.test(rej))note('ja reject '+rej);
   if(lang==='en'&&!/cannot be used twice/i.test(rej))note('en reject '+rej);
+  if(await p.locator('.ch[data-t="かたまり"] .quiz').count()!==1)note(lang+' 1-4 quiz count');
   const q=p.locator('.ch[data-t="かたまり"] .quiz').first();
   await q.locator('button').nth(0).click();
   const qst=await q.evaluate(el=>({
@@ -142,8 +143,36 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   await p.click('#dMyth summary');
   const ovM=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   if(ovM>1)note(lang+' myth open overflow');
+  const mineQs=p.locator('.ch[data-t="マイニング"] .quiz');
+  if(await mineQs.count()!==1)note(lang+' 2-3 quiz count '+await mineQs.count());
+  const mq=await mineQs.innerText();
+  if(lang==='ja'&&(!/1問クイズ/.test(mq)||!/およそ10分/.test(mq)||/3→4/.test(mq)))note('ja 2-3 quiz '+mq.slice(0,100));
+  if(lang==='en'&&(!/10 minutes/.test(mq)||/from 3 to 4/i.test(mq)))note('en 2-3 quiz '+mq.slice(0,120));
+  await mineQs.locator('button').nth(1).click();
+  const mqst=await mineQs.evaluate(el=>({
+    done:el.dataset.done,
+    dis:[...el.querySelectorAll('.opts button')].every(b=>b.disabled),
+    right:[...el.querySelectorAll('.opts button')].findIndex(b=>b.classList.contains('right')),
+    wrong:!!el.querySelector('.opts button.wrong'),
+    ans:el.querySelector('.ans').hidden?'':el.querySelector('.ans').textContent
+  }));
+  if(mqst.done!=='1'||!mqst.dis||mqst.right!==0||!mqst.wrong||!mqst.ans)note(lang+' 2-3 answer '+JSON.stringify(mqst));
+  await mineQs.locator('button').nth(0).evaluate(b=>b.click());
+  const mstill=await mineQs.evaluate(el=>el.dataset.done==='1'&&el.querySelectorAll('.opts button.right').length===1&&[...el.querySelectorAll('.opts button')].every(b=>b.disabled));
+  if(!mstill)note(lang+' 2-3 quiz retap');
+  const order=await p.evaluate(()=>{
+    const s=document.querySelector('.ch[data-t="マイニング"]');
+    const ids=[...s.children].map(e=>e.id||(e.classList.contains('quiz')?'quiz':''));
+    return {quiz:ids.indexOf('quiz'),m:ids.indexOf('mMyth'),d:ids.indexOf('dMyth'),last:s.lastElementChild.id,q:ids.filter(x=>x==='quiz').length};
+  });
+  if(order.q!==1||order.last!=='dMyth'||!(order.quiz<order.m&&order.m<order.d))note(lang+' 2-3 order '+JSON.stringify(order));
   await go('ブロックが届く');
   const sp=await p.locator('.ch[data-t="ブロックが届く"]').innerText();
+  const bq=p.locator('.ch[data-t="ブロックが届く"] .quiz');
+  if(await bq.count()!==1)note(lang+' 2-4 quiz count '+await bq.count());
+  const bt=await bq.innerText();
+  if(lang==='ja'&&(!/1問クイズ/.test(bt)||!/枝分かれ/.test(bt)||/ノードはどうする/.test(bt)))note('ja 2-4 quiz '+bt.slice(0,100));
+  if(lang==='en'&&(!/fork/i.test(bt)||/what does a node do/i.test(bt)))note('en 2-4 quiz '+bt.slice(0,120));
   if(lang==='ja'&&(!/フォーク/.test(sp)||!/マイニング/.test(sp)))note('ja 2-4 '+sp.slice(0,120));
   if(lang==='en'&&(!/fork/i.test(sp)||!/Mining/.test(sp)))note('en 2-4 missing fork/mining');
   if(/2,016|2016/.test(sp))note(lang+' 2-4 repeats 2016 mechanism');
