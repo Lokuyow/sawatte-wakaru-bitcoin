@@ -163,6 +163,9 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const footOrder=await p.evaluate(()=>{const f=document.getElementById('uxFoot');return [...f.children].map(e=>e.id).filter(Boolean)});
   const mi=footOrder.indexOf('uxMsg'),xi=footOrder.indexOf('uxTx');
   if(!(xi>=0&&mi>xi)||footOrder.includes('uxTerm'))note(lang+' result order '+footOrder.join(','));
+  const noteT=await p.locator('.ch[data-t="かたまり"] .note').textContent().catch(()=>'');
+  if(lang==='ja'&&!/実際のビットコイン/.test(noteT))note('ja btc bridge missing');
+  if(lang==='en'&&!/Real Bitcoin/.test(noteT))note('en btc bridge missing');
   await p.locator('#uxA .tama[data-state="spent"]').click();
   await p.evaluate(()=>document.getElementById('uxGo').click());
   await p.waitForSelector('#uxMsg.ng');
