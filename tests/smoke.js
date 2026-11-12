@@ -169,7 +169,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   await jsClick('#uxGo');
   await p.waitForSelector('#uxMsg.ng',{timeout:TIMEOUT});
   const rej=await p.textContent('#uxMsg');
-  if(lang==='ja'&&(!/この2\.5コイン玉は使い済み/.test(rej)||!/二重払いなので、送れません/.test(rej)))note('ja reject '+rej);
+  if(lang==='ja'&&(!/この2\.5コイン玉は使用済み/.test(rej)||!/二重払いなので、送れません/.test(rej)))note('ja reject '+rej);
   if(lang==='en'&&(!/2\.5-coin piece/.test(rej)||!/already spent/i.test(rej)||!/double spend/i.test(rej)||!/cannot be sent/i.test(rej)))note('en reject '+rej);
   await p.locator('#uxA .tama[data-amt="1"][data-state="live"]').click();
   await p.locator('#uxAmt button[data-u="1"]').click();
