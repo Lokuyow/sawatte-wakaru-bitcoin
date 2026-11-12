@@ -17,20 +17,40 @@ async function boot(w,h,lang,theme){
   await p.click('#start');
   return {p,c,errs};
 }
-async function walk(p){
-  const n=await p.locator('.ch').count();const ov=[];
+async function halvingWords(p){
+  return p.evaluate(()=>{
+    const bad=[];
+    const w=document.createTreeWalker(document.body,4);
+    let n;while(n=w.nextNode()){
+      const pe=n.parentElement;
+      if(pe&&pe.closest('script,style'))continue;
+      if((n.nodeValue||'').includes('半減期'))bad.push((n.nodeValue||'').trim().slice(0,90));
+    }
+    for(const e of document.querySelectorAll('*')){
+      if(!e.getAttribute)continue;
+      for(const a of ['aria-label','title','alt','placeholder']){
+        const v=e.getAttribute(a);
+        if(v&&v.includes('半減期'))bad.push('@'+a+':'+v.slice(0,90));
+      }
+    }
+    return bad;
+  });
+}
+async function walk(p,lang){
+  const n=await p.locator('.ch').count();const ov=[];const words=[];
   for(let i=0;i<n;i++){
     await p.evaluate(i=>{document.querySelectorAll('#prog span')[i].click()},i);
     await p.waitForTimeout(40);
     const o=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
     if(o>1)ov.push(i+':'+await p.evaluate(()=>document.querySelector('.ch.on').dataset.t));
+    if(lang==='ja')words.push(...await halvingWords(p));
   }
-  return {n,ov};
+  return {n,ov,words:[...new Set(words)]};
 }
 // layout + translation sweep
 for(const [w,h,lang,theme] of [[375,812,'ja','light'],[375,812,'en','light'],[1280,900,'ja','light'],[375,812,'ja','dark'],[1280,900,'en','dark']]){
   const {p,c,errs}=await boot(w,h,lang,theme);
-  const {n,ov}=await walk(p);
+  const {n,ov,words}=await walk(p,lang);
   const stage1=await p.evaluate(()=>document.querySelectorAll('.ch[data-p="1"]').length);
   const title=await p.evaluate(()=>{const s=[...document.querySelectorAll('.ch')].find(c=>c.dataset.t==='かたまり');return s.querySelector('h2').textContent});
   const miss=lang==='en'?await p.evaluate(()=>[...window.__miss]):[];
@@ -40,6 +60,7 @@ for(const [w,h,lang,theme] of [[375,812,'ja','light'],[375,812,'en','light'],[12
   if(ov.length)note(w+' '+h+' '+lang+' '+theme+' overflow '+ov.join(','));
   if(errs.length)note(w+lang+theme+' errors '+errs.join('|'));
   if(miss.length)note(w+lang+' miss '+JSON.stringify(miss.slice(0,12)));
+  if(words&&words.length)note(w+lang+' visible 半減期 '+JSON.stringify(words.slice(0,8)));
   console.log('walk',w,h,lang,theme,'pages',n,'stage1',stage1,'ov',ov.length,'err',errs.length,'miss',miss.length);
   await c.close();
 }
@@ -126,6 +147,19 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='ja'&&(!/フォーク/.test(sp)||!/マイニング/.test(sp)))note('ja 2-4 '+sp.slice(0,120));
   if(lang==='en'&&(!/fork/i.test(sp)||!/Mining/.test(sp)))note('en 2-4 missing fork/mining');
   if(/2,016|2016/.test(sp))note(lang+' 2-4 repeats 2016 mechanism');
+  if(lang==='ja'){
+    await go('報酬半減');
+    const intro=await p.locator('.ch[data-t="報酬半減"]').innerText();
+    if(!intro.includes('報酬半減')||!intro.includes('ハービング（halving）')||intro.includes('半減期'))note('3-2 wording');
+    await p.click('#hPlay');
+    await p.waitForFunction(()=>[...document.querySelectorAll('#hCurve text')].some(t=>/報酬半減/.test(t.textContent)),{timeout:15000});
+    const left=await halvingWords(p);
+    if(left.length)note('after chart 半減期 '+JSON.stringify(left.slice(0,6)));
+  }else{
+    await go('報酬半減');
+    const intro=await p.locator('.ch[data-t="報酬半減"]').innerText();
+    if(!/halving/i.test(intro)||intro.includes('半減期'))note('en 3-2 '+intro.slice(0,100));
+  }
   const miss=lang==='en'?await p.evaluate(()=>[...window.__miss]):[];
   if(miss.length)note(lang+' h'+h+' miss '+JSON.stringify(miss.slice(0,15)));
   if(errs.length)note(lang+' h'+h+' errors '+errs.join('|'));

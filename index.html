@@ -1,6 +1,6 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>さわってわかるビットコイン</title>
-<meta name="description" content="ハッシュ、マイニング、署名、二重払い、半減期。ビットコインのしくみを4つのステージと3つのゲームで、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
+<meta name="description" content="ハッシュ、マイニング、署名、二重払い、報酬半減。ビットコインのしくみを4つのステージと3つのゲームで、さわりながら学べる初心者向けサイト。本物のビットコインは使いません。">
 <meta name="theme-color" content="#E07800">
 <meta property="og:type" content="website"><meta property="og:title" content="さわってわかるビットコイン"><meta property="og:description" content="ビットコインのしくみを4つのステージと3つのゲームでさわって学ぼう。すべてブラウザの中のシミュレーションです。">
 <meta property="og:url" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/"><meta property="og:image" content="https://lokuyow.github.io/sawatte-wakaru-bitcoin/og-image-v9.png?v=20261028c"><meta property="og:image:type" content="image/png">
@@ -61,8 +61,8 @@
 <div class="uxFoot">
 <div class="uxAmt" id="uxAmt" role="group"></div>
 <button type="button" id="uxGo"></button>
-<p id="uxTerm" class="uxTerm"></p>
 <p id="uxMsg" class="uxMsg" role="status"></p>
+<p id="uxTerm" class="uxTerm"></p>
 </div>
 </div>
 </section>
@@ -86,7 +86,7 @@
 <details class="more myth" id="dMyth"><summary>🤔 よくある誤解: 計算機が強くなると掘りつくされ、いなくなると止まる?</summary>
 <p>いいえ。計算する人の数（計算力）が変わっても、ブロックがおよそ10分に1個になるようむずかしさを上下させます。このしくみを難易度調整と呼びます。調整は2,016ブロックごとで、それまでは速さが一時的に前後します。</p>
 <p><b>思い込み: すごい計算機が出ると、残りのコインがすぐ掘りつくされる。</b></p>
-<p>計算力が跳ね上がると、次の調整まではブロックが早く見つかることがあります。それでも残りのコインが一気に掘りつくされるわけではありません。調整のあと、間隔はおよそ10分に戻ります。2100万枚の上限は時間との競争ではなく、ブロックの番号が進むと報酬が半分になるしくみ（半減期）で決まります。</p>
+<p>計算力が跳ね上がると、次の調整まではブロックが早く見つかることがあります。それでも残りのコインが一気に掘りつくされるわけではありません。調整のあと、間隔はおよそ10分に戻ります。2100万枚の上限は時間との競争ではなく、ブロックの番号が進むと報酬が半分になるしくみで決まります。</p>
 <p><b>思い込み: 採掘する人がいなくなると、ブロックが見つからず動きが止まる。</b></p>
 <p>計算力が落ちると、次の調整まではブロックが遅くなります。チェーンは止まりません。調整のあと、残った人でもおよそ10分に1個が目標です。</p>
 <div class="mcols"><div class="can"><b>⭕ ほんとう</b><ul><li>計算力が増えても、むずかしさが上がり、発行のペースはだいたい同じ</li><li>計算力が減っても、むずかしさが下がり、残った人で掘り続けられる</li><li>次の調整までは、一時的に速くなったり遅くなったりする</li></ul></div><div class="cant"><b>❌ 誤解</b><ul><li>すごい計算機で、残りのコインがすぐ掘りつくされる</li><li>採掘する人が減ると、ビットコインの動きが止まる</li></ul></div></div>
@@ -121,11 +121,13 @@
 
 <div id="fPool" class="pool"></div><div id="fRes" class="res"></div>
 </section>
-<section class="ch" data-t="半減期" data-p="3"><h2><em>3-2</em>半減期と2100万枚の上限</h2>
-<p>報酬は最初50BTC。21万ブロックごとに半分になり、合計は2100万BTC手前で止まります。</p><div class="words"><dl class="terms"><div><dt>BTC</dt><dd>ビットコインの単位。</dd></div><div><dt>報酬</dt><dd>ブロックを追加した人がもらう新しいコイン。</dd></div><div><dt>ブロック高さ</dt><dd>最初のブロックから数えて何番目のブロックか。</dd></div></dl></div>
+<section class="ch" data-t="報酬半減" data-p="3"><h2><em>3-2</em>報酬半減と2100万枚の上限</h2>
+<p>報酬は最初50BTC。21万ブロックごとに半分になり、合計は2100万BTC手前で止まります。</p>
+<p>この、報酬が半分になることをハービング（halving）と呼びます。</p><div class="words"><dl class="terms"><div><dt>BTC</dt><dd>ビットコインの単位。</dd></div><div><dt>報酬</dt><dd>ブロックを追加した人がもらう新しいコイン。</dd></div><div><dt>ブロック高さ</dt><dd>最初のブロックから数えて何番目のブロックか。</dd></div></dl></div>
 <label>ブロック高さ: <b id="hH">0</b><span id="hY">(<b>2009年ごろ</b>)</span><input type="range" id="hgt" min="0" max="7000000" step="10000" value="0"></label>
-<p>1ブロックの報酬: <b id="hR"></b> BTC(半減 <b id="hN"></b> 回)</p>
-<p>ここまでの発行量: <b id="hS"></b> BTC</p><svg id="hCurve" class="curve" viewBox="0 0 320 150" role="img" aria-label="発行量のグラフ"></svg><div class="crow"><button id="hPlay" class="ghost">▶ 再生</button></div><p class="cap">21万ブロックはおよそ4年。2024年の半減期で報酬は3.125BTCになりました。</p>
+<p>1ブロックの報酬: <b id="hR"></b> BTC</p>
+<p id="hTimes"></p>
+<p>ここまでの発行量: <b id="hS"></b> BTC</p><svg id="hCurve" class="curve" viewBox="0 0 320 150" role="img" aria-label="発行量のグラフ"></svg><div class="crow"><button id="hPlay" class="ghost">▶ 再生</button></div><p class="cap">21万ブロックはおよそ4年。2024年の報酬半減で報酬は3.125BTCになりました。</p>
 <details class="more" id="hMyth"><summary>🤔 よくある誤解: 報酬がなくなったらビットコインは終わる?</summary><p>いいえ。マイナーの収入は「新しいコインの報酬」と「送金の手数料」の2つです。</p><label>時代: <b id="hmE">2009年ごろ</b><input type="range" id="hmS" min="0" max="4" value="0"></label><div class="inc"><div id="hmR" class="inc-r">報酬</div><div id="hmF" class="inc-f">手数料</div></div><p class="cap">割合はイメージです(実際の手数料は時期によって大きく変わります)。</p><div class="mcols"><div class="can"><b>⭕ ほんとう</b><ul><li>報酬は約4年ごとに半分になる</li><li>使う人が増えると、手数料の合計は増えやすい</li></ul></div><div class="cant"><b>❌ 誤解</b><ul><li>報酬がゼロになるとマイナーはタダ働き</li><li>2140年ごろにビットコインが止まる</li></ul></div></div></details></section>
 
 <section class="ch" data-t="ライトニング" data-p="3"><h2><em>3-3</em>ライトニング: ブロックの外で払う</h2>
@@ -178,7 +180,7 @@
 <section class="ch" data-t="全体の流れ" data-p="5"><h2><em>4</em>総まとめ: 支払いの流れ</h2><p>全部の章は、1回の支払いでつながっています。▶で順番に見てみよう。</p><div class="flowbox"><ol class="flow rail" id="flow"><li data-g="鍵の強さ"><span class="fi">🎲</span><div><b>秘密鍵を作る</b><p>256ビットのランダムな数。これがあなただけの鍵です。</p><a href="#" class="more">詳しくは「鍵の強さ」</a></div></li><li data-g="署名"><span class="fi">🔑</span><div><b>ボブのアドレス</b><p>ボブが自分の鍵から公開鍵→アドレスを作り、アリスに教えます。</p><a href="#" class="more">詳しくは「署名」</a></div></li><li data-g="台帳"><span class="fi">📝</span><div><b>取引を書く</b><p>「ボブのアドレスへ 0.01 BTC」という支払いを書きます。</p><a href="#" class="more">詳しくは「台帳」</a></div></li><li data-g="署名"><span class="fi">✍️</span><div><b>署名で証明</b><p>アリスの秘密鍵で署名。本人が送ったと誰でも確認できます。</p><a href="#" class="more">詳しくは「署名」</a></div></li><li data-g="台帳"><span class="fi">📡</span><div><b>ネットワークに送る</b><p>世界中のノードが、選んだコインのかたまりがまだ使われていないか、署名が正しいかをチェックして広めます。</p><a href="#" class="more">詳しくは「台帳」</a></div></li><li data-g="手数料"><span class="fi">⏳</span><div><b>メンプールで待つ</b><p>ブロックに入るのを待つ場所。手数料率(サイズあたりの手数料)が高い取引から選ばれます。</p><a href="#" class="more">詳しくは「手数料」</a></div></li><li data-g="マイニング"><span class="fi">⛏️</span><div><b>マイナーが採掘</b><p>マイナーが取引をブロックに入れ、当たりのナンスを探します。むずかしさは、およそ10分に1個になるよう調整されます。</p><a href="#" class="more">詳しくは「マイニング」</a></div></li><li data-g="チェーン"><span class="fi">🔗</span><div><b>チェーンにつながる</b><p>ブロックは前の指紋を引きつぐので、書きかえるとすぐバレます。</p><a href="#" class="more">詳しくは「チェーン」</a></div></li><li data-g="51%攻撃"><span class="fi">🎉</span><div><b>ボブに届く</b><p>取引の入ったブロックから数えて積まれた数が「承認」。6つで取り消しはほぼ不可能。</p><a href="#" class="more">詳しくはゲーム「51%攻撃」</a></div></li></ol></div><div class="stage" id="fStage" aria-hidden="true"></div><div class="fbar"><div id="fBar"></div></div><div class="fcap" id="fCap" aria-live="polite"><b id="fTitle">▶ 再生を押すと、最初から順番に進みます</b><p id="fDesc"></p><a href="#" class="more" id="fMore" hidden></a></div><div class="fctl"><button id="fPrev" class="ghost">← 前へ</button><button id="fPlay">▶ 再生</button><button id="fNext" class="ghost">次へ →</button></div><div class="fopt"><button id="fReset" class="ghost sm">最初から</button></div></section>
 <section class="ch" data-t="まとめ" data-p="5"><div class="trophy">🏆</div><h2 class="c">全部クリア!おつかれさまでした</h2><p>これで、こんなことが説明できるようになりました:</p><ul class="done">
 <li>ハッシュは改ざんがすぐバレる「指紋」</li><li>ブロックはハッシュで鎖のようにつながっている</li><li>マイニングは当たりのナンス探し。むずかしさはおよそ10分に1ブロックになるよう調整される。だから記録の書きかえはとても大変</li><li>掘ったブロックは、ノードが一つずつチェックして、それぞれのチェーンにつなぐ。間隔がおよそ10分なのは、届く時間を確保するため</li>
-<li>署名で、本人が出した取引だとみんなが確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく。コインは残高の数字ではなくかたまり（UTXO）で、一度使うと消え、余りは新しいおつりになる</li><li>手数料率(サイズあたりの手数料)が高い取引から先にブロックに入る</li><li>発行は半減期をくり返して2100万BTC未満で打ち止め</li><li>ライトニングなら、ブロックの外で一瞬で払える</li><li>計算力が半分未満だと、承認が増えるほど過去の取引を取り消せる確率はどんどん小さくなる</li></ul>
+<li>署名で、本人が出した取引だとみんなが確認できる</li><li>秘密鍵はただの乱数でも、数が多すぎて当てられない</li><li>みんなの台帳が二重払いをはじく。コインは残高の数字ではなくかたまり（UTXO）で、一度使うと消え、余りは新しいおつりになる</li><li>手数料率(サイズあたりの手数料)が高い取引から先にブロックに入る</li><li>発行は報酬半減をくり返して2100万BTC未満で打ち止め</li><li>ライトニングなら、ブロックの外で一瞬で払える</li><li>計算力が半分未満だと、承認が増えるほど過去の取引を取り消せる確率はどんどん小さくなる</li></ul>
 <div class="tipw"><div class="tip" style="display:inline-block;text-align:center"><p style="margin:0 0 12px">いいなと思ったら応援しよう！</p><a class="tipb" href="https://satssupport.app/t/XIEDpefYfUUw" target="_blank" rel="noopener noreferrer">ビットコインで応援する</a></div></div><div class="share"><div class="shrow"><a id="share" class="btn x" target="_blank" rel="noopener">𝕏 でシェアする</a><button id="share2" class="ghost"><svg viewBox="0 0 24 24" aria-hidden="true" class="shi"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span>共有</span></button></div><button id="again" class="ghost">最初からもう一回</button></div><p class="credit"><span>つくった人</span> <a href="https://lokuyow.github.io/" target="_blank" rel="noopener">ロクヨウ</a><i aria-hidden="true">·</i><a href="https://github.com/Lokuyow/sawatte-wakaru-bitcoin" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>ソースコード</span></a></p></section>
 </main>
 <footer><button id="prev" class="ghost">← もどる</button><span id="pos"></span><button id="next">つぎへ →</button></footer></div>

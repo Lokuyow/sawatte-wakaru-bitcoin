@@ -73,7 +73,15 @@ shots.push(path.join(OUT,'23-myth-open-full-375-ja-light.png'));
 await go(p,'ブロックが届く');
 await frame(p,'.ch[data-t="ブロックが届く"] h2');
 await shot(p,'24-why-375-ja-light');
+await go(p,'報酬半減');
+await frame(p,'.ch[data-t="報酬半減"] h2');
+await shot(p,'32-halving-intro-375-ja-light');
 await c.close();
+{const en=await boot(375,812,'en','light');
+await go(en.p,'報酬半減');
+await frame(en.p,'.ch[data-t="報酬半減"] h2');
+await shot(en.p,'32-halving-intro-375-en-light');
+await en.c.close();}
 await b.close();
 console.log('VISUAL OK',shots.length);
 })().catch(e=>{console.error(e);process.exit(1)});
