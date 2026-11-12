@@ -96,8 +96,9 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(idle.msg!=='none'||idle.tx!==true||idle.term)note(lang+' 1-4 idle gap '+JSON.stringify(idle));
   if(idle.alice.join(',')!=='2.5live,1live,0.5live'||idle.bob!==0||idle.letters)note(lang+' start coins '+JSON.stringify(idle));
   if(!idle.glossBefore||!/UTXO/.test(idle.gloss)||!/Unspent Transaction Output/.test(idle.gloss))note(lang+' glossary '+idle.gloss);
-  if(lang==='ja'&&!/まだ使われていないコイン/.test(idle.gloss))note('ja glossary '+idle.gloss);
-  if(idle.amtOn.join(',')!=='1'||idle.amtSame)note(lang+' amount highlight '+JSON.stringify(idle.amtOn)+' same '+idle.amtSame);
+  if(lang==='ja'&&(!/まだ使われていないコイン/.test(idle.gloss)||!/同じコイン玉を2回使おうとするズル/.test(idle.gloss)))note('ja glossary '+idle.gloss);
+  if(lang==='en'&&!/Trying to use the same coin piece twice/.test(idle.gloss))note('en glossary '+idle.gloss);
+  if(idle.amtOn.length||idle.amtSame)note(lang+' amount highlight '+JSON.stringify(idle.amtOn)+' same '+idle.amtSame);
   await p.locator('#uxA .tama[data-amt="2.5"]').click();
   await p.locator('#uxAmt button[data-u="3"]').click();
   const picked=await p.evaluate(()=>{
@@ -139,8 +140,8 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   await p.click('#uxGo');
   await p.waitForSelector('#uxMsg.ng');
   const rej=await p.textContent('#uxMsg');
-  if(lang==='ja'&&(!/この2\.5コイン玉は使い済み/.test(rej)||!/二度使えません/.test(rej)))note('ja reject '+rej);
-  if(lang==='en'&&(!/2\.5-coin piece/.test(rej)||!/already spent/i.test(rej)||!/cannot be used twice/i.test(rej)))note('en reject '+rej);
+  if(lang==='ja'&&(!/この2\.5コイン玉は使い済み/.test(rej)||!/二重払いなので、送れません/.test(rej)))note('ja reject '+rej);
+  if(lang==='en'&&(!/2\.5-coin piece/.test(rej)||!/already spent/i.test(rej)||!/double spend/i.test(rej)||!/cannot be sent/i.test(rej)))note('en reject '+rej);
   await p.locator('#uxA .tama[data-amt="1"][data-state="live"]').click();
   await p.locator('#uxAmt button[data-u="1"]').click();
   await p.click('#uxGo');
@@ -175,17 +176,24 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     return {on:on.length,same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0])))};
   });
   if(amt13.on!==1||amt13.same)note(lang+' 1-3 amount highlight '+JSON.stringify(amt13));
-  const hidden=await p.locator('#tDouble').isHidden();
-  if(!hidden)note(lang+' tDouble visible while idle');
+  const sec13=await p.locator('.ch[data-t="台帳"]').innerText();
+  if(/二重払い|double spend/i.test(sec13))note(lang+' 1-3 still teaches double spend');
+  if(lang==='ja'&&(!/持っていないコインを送ろうとすると、はじかれます/.test(sec13)||/使ったコイン/.test(sec13)))note('ja 1-3 intro');
+  if(lang==='en'&&!/coins you don’t have is rejected/i.test(sec13))note('en 1-3 intro');
+  if(await p.locator('#tDouble').count())note(lang+' tDouble still in the page');
+  const mythThen=await p.evaluate(()=>{const s=document.querySelector('.ch[data-t="台帳"]'),m=s.querySelector('#lMyth'),q=s.querySelector('.quiz');return !!(m&&q&&(m.compareDocumentPosition(q)&4))});
+  if(!mythThen)note(lang+' 1-3 myth not above quiz');
+  const q13=p.locator('.ch[data-t="台帳"] .quiz');
+  if(await q13.count()!==1)note(lang+' 1-3 quiz count');
+  const q13t=await q13.innerText();
+  if(lang==='ja'&&!/世界のノードの台帳はどうなる/.test(q13t))note('ja 1-3 quiz '+q13t.slice(0,80));
+  if(lang==='en'&&!/ledgers on nodes around the world/i.test(q13t))note('en 1-3 quiz '+q13t.slice(0,80));
   await p.locator('#tL button.p').nth(3).click();
   await p.locator('#tR button.p').nth(1).click();
   await p.evaluate(()=>document.getElementById('tSend').click());
-  await p.waitForSelector('#tDouble:not([hidden])');
+  await p.waitForSelector('#log li.ok');
   await p.waitForTimeout(250);
-  const db=await box(p,'#tDouble'),nx=await box(p,'#next'),ft=await box(p,'#app footer');
-  if(hit(db,nx)||hit(db,ft))note(lang+' h'+h+' 1-3 overlap dbl '+JSON.stringify(db)+' next '+JSON.stringify(nx)+' foot '+JSON.stringify(ft));
-  const clip=await p.evaluate(()=>{const e=document.getElementById('tDouble');return e.scrollWidth>e.clientWidth+2});
-  if(clip)note(lang+' tDouble text clipped');
+  if(/二重払い|double spend/i.test(await p.locator('.ch[data-t="台帳"]').innerText()))note(lang+' 1-3 double spend after send');
   // 2-3 prose stays, the adjustment widget is gone, myth is short
   await go('マイニング');
   if(await p.locator('#dAdj,#dHr,#dNote,#dRule').count())note(lang+' 2-3 widget still present');
@@ -220,9 +228,9 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const order=await p.evaluate(()=>{
     const s=document.querySelector('.ch[data-t="マイニング"]');
     const ids=[...s.children].map(e=>e.id||(e.classList.contains('quiz')?'quiz':''));
-    return {quiz:ids.indexOf('quiz'),m:ids.indexOf('mMyth'),d:ids.indexOf('dMyth'),last:s.lastElementChild.id,q:ids.filter(x=>x==='quiz').length};
+    return {quiz:ids.indexOf('quiz'),m:ids.indexOf('mMyth'),d:ids.indexOf('dMyth'),last:s.lastElementChild.classList.contains('quiz'),q:ids.filter(x=>x==='quiz').length};
   });
-  if(order.q!==1||order.last!=='dMyth'||!(order.quiz<order.m&&order.m<order.d))note(lang+' 2-3 order '+JSON.stringify(order));
+  if(order.q!==1||!order.last||!(order.m<order.d&&order.d<order.quiz))note(lang+' 2-3 order '+JSON.stringify(order));
   await go('ブロックが届く');
   const sp=await p.locator('.ch[data-t="ブロックが届く"]').innerText();
   const bq=p.locator('.ch[data-t="ブロックが届く"] .quiz');

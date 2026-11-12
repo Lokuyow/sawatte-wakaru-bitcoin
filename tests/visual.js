@@ -33,7 +33,10 @@ for(const [w,h,lang,theme,tag] of [[375,812,'ja','light','375-ja-light'],[375,81
     await frame(p,'#uxAmt');
     await shot(p,'14-amt-15-'+tag);
     await p.locator('#uxAmt button[data-u="2"]').click();
-  }else await p.locator('#uxA .tama[data-amt="2.5"]').click();
+  }else{
+    await p.locator('#uxA .tama[data-amt="2.5"]').click();
+    await p.locator('#uxAmt button[data-u="2"]').click();
+  }
   await frame(p,'#uxA');
   await shot(p,'14-select-'+tag);
   await p.click('#uxGo');
@@ -53,17 +56,20 @@ for(const [w,h,lang,theme,tag] of [[375,812,'ja','light','375-ja-light'],[375,81
   await frame(p,'.ch[data-t="かたまり"] .quiz .ans');
   await shot(p,'14-quiz-'+tag);
   await go(p,'台帳');
+  await frame(p,'.ch[data-t="台帳"] h2');
+  if(lang==='ja'&&w===375)await shot(p,'13-idle-'+tag);
   await p.locator('#tL button.p').nth(3).click();
   await p.locator('#tR button.p').nth(1).click();
   await p.evaluate(()=>document.getElementById('tSend').click());
-  await p.waitForSelector('#tDouble:not([hidden])');
+  await p.waitForSelector('#log li.ok');
   await p.waitForTimeout(200);
-  await p.evaluate(()=>document.getElementById('tDouble').scrollIntoView({block:'center',inline:'nearest'}));
-  await p.waitForTimeout(80);
-  const over=await p.evaluate(()=>{const a=document.getElementById('tDouble').getBoundingClientRect(),n=document.getElementById('next').getBoundingClientRect(),f=document.querySelector('#app footer').getBoundingClientRect();
-    const hit=(a,b)=>Math.min(a.right,b.right)-Math.max(a.left,b.left)>0.5&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>0.5;
-    return hit(a,n)||hit(a,f)});
-  if(over){await shot(p,'13-OVERLAP-'+tag);throw new Error('overlap '+tag)}
+  if(await p.locator('#tDouble').count())throw new Error('tDouble still present '+tag);
+  if(lang==='ja'&&w===375){
+    await frame(p,'#ldNet');
+    await shot(p,'13-sent-'+tag);
+    await frame(p,'.ch[data-t="台帳"] .quiz');
+    await shot(p,'13-quiz-'+tag);
+  }
   await shot(p,'13-next-'+tag);
   await c.close();
 }
@@ -71,6 +77,8 @@ const {p,c}=await boot(375,812,'ja','light');
 await go(p,'マイニング');
 await frame(p,'.ch[data-t="マイニング"] h2');
 await shot(p,'23-prose-375-ja-light');
+await frame(p,'#mMyth');
+await shot(p,'23-myths-then-quiz-375-ja-light');
 await frame(p,'.ch[data-t="マイニング"] .quiz');
 await shot(p,'23-quiz-375-ja-light');
 await frame(p,'#dMyth');
