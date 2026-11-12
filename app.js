@@ -25,7 +25,7 @@ const leaveH=[],enterH=[];const onLeave=f=>leaveH.push(f),onEnter=f=>enterH.push
 $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);$('again').onclick=()=>go(0);let SAVED;try{const ix=t=>chs.findIndex(c=>c.dataset.t==(t==='半減期'?'報酬半減':t==='まとめ'?'おわりに':t));let d=JSON.parse(localStorage.getItem('sw-btc2'));if(d){SAVED={cur:ix(d.cur),seen:(d.seen||[]).map(ix).filter(j=>j>=0)};if(d.games)gameBest=d.games}else{const o=JSON.parse(localStorage.getItem('sw-btc'));if(o){const U=['はじめに','ハッシュ','チェーン','マイニング','ブロックが届く','署名','鍵の強さ','台帳','手数料','半減期','ライトニング','ゲーム','ニセ取引','マイニング競争','51%攻撃','全体の流れ','まとめ'],T0=U.filter(x=>x!='ゲーム'),Q=[o.cur,...(o.seen||[])].some(j=>j==15)?U:T0,m=j=>ix(Q[j]);SAVED={cur:m(o.cur),seen:(o.seen||[]).map(m).filter(j=>j>=0)}}}if(SAVED&&!(SAVED.cur>=0))SAVED.cur=0}catch(e){SAVED=null}go(0);
 $('start').onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(0)};
 (()=>{const d=SAVED;if(!d||!(d.cur>0))return;const r=$('resume');r.hidden=false;r.textContent=L('▶ 続きから('+chs[d.cur].dataset.t+')','▶ Continue ('+(window.T?T(chs[d.cur].dataset.t):chs[d.cur].dataset.t)+')');(d.seen||[]).forEach(j=>seen.add(j));r.onclick=()=>{$('hero').hidden=true;$('app').hidden=false;go(d.cur)}})();
-(()=>{let n=0;const c=document.querySelector('.hero .coin');c.onclick=()=>{if(++n%5==0){c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');confetti()}}})();
+(()=>{let n=0;const c=document.querySelector('.hero .coin');c.onclick=()=>{if(++n%5==0){c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');confetti()}};c.onkeydown=e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();c.click()}}})();
 const U='https://lokuyow.github.io/sawatte-wakaru-bitcoin/';
 {const st=()=>L('「さわってわかるビットコイン」\n4つのステージと3つのゲームをぜんぶクリアしました！\nハッシュもマイニングも署名も、さわってみると意外とわかります ₿','“Touch & Learn Bitcoin”\nI finished all 4 stages and 3 games!\nHashing, mining and signatures make sense once you try them ₿')+'\n'+U;$('share').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(st());$('share2').onclick=()=>__share(st())};
 // quizzes (B-12: 定義と対象章を一体化。対象章が見つからないクイズはスキップし、全体の初期化は止めない)
@@ -508,7 +508,7 @@ const cap=$('fCap');cap.hidden=true;document.querySelector('.fctl').hidden=true;
 $('fdR').onclick=()=>{undone();set(0)};$('fdG').onclick=()=>{undone();go(chs.findIndex(c=>c.dataset.t=='ゲーム'))};$('fdN').onclick=()=>{undone();go(chs.findIndex(c=>c.dataset.t=='おわりに'))};
 window.confetti&&confetti();window.__bz&&__bz([30,60,30,60,120]);window.__bu&&__bu($('fB'),18);d.focus&&d.querySelector('h3').setAttribute('tabindex','-1');d.querySelector('h3').focus({preventScroll:true})};
 $('fNext').onclick=()=>{stop();if(k>=L2.length-1)return done();set(k+1)};$('fPrev').onclick=()=>{stop();set(Math.max(0,k-1))};$('fReset').onclick=()=>{stop();set(-1)};
-L2.forEach((l,i)=>{l.onclick=e=>{e.preventDefault();stop();set(i)}});set(-1)})();
+L2.forEach((l,i)=>{l.tabIndex=0;l.setAttribute('role','button');l.onclick=e=>{e.preventDefault();stop();set(i)};l.onkeydown=e=>{if(e.target!==l)return;if(e.key=='Enter'||e.key==' '){e.preventDefault();stop();set(i)}}});set(-1)})();
 
 // intro
 (()=>{const v=$('iView');if(!v)return;const T_=x=>window.T?window.T(x):x;
