@@ -1234,8 +1234,8 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .ux{margin:12px 0 0}
 .uxPs{display:grid;gap:14px}
 .uxNm{display:block;font-size:1rem;line-height:1.4;margin:0 0 6px}
-.uxCs{display:flex;flex-wrap:wrap;gap:14px 12px;align-items:flex-end;min-height:72px}
-.uxEmpty{flex:1 1 100%;min-height:72px;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--mut);font-weight:700;font-size:1rem;padding:8px 12px;background:var(--soft)}
+.uxCs{display:flex;flex-wrap:wrap;gap:14px 12px;align-items:flex-end;min-height:140px}
+.uxEmpty{flex:1 1 100%;min-height:72px;align-self:stretch;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--mut);font-weight:700;font-size:1rem;padding:8px 12px;background:var(--soft)}
 .tama{display:flex;flex:0 0 auto;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%;margin:0;padding:0;border:0;border-radius:0;background:transparent;color:var(--onb,#fff);box-shadow:none;line-height:1}
 .tama .disc{position:relative;width:calc(56px + var(--u) * 12px);height:calc(56px + var(--u) * 12px);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 30%,color-mix(in srgb,#fff 46%,var(--accent2)),var(--accent) 42%,color-mix(in srgb,#000 16%,var(--accent)));box-shadow:inset 0 0 0 3px color-mix(in srgb,#fff 32%,var(--accent)),inset 0 -7px 0 color-mix(in srgb,#000 20%,var(--accent)),0 3px 0 color-mix(in srgb,#000 16%,var(--line2))}
 .tama .mint{position:absolute;inset:0;width:100%;height:100%;color:color-mix(in srgb,#000 45%,var(--accent))}
@@ -1243,7 +1243,12 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .tama b{position:relative;z-index:1;font-size:1rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .tama[style*="--u:3"] b,.tama[style*="--u:4"] b,.tama[style*="--u:5"] b,.tama[style*="--u:6"] b{font-size:1.15rem}
 .tama .use{display:block;font-style:normal;font-size:1rem;font-weight:800;line-height:1.2;color:var(--ng)}
+.tama.on,.tama:hover{background:transparent}
 .tama.on .disc{box-shadow:inset 0 0 0 3px color-mix(in srgb,#fff 32%,var(--accent)),inset 0 -7px 0 color-mix(in srgb,#000 20%,var(--accent)),0 0 0 3px var(--card),0 0 0 6px var(--accent)}
+.uxCs.many .tama .disc{width:calc(40px + var(--u) * 8px);height:calc(40px + var(--u) * 8px)}
+#ux.fresh .tama:not(.spent) .disc{animation:uxPulse 1.8s ease-in-out infinite}
+@keyframes uxPulse{50%{filter:brightness(1.13)}}
+@media(prefers-reduced-motion:reduce){#ux.fresh .tama .disc{animation:none}}
 .tama.spent{opacity:.8}
 .tama.spent .disc{background:transparent;color:var(--mut);box-shadow:none;border:1.5px dashed var(--mut)}
 .tama.spent b{text-decoration:line-through}
@@ -1271,6 +1276,16 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 #uxMsg.hold{display:block;padding:10px 12px;border-radius:10px}
 #uxMsg.ok{background:var(--okbg);color:var(--ok)}
 #uxMsg.ng{background:var(--ngbg);color:var(--ng)}
+.aAdj{margin-top:10px}
+.aStats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 4px}
+.aStats>div{background:var(--soft);border-radius:12px;padding:8px 12px}
+.aStats small{display:block;color:var(--mut);font-size:.78rem;font-weight:700}
+.aStats b{font-size:1.3rem;font-weight:800}
+.aRow{display:flex;gap:4px;flex-wrap:wrap;min-height:16px;margin:8px 0 4px}
+.aRow i{width:16px;height:16px;border-radius:4px;background:var(--o);animation:in .3s}
+.aCnt{font-size:.85rem;color:var(--mut);font-weight:700;margin:2px 0 8px}
+#djGo{width:100%;margin:0}
+.aMsg{font-size:.92rem;font-weight:700;line-height:1.5;min-height:1.5em;margin:8px 0 0}
 @media(min-width:720px){.uxPs{grid-template-columns:1fr 1fr;align-items:start}}
 @media(hover:hover){
 .uxAmt button:not(.on):not(:disabled):hover{background:var(--soft);color:var(--ink)}

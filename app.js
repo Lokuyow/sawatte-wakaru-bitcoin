@@ -34,7 +34,7 @@ const Q=[['試してみよう: 「。」を1個足したら、ハッシュはど
 ['発行されるビットコインの合計は?',['無限に増える','ぴったり2100万BTC','2100万BTC少し手前で止まる'],2,'報酬が半分ずつになっていくので、合計は2100万BTCにじわじわ近づき、わずかに下回る約2099万9999.97BTCで止まります。']];
 Q.push(['秘密鍵が他人に当てられないいちばんの理由は?',['ひみつの計算式で作るから','組み合わせが数えきれないほど多いから','銀行が守っているから'],1,'秘密鍵はただのランダムな数。でも組み合わせが約10の77乗通りもあるので、総当たりでは当てられません。']);Q.push(['混んでいるとき、早くブロックに入れてもらうには?',['手数料を高くする','取引を何回も送る','金額を小さくする'],0,'マイナーはサイズあたりの手数料(手数料率)が高い取引から順にブロックに入れます。'],['ライトニングで100回払ったら、ブロックに記録されるのは?',['100回','開く・閉じるの2回だけ','0回'],1,'チャンネルの中の支払いはブロックの外。記録されるのは開くときと閉じるときだけです。']);const QI=['ハッシュ','チェーン','署名','台帳','報酬半減','鍵の強さ','手数料','ライトニング'].map(t=>chs.findIndex(c=>c.dataset.t==t));
 [[ 'かたまり',[L('2.5コイン玉から1だけ送ると、その玉はどうなる?','If you send 1 from a 2.5-coin piece, what happens to that piece?'),[L('1.5コイン玉に小さくなる','It shrinks into a 1.5-coin piece'),L('使い済みになり、おつりの1.5は新しいコイン玉になる','It is spent, and the 1.5 of change is a new coin'),L('1玉と0.5玉が1.5に合体する','The 1-coin and the 0.5-coin merge into 1.5')],1,L('玉は削れません。2.5コイン玉はまるごと使われ、ボブに新しい1コイン玉、アリスに新しい1.5コイン玉ができます。同じ額の玉が2枚あっても、それは2枚の別々の玉です。','A piece cannot be shaved down. The 2.5-coin piece is spent whole. Bob gets a new 1-coin piece, and Alice gets a new 1.5-coin piece. Two pieces with the same amount are still two separate coins.')]],
-['マイニング',[L('マイナーが急に増えたとき、ブロックの間隔をおよそ10分に保つには?','When the number of miners suddenly jumps, what keeps blocks about 10 minutes apart?'),[L('むずかしさを上げる','Difficulty goes up'),L('むずかしさを下げる','Difficulty goes down'),L('むずかしさは変えない','Difficulty stays the same')],0,L(`計算する人が増えると、調整しなければブロックは早く見つかります。むずかしさを上げて、目標のおよそ10分に戻します。調整は${(2016).toLocaleString(LOC)}ブロックごとです。目標どおりならおよそ2週間に1回で、そのあいだに計算力が変わると実際の日数は前後します。`,`More miners would find blocks faster if difficulty stayed put. Difficulty is raised so the target returns to about 10 minutes. The adjustment happens every ${(2016).toLocaleString(LOC)} blocks. If blocks stay on target that is about once every two weeks, and if hashrate changes during those blocks the actual number of days varies.`)]],
+['マイニング',[L('マイナーが急に増えたとき、ブロックの間隔をおよそ10分に保つには?','When the number of miners suddenly jumps, what keeps blocks about 10 minutes apart?'),[L('採掘難易度を上げる','Difficulty goes up'),L('採掘難易度を下げる','Difficulty goes down'),L('採掘難易度は変えない','Difficulty stays the same')],0,L(`計算する人が増えると、調整しなければブロックは早く見つかります。採掘難易度を上げて、目標のおよそ10分に戻します。調整は${(2016).toLocaleString(LOC)}ブロックごとです。目標どおりならおよそ2週間に1回で、そのあいだに計算力が変わると実際の日数は前後します。`,`More miners would find blocks faster if difficulty stayed put. Difficulty is raised so the target returns to about 10 minutes. The adjustment happens every ${(2016).toLocaleString(LOC)} blocks. If blocks stay on target that is about once every two weeks, and if hashrate changes during those blocks the actual number of days varies.`)]],
 ['ブロックが届く',[L('ブロックの間隔が数秒しかなかったら、何が増える?','If blocks came only seconds apart, what would increase?'),[L('届く前に次が見つかり、枝分かれが増える','The next block is often found before the last one arrives, so forks increase'),L('手数料だけが増える','Only fees increase'),L('2100万枚の上限が増える','The 21 million cap increases')],0,L('前のブロックが世界のノードに届く前に次が見つかると、チェーンが枝分かれ（フォーク）しやすくなります。およそ10分という間隔は、届く時間を確保するための目標です。その間隔を保つ調整は、2-3で見たとおりです。','If the next block is found before the previous one has reached nodes around the world, the chain forks more often. The roughly 10-minute gap is the target that leaves time for a block to arrive. How that gap is kept is the adjustment from 2-3.')]]
 ].forEach(([t,q])=>{Q.push(q);QI.push(chs.findIndex(c=>c.dataset.t==t))});
 Q.forEach(([q,o,k,e],i)=>{i=QI[i];const d=document.createElement('div');d.className='quiz';d.innerHTML=`<h3>💡 1問クイズ</h3><p>${q}</p><div class="opts">${o.map((x,j)=>`<button data-j="${j}">${x}</button>`).join('')}</div><div class="ans" hidden></div>`;chs[i].append(d);
@@ -93,7 +93,7 @@ $('cReset').onclick=async()=>{const g=++cgen;fixing=false;$('cFix').disabled=fal
 (async()=>{await seal();good=await hashes();chain(true)})();
 // 3 mining (small async batches so the UI stays responsive)
 const fmtT=s=>EN?(s<60?s.toFixed(1)+' s':s<3600?Math.floor(s/60)+' min '+Math.floor(s%60)+' s':(s/3600).toFixed(1)+' h'):s<60?s.toFixed(1)+'秒':s<3600?Math.floor(s/60)+'分'+Math.floor(s%60)+'秒':(s/3600).toFixed(1)+'時間';let mining=false,stopReq=false,rate=1e5;
-function dUp(){const n=+$('diff').value,e=16**n;$('dV').textContent=n;$('mExp').textContent=e.toLocaleString(LOC);const w=$('mWarn');w.textContent=n<5?'':L(`⏳ このむずかしさだと、この端末では平均${fmtT(e/rate)}くらいかかりそうです。途中でストップもできます。`,`⏳ At this difficulty, this device needs about ${fmtT(e/rate)} on average. You can stop anytime.`);if(n>=5)w.classList.add('hold')}
+function dUp(){const n=+$('diff').value,e=16**n;$('dV').textContent=n;$('mExp').textContent=e.toLocaleString(LOC);const w=$('mWarn');w.textContent=n<5?'':L(`⏳ この採掘難易度だと、この端末では平均${fmtT(e/rate)}くらいかかりそうです。途中でストップもできます。`,`⏳ At this difficulty, this device needs about ${fmtT(e/rate)} on average. You can stop anytime.`);if(n>=5)w.classList.add('hold')}
 $('diff').oninput=dUp;dUp();
 $('mStop').onclick=()=>stopReq=true;onLeave(()=>{if(mining)stopReq=true;if(+$('diff').value<5)$('mWarn').classList.remove('hold')});
 $('mGo').onclick=async()=>{if(mining)return;mining=true;stopReq=false;$('mGo').hidden=true;$('mStop').hidden=false;$('diff').disabled=true;$('mHash').className='hash';const n=+$('diff').value,z='0'.repeat(n);let nonce=0,h,found=false;const t0=performance.now();
@@ -181,7 +181,7 @@ async function ldSync(ok,ngMsg){
 rp();
 onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPins().forEach(p=>p.className='ldPin');ldPaint(bal);ldPrev={...bal};ldMsg('');ldHold(false)});
 (()=>{const root=$('ux');if(!root)return;
-let seq=3,sel=null,sendU=null,busy=false,lastTx=null;
+let seq=3,sel=null,picked=false,sendU=null,busy=false,lastTx=null;
 let coins=[{id:1,u:5,who:'アリス',state:'live'},{id:2,u:2,who:'アリス',state:'live'},{id:3,u:1,who:'アリス',state:'live'}];
 const face=u=>{const n=u/2;return n.toLocaleString(LOC,{maximumFractionDigits:1,minimumFractionDigits:Number.isInteger(n)?0:1})};
 const canon=u=>{const n=u/2;return Number.isInteger(n)?String(n):n.toFixed(1)};
@@ -192,7 +192,7 @@ const fit=()=>requestAnimationFrame(()=>{['uxMsg','uxTx','uxGo'].some(id=>{const
 function line(u,who,change){const nm=EN?pe(u):pj(u),pn=EN?we(who):wj(who),whoT=EN?(change?` (back to <span class="pn">${pn}</span> as change)`:` (<span class="pn">${pn}</span>)`):(change?`（おつりとして<span class="pn">${pn}</span>へ）`:`（<span class="pn">${pn}</span>）`);return `<span class="line"><span class="nm">${nm}</span><span class="who">${whoT}</span></span>`}
 function paintTx(){const box=$('uxTx');if(!lastTx){box.hidden=true;$('uxTxB').innerHTML='';return}box.hidden=false;const t=lastTx;let outs=line(t.give,t.to,false);if(t.change)outs+=line(t.change,t.from,true);$('uxTxB').innerHTML=`<span class="nm">${piece(t.spent)}</span><span class="uxArr" aria-hidden="true">→</span><div class="uxOut">${outs}</div>`}
 function paint(){
-  const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');
+  const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');el.classList.toggle('many',list.length>=4);
     el.innerHTML=list.length?list.map(c=>{const spent=c.state==='spent',label=spent?L(`${pj(c.u)}、使い済み`,`${pe(c.u)}, spent`):piece(c.u);return `<button type="button" class="tama${sel===c.id?' on':''}${spent?' spent':''}" style="--u:${c.u}" data-id="${c.id}" data-u="${c.u}" data-amt="${canon(c.u)}" data-state="${c.state}" data-who="${c.who}" aria-pressed="${sel===c.id}" aria-label="${label}"><span class="disc">${mint(c.id)}<b>${face(c.u)}</b></span>${spent?`<em class="use">${L('使い済み','Spent')}</em>`:''}</button>`}).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
   pile('アリス');pile('ボブ');
   const c=coins.find(x=>x.id===sel);
@@ -205,6 +205,9 @@ function paint(){
   else if(c.state==='spent'){go.disabled=busy;go.textContent=L('この玉をもう一度使う','Try this coin again')}
   else if(sendU==null){go.disabled=true;go.textContent=L('額を選ぶ','Pick an amount')}
   else{const to=c.who==='アリス'?'ボブ':'アリス';go.disabled=busy||sendU>c.u;go.textContent=L(`${wj(to)}へ ${face(sendU)} 送る`,`Send ${face(sendU)} to ${we(to)}`)}
+  const hint=$('uxHint');
+  if(hint)hint.textContent=!c?L('まず、送るコイン玉をタップ','First, tap a coin to send'):c.state==='spent'?L('使い済みの玉です。ボタンを押してみよう','This coin is spent — press the button to see'):sendU==null?L('次に、送る額を選んでください','Next, pick an amount'):L('あとはボタンを押して送るだけ','Now just press the button to send');
+  root.classList.toggle('fresh',!picked);
   paintTx();
 }
 function say(kind,text){const m=$('uxMsg');m.className='uxMsg hold '+kind;m.textContent=text}
@@ -226,9 +229,22 @@ function act(){
 }
 $('uxAmt').setAttribute('aria-label',L('送る額','Amount to send'));
 $('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled||busy)return;sendU=+b.dataset.u;paint()};
-$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b||busy)return;const id=+b.dataset.id;sel=sel===id?null:id;paint()};
+$('uxPs').onclick=e=>{const b=e.target.closest('.tama');if(!b||busy)return;const id=+b.dataset.id;sel=sel===id?null:id;picked=true;paint()};
 $('uxGo').onclick=act;paint();
 onEnter(()=>{if(chs[cur].dataset.t=='かたまり')fit()});
+})();
+(()=>{const box=$('aAdj');if(!box)return;const myth=$('dMyth'),sec=box.closest('section');
+let pow=1,diff=1,n=0,acc=0;
+const fmt=x=>{const v=Math.round(x*100)/100;return Number.isInteger(v)?String(v):String(v).replace(/0+$/,'').replace(/\.$/,'')};
+const iv=()=>10*diff/pow;
+box.innerHTML=`<div class="seg" id="djPow" role="group" aria-label="${L('計算力','Mining power')}">${[[0.5,L('半分','Half')],[1,L('今と同じ','Same as now')],[2,L('2倍','2×')],[4,L('4倍','4×')]].map(([m,t])=>`<button type="button" data-m="${m}" class="${m===1?'on':''}" aria-pressed="${m===1}">${t}</button>`).join('')}</div><div class="aStats"><div><small>${L('ブロック間隔','Block interval')}</small><b id="djInt"></b></div><div><small>${L('採掘難易度','Mining difficulty')}</small><b id="djDiff"></b></div></div><div class="aRow" id="djRow" aria-hidden="true"></div><p class="aCnt" id="djCnt"></p><button type="button" id="djGo"></button><p class="aMsg" id="djMsg" role="status"></p>`;
+const msg=t=>{$('djMsg').textContent=t};
+const cnt=()=>{$('djCnt').textContent=L(`掘れたブロック: ${n}`,`Blocks mined: ${n}`)};
+function paint(){$('djInt').textContent=L(`約${fmt(iv())}分`,`about ${fmt(iv())} min`);$('djDiff').textContent='×'+fmt(diff);cnt();const go=$('djGo');go.disabled=pow===diff;go.textContent=L('難易度調整まで早送り','Fast-forward to the difficulty adjustment')}
+box.querySelector('#djPow').onclick=e=>{const b=e.target.closest('button');if(!b)return;pow=+b.dataset.m;box.querySelectorAll('#djPow button').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});msg(pow===diff?L('計算力と採掘難易度がつり合っています。間隔は約10分です。','Mining power and difficulty are balanced — blocks come about every 10 minutes.'):L(`計算力が変わりました。難易度調整までは、間隔が約${fmt(iv())}分になります。`,`Mining power changed. Until the adjustment, blocks come about every ${fmt(iv())} minutes.`));paint()};
+box.querySelector('#djGo').onclick=()=>{diff=pow;msg(L(`難易度調整! 採掘難易度が ×${fmt(diff)} になりました。間隔は約10分にもどりました。`,`Difficulty adjustment! Mining difficulty is now ×${fmt(diff)}, and blocks are back to about every 10 minutes.`));paint()};
+setInterval(()=>{if(!myth.open||!sec.classList.contains('on'))return;acc+=100/(iv()*55);while(acc>=1){acc--;n++;const row=$('djRow');if(row.children.length>=28)row.innerHTML='';const i=document.createElement('i');row.appendChild(i);cnt()}},100);
+msg(L('計算力を変えてみてください。調整が入ると、間隔は約10分にもどります。','Try changing the mining power. After the adjustment, blocks are back to about every 10 minutes.'));paint();
 })();
 
 // 6 halving

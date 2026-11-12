@@ -73,6 +73,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const go=async t=>p.evaluate(t=>{const i=[...document.querySelectorAll('.ch')].findIndex(c=>c.dataset.t===t);document.querySelectorAll('#prog span')[i].click()},t);
   // 1-4 idle is compact, then send 1 from the 2.5-coin piece
   await go('かたまり');
+  await p.waitForTimeout(450);
   const idle=await p.evaluate(()=>{
     const sec=document.querySelector('.ch[data-t="かたまり"]');
     const words=sec.querySelector('.words'),ux=sec.querySelector('#ux');
@@ -81,6 +82,9 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     const on=btns.filter(b=>b.classList.contains('on'));
     const off=btns.filter(b=>!b.classList.contains('on'));
     return {
+      hint:(document.getElementById('uxHint')||{}).textContent||'',
+      uxAh:document.getElementById('uxA').getBoundingClientRect().height,
+      amtTop:document.getElementById('uxAmt').getBoundingClientRect().top+scrollY,
       msg:getComputedStyle(document.getElementById('uxMsg')).display,
       tx:document.getElementById('uxTx').hidden,
       term:!!document.getElementById('uxTerm'),
@@ -99,6 +103,8 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='ja'&&(!/まだ使われていないコイン/.test(idle.gloss)||!/同じコイン玉を2回使おうとするズル/.test(idle.gloss)))note('ja glossary '+idle.gloss);
   if(lang==='en'&&!/Trying to use the same coin piece twice/.test(idle.gloss))note('en glossary '+idle.gloss);
   if(idle.amtOn.length||idle.amtSame)note(lang+' amount highlight '+JSON.stringify(idle.amtOn)+' same '+idle.amtSame);
+  if(lang==='ja'&&!/コイン玉をタップ/.test(idle.hint))note('ja 1-4 hint idle '+idle.hint);
+  if(lang==='en'&&!/tap a coin/i.test(idle.hint))note('en 1-4 hint idle '+idle.hint);
   await p.locator('#uxA .tama[data-amt="2.5"]').click();
   await p.locator('#uxAmt button[data-u="3"]').click();
   const picked=await p.evaluate(()=>{
@@ -106,13 +112,18 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     const bg=b=>getComputedStyle(b).backgroundColor;
     const on=btns.filter(b=>b.classList.contains('on'));
     const off=btns.filter(b=>!b.classList.contains('on'));
-    return {on:on.map(b=>b.textContent.trim()),same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0]))),go:document.getElementById('uxGo').textContent};
+    return {on:on.map(b=>b.textContent.trim()),same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0]))),go:document.getElementById('uxGo').textContent,tamaBg:getComputedStyle(document.querySelector('.tama.on')).backgroundColor,hint:document.getElementById('uxHint').textContent};
   });
   if(picked.on.join(',')!=='1.5'||picked.same||!/1\.5/.test(picked.go))note(lang+' amount 1.5 '+JSON.stringify(picked));
+  if(picked.tamaBg!=='rgba(0, 0, 0, 0)')note(lang+' tama selected bg '+picked.tamaBg);
+  if(lang==='ja'&&!/ボタンを押して送るだけ/.test(picked.hint))note('ja 1-4 hint ready '+picked.hint);
+  if(lang==='en'&&!/press the button/i.test(picked.hint))note('en 1-4 hint ready '+picked.hint);
   await p.locator('#uxAmt button[data-u="2"]').click();
   await p.click('#uxGo');
   await p.waitForSelector('#uxMsg.ok');
   const after=await p.evaluate(()=>({
+    uxAh:document.getElementById('uxA').getBoundingClientRect().height,
+    amtTop:document.getElementById('uxAmt').getBoundingClientRect().top+scrollY,
     alice:[...document.querySelectorAll('#uxA .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     bob:[...document.querySelectorAll('#uxB .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     tx:document.getElementById('uxTx').innerText,
@@ -126,6 +137,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const change=after.alice.find(c=>c.s==='live'&&c.a==='1.5');
   const got=after.bob.find(c=>c.s==='live'&&c.a==='1');
   if(!spent||!keep1||!keep05||!change||!got||after.bob.length!==1)note(lang+' send result '+JSON.stringify(after));
+  if(Math.abs(after.uxAh-idle.uxAh)>1||Math.abs(after.amtTop-idle.amtTop)>1)note(lang+' 1-4 layout shift '+JSON.stringify({a:idle.uxAh,b:after.uxAh,c:idle.amtTop,d:after.amtTop}));
   if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/おつりとしてアリスへ/.test(after.tx)))note('ja strip '+after.tx);
   if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/back to Alice as change/i.test(after.tx)))note('en strip '+after.tx);
   if(after.term)note(lang+' utxo box still in the result');
@@ -208,6 +220,14 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   await p.click('#dMyth summary');
   const ovM=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   if(ovM>1)note(lang+' myth open overflow');
+  await p.locator('#djPow button[data-m="2"]').click();
+  const adj1=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,g:document.getElementById('djGo').disabled}));
+  if(lang==='ja'&&(!/約5分/.test(adj1.i)||adj1.g))note('ja adj pow2 '+JSON.stringify(adj1));
+  if(lang==='en'&&(!/5 min/.test(adj1.i)||adj1.g))note('en adj pow2 '+JSON.stringify(adj1));
+  await p.click('#djGo');
+  const adj2=await p.evaluate(()=>({i:document.getElementById('djInt').textContent,d:document.getElementById('djDiff').textContent}));
+  if(lang==='ja'&&(!/約10分/.test(adj2.i)||!/×2/.test(adj2.d)))note('ja adj after '+JSON.stringify(adj2));
+  if(lang==='en'&&(!/10 min/.test(adj2.i)||!/×2/.test(adj2.d)))note('en adj after '+JSON.stringify(adj2));
   const mineQs=p.locator('.ch[data-t="マイニング"] .quiz');
   if(await mineQs.count()!==1)note(lang+' 2-3 quiz count '+await mineQs.count());
   const mq=await mineQs.innerText();
