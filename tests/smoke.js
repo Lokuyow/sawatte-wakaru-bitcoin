@@ -133,6 +133,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
     alice:[...document.querySelectorAll('#uxA .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     bob:[...document.querySelectorAll('#uxB .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     tx:document.getElementById('uxTx').innerText,
+    hdrFs:parseFloat(getComputedStyle(document.querySelector('.uxTxH span')).fontSize),
     chg:[...document.querySelectorAll('#uxA .tama.chg')].map(e=>e.dataset.amt),
     panel:getComputedStyle(document.getElementById('uxA').parentElement).borderTopWidth,
     term:!!document.getElementById('uxTerm'),
@@ -148,6 +149,7 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(Math.abs(after.uxAh-idle.uxAh)>1||Math.abs(after.amtTop-idle.amtTop)>1)note(lang+' 1-4 layout shift '+JSON.stringify({a:idle.uxAh,b:after.uxAh,c:idle.amtTop,d:after.amtTop}));
   if(after.alice.map(c=>c.a+c.s).join(',')!=='2.5spent,1.5live,1live,0.5live')note(lang+' coin order '+after.alice.map(c=>c.a+c.s).join(','));
   if(after.chg.join(',')!=='1.5')note(lang+' change badge '+JSON.stringify(after.chg));
+  if(!(after.hdrFs<14))note(lang+' strip header not label-like '+after.hdrFs);
   if(after.panel!=='1px')note(lang+' pile panel '+after.panel);
   if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/おつりとしてアリスへ/.test(after.tx)))note('ja strip '+after.tx);
   if(lang==='ja'&&!/2\.5コイン玉\s*（アリス）/.test(after.tx))note('ja strip input owner '+after.tx);
@@ -173,6 +175,24 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   await p.waitForSelector('#uxMsg.ok');
   const twins=await p.locator('#uxA .tama[data-amt="0.5"][data-state="live"]').evaluateAll(els=>els.map(e=>e.dataset.id));
   if(twins.length!==2||twins[0]===twins[1])note(lang+' two 0.5 pieces '+twins.join(','));
+  await p.locator('#uxA .tama[data-amt="1.5"][data-state="live"]').click();
+  await p.locator('#uxB .tama[data-amt="1"]').click();
+  const gate=await p.evaluate(()=>({a:document.querySelectorAll('#uxA .tama.on').length,b:document.querySelectorAll('#uxB .tama.on').length}));
+  if(gate.a!==0||gate.b!==1)note(lang+' owner switch '+JSON.stringify(gate));
+  await p.locator('#uxB .tama[data-amt="1"]').click();
+  await p.locator('#uxA .tama[data-amt="1.5"][data-state="live"]').click();
+  await p.locator('#uxA .tama[data-amt="0.5"][data-state="live"]').first().click();
+  const amtBtns=await p.locator('#uxAmt button').evaluateAll(bs=>bs.map(b=>b.dataset.u));
+  if(!amtBtns.includes('4'))note(lang+' multi total steps '+amtBtns.join(','));
+  await p.locator('#uxAmt button[data-u="3"]').click();
+  await p.evaluate(()=>document.getElementById('uxGo').click());
+  await p.waitForSelector('#uxMsg.ok');
+  const multi=await p.evaluate(()=>({alice:[...document.querySelectorAll('#uxA .tama')].map(e=>e.dataset.amt+e.dataset.state),bob:[...document.querySelectorAll('#uxB .tama')].map(e=>e.dataset.amt+e.dataset.state),tx:document.getElementById('uxTx').innerText,chg:[...document.querySelectorAll('#uxA .tama.chg')].map(e=>e.dataset.amt),msg:document.getElementById('uxMsg').textContent}));
+  if(multi.alice.join(',')!=='2.5spent,1.5spent,1spent,0.5spent,0.5live,0.5live')note(lang+' multi alice '+multi.alice.join(','));
+  if(multi.bob.join(',')!=='1live,0.5live,1.5live')note(lang+' multi bob '+multi.bob.join(','));
+  if(multi.chg.join(',')!=='0.5')note(lang+' multi chg '+JSON.stringify(multi.chg));
+  if(lang==='ja'&&(!/1\.5コイン玉\s*（アリス）/.test(multi.tx)||!/0\.5コイン玉\s*（アリス）/.test(multi.tx)||!/まるごと使います/.test(multi.msg)))note('ja multi '+multi.tx+' | '+multi.msg);
+  if(lang==='en'&&(!/1\.5-coin piece\s*\(Alice\)/.test(multi.tx)||!/0\.5-coin piece\s*\(Alice\)/.test(multi.tx)||!/whole/.test(multi.msg)))note('en multi '+multi.tx+' | '+multi.msg);
   if(await p.locator('.ch[data-t="かたまり"] .quiz').count()!==1)note(lang+' 1-4 quiz count');
   const q=p.locator('.ch[data-t="かたまり"] .quiz').first();
   await q.locator('button').nth(0).click();
@@ -228,8 +248,8 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(lang==='en'&&(!/10 minutes/.test(mineBody)||!/2,016/.test(mineBody)||!/two weeks/.test(mineBody)))note('en 2-3 prose');
   if(await p.locator('#dMyth').evaluate(e=>e.open))note(lang+' myth starts open');
   const myth=await p.textContent('#dMyth');
-  if(lang==='ja'&&(!/難易度調整/.test(myth)||!/止まりません/.test(myth)||!/報酬半減/.test(myth)||/半減期/.test(myth)||/ほんとう/.test(myth)))note('ja myth '+myth.slice(0,120));
-  if(lang==='en'&&(!/10 minutes/.test(myth)||!/does not stop/i.test(myth)||!/21 million/.test(myth)||/半減期/.test(myth)))note('en myth '+myth.slice(0,140));
+  if(lang==='ja'&&(!/難易度調整/.test(myth)||!/採掘難易度/.test(myth)||/半減期/.test(myth)||/ほんとう/.test(myth)))note('ja myth '+myth.slice(0,120));
+  if(lang==='en'&&(!/10 minutes/.test(myth)||!/difficulty/i.test(myth)||/半減期/.test(myth)))note('en myth '+myth.slice(0,140));
   await p.click('#dMyth summary');
   const ovM=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   if(ovM>1)note(lang+' myth open overflow');
