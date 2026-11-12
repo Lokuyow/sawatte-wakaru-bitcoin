@@ -1,6 +1,7 @@
 # tests/ — 「さわってわかるビットコイン」テストスイート
 
 正規スイートは `smoke.js` / `visual.js` / `enscan.js` の3本と、共通ヘルパー `util.js` です。
+ほかに、ブラウザ不要の軽量チェック `i18n.js`（Node のみ）があります。
 対象コード（`app.js` / `style.css` / `en.js` / `index.html`）は変更しません。
 
 ## 前提
@@ -62,6 +63,14 @@ NODE_PATH=~/workspace/tools/pwtest/node_modules node tests/enscan.js
 ```
 
 所要時間の目安: 数分（ボタンの乱雑クリック走査を含むため最も時間がかかります）。
+
+### i18n.js — 英語訳の二重管理チェック
+
+`en.js` の辞書 D と `app.js` の `L('日本語','English')` を機械抽出し、同じ日本語キーに違う英訳が付いていないかを照合します（D-3 の再発防止）。文の部品（断片）や活用形として意図的に違うものは、テスト内の許可リスト `ALLOW` に理由つきで登録されています。許可リスト以外の食い違いがあると一覧を表示して終了コード 1 で終わります。サーバーも Playwright も不要です。
+
+```sh
+node tests/i18n.js
+```
 
 ### util.js — 共通ヘルパー
 
