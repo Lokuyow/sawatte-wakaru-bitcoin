@@ -1,6 +1,6 @@
 // Service Worker: さわってわかるビットコイン
 // リリースごとに CACHE の z 番号を上げること（index.html の ?v= の z 番号と揃える）。
-const CACHE = 'sawatte-z107';
+const CACHE = 'sawatte-z108';
 
 // コアファイルは install 時にプリキャッシュする（アセット本体は初回アクセス時に随時キャッシュ）。
 const CORE = [
