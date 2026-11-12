@@ -1237,14 +1237,12 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .uxCs{display:flex;flex-wrap:wrap;gap:14px 10px;align-items:flex-end;min-height:118px}
 .uxEmpty{flex:1 1 100%;min-height:72px;align-self:stretch;display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:12px;color:var(--mut);font-weight:700;font-size:1rem;padding:8px 12px;background:var(--soft)}
 .tama{position:relative;display:flex;flex:0 0 auto;flex-direction:column;align-items:center;gap:4px;width:max-content;max-width:100%;margin:0;padding:0;border:0;border-radius:0;background:transparent;color:var(--onb,#fff);box-shadow:none;line-height:1}
-.tama .disc{position:relative;width:calc(40px + var(--u) * 8px);height:calc(40px + var(--u) * 8px);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,#fff 60%,var(--accent2)),var(--accent2) 36%,var(--accent) 64%,color-mix(in srgb,#000 20%,var(--accent)));box-shadow:inset 0 0 0 2px color-mix(in srgb,#fff 40%,var(--accent)),inset 0 0 0 6px color-mix(in srgb,#000 12%,var(--accent)),inset 0 -8px 10px color-mix(in srgb,#000 20%,transparent),inset 0 8px 10px color-mix(in srgb,#fff 32%,transparent),0 3px 5px color-mix(in srgb,#000 24%,transparent)}
-.tama .mint{position:absolute;inset:0;width:100%;height:100%;color:color-mix(in srgb,#000 45%,var(--accent))}
-.tama .mint .dot{fill:currentColor}
-.tama b{position:relative;z-index:1;font-size:1rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;text-shadow:0 1px 0 color-mix(in srgb,#fff 42%,transparent),0 -1px 1px color-mix(in srgb,#000 26%,transparent)}
+.tama .disc{position:relative;width:calc(40px + var(--u) * 8px);height:calc(40px + var(--u) * 8px);border-radius:50%;display:grid;place-items:center;background:var(--accent2);box-shadow:inset 0 0 0 2px color-mix(in srgb,#000 16%,var(--accent)),0 2px 4px color-mix(in srgb,#000 16%,transparent);color:color-mix(in srgb,#000 58%,var(--accent))}
+.tama b{position:relative;z-index:1;font-size:1rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .tama[style*="--u:3"] b,.tama[style*="--u:4"] b,.tama[style*="--u:5"] b,.tama[style*="--u:6"] b{font-size:1.15rem}
 .tama .use{display:block;font-style:normal;font-size:1rem;font-weight:800;line-height:1.2;color:var(--ng)}
 .tama.on,.tama:hover{background:transparent}
-.tama.on .disc{box-shadow:inset 0 0 0 2px color-mix(in srgb,#fff 40%,var(--accent)),inset 0 0 0 6px color-mix(in srgb,#000 12%,var(--accent)),inset 0 -8px 10px color-mix(in srgb,#000 20%,transparent),inset 0 8px 10px color-mix(in srgb,#fff 32%,transparent),0 3px 5px color-mix(in srgb,#000 24%,transparent),0 0 0 3px var(--card),0 0 0 7px var(--ink)}
+.tama.on .disc{box-shadow:inset 0 0 0 2px color-mix(in srgb,#000 16%,var(--accent)),0 2px 4px color-mix(in srgb,#000 16%,transparent),0 0 0 3px var(--card),0 0 0 7px var(--ink)}
 .uxP{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px 12px 12px}
 .uxEmpty{border:0}
 .tama .chgB{position:absolute;top:-5px;right:-5px;width:22px;height:22px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;border:2px solid var(--card);z-index:2;box-shadow:0 1px 3px color-mix(in srgb,#000 25%,transparent)}
@@ -1259,7 +1257,6 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .tama.spent{opacity:.8}
 .tama.spent .disc{background:transparent;color:var(--mut);box-shadow:none;border:1.5px dashed var(--mut)}
 .tama.spent b{text-decoration:line-through}
-.tama.spent .mint{color:var(--mut)}
 .tama.spent.on .disc{outline:3px solid var(--ng);outline-offset:3px}
 .uxFoot{display:grid;gap:10px;margin-top:14px}
 .uxAmt{display:flex;flex-wrap:wrap;gap:8px}
