@@ -73,25 +73,51 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const go=async t=>p.evaluate(t=>{const i=[...document.querySelectorAll('.ch')].findIndex(c=>c.dataset.t===t);document.querySelectorAll('#prog span')[i].click()},t);
   // 1-4 idle is compact, then send 1 from the 2.5-coin piece
   await go('かたまり');
-  const idle=await p.evaluate(()=>({
-    msg:getComputedStyle(document.getElementById('uxMsg')).display,
-    term:getComputedStyle(document.getElementById('uxTerm')).display,
-    tx:document.getElementById('uxTx').hidden,
-    alice:[...document.querySelectorAll('#uxA .tama')].map(e=>e.dataset.amt+e.dataset.state),
-    bob:document.querySelectorAll('#uxB .tama').length,
-    letters:/コイン[A-Z]/.test(document.querySelector('.ch[data-t="かたまり"]').innerText)
-  }));
-  if(idle.msg!=='none'||idle.term!=='none'||idle.tx!==true)note(lang+' 1-4 idle gap '+JSON.stringify(idle));
+  const idle=await p.evaluate(()=>{
+    const sec=document.querySelector('.ch[data-t="かたまり"]');
+    const words=sec.querySelector('.words'),ux=sec.querySelector('#ux');
+    const btns=[...document.querySelectorAll('#uxAmt button')];
+    const bg=b=>getComputedStyle(b).backgroundColor;
+    const on=btns.filter(b=>b.classList.contains('on'));
+    const off=btns.filter(b=>!b.classList.contains('on'));
+    return {
+      msg:getComputedStyle(document.getElementById('uxMsg')).display,
+      tx:document.getElementById('uxTx').hidden,
+      term:!!document.getElementById('uxTerm'),
+      alice:[...document.querySelectorAll('#uxA .tama')].map(e=>e.dataset.amt+e.dataset.state),
+      bob:document.querySelectorAll('#uxB .tama').length,
+      letters:/コイン[A-Z]/.test(sec.innerText),
+      gloss:words?words.innerText:'',
+      glossBefore:!!(words&&ux&&(words.compareDocumentPosition(ux)&4)),
+      amtOn:on.map(b=>b.textContent.trim()),
+      amtSame:!!(on[0]&&off.some(b=>bg(b)===bg(on[0])))
+    };
+  });
+  if(idle.msg!=='none'||idle.tx!==true||idle.term)note(lang+' 1-4 idle gap '+JSON.stringify(idle));
   if(idle.alice.join(',')!=='2.5live,1live,0.5live'||idle.bob!==0||idle.letters)note(lang+' start coins '+JSON.stringify(idle));
+  if(!idle.glossBefore||!/UTXO/.test(idle.gloss)||!/Unspent Transaction Output/.test(idle.gloss))note(lang+' glossary '+idle.gloss);
+  if(lang==='ja'&&!/まだ使われていないコイン/.test(idle.gloss))note('ja glossary '+idle.gloss);
+  if(idle.amtOn.join(',')!=='1'||idle.amtSame)note(lang+' amount highlight '+JSON.stringify(idle.amtOn)+' same '+idle.amtSame);
   await p.locator('#uxA .tama[data-amt="2.5"]').click();
+  await p.locator('#uxAmt button[data-u="3"]').click();
+  const picked=await p.evaluate(()=>{
+    const btns=[...document.querySelectorAll('#uxAmt button')];
+    const bg=b=>getComputedStyle(b).backgroundColor;
+    const on=btns.filter(b=>b.classList.contains('on'));
+    const off=btns.filter(b=>!b.classList.contains('on'));
+    return {on:on.map(b=>b.textContent.trim()),same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0]))),go:document.getElementById('uxGo').textContent};
+  });
+  if(picked.on.join(',')!=='1.5'||picked.same||!/1\.5/.test(picked.go))note(lang+' amount 1.5 '+JSON.stringify(picked));
+  await p.locator('#uxAmt button[data-u="2"]').click();
   await p.click('#uxGo');
   await p.waitForSelector('#uxMsg.ok');
   const after=await p.evaluate(()=>({
     alice:[...document.querySelectorAll('#uxA .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     bob:[...document.querySelectorAll('#uxB .tama')].map(e=>({a:e.dataset.amt,s:e.dataset.state,id:e.dataset.id})),
     tx:document.getElementById('uxTx').innerText,
-    term:document.getElementById('uxTerm').textContent,
-    msg:document.getElementById('uxMsg').textContent
+    term:!!document.getElementById('uxTerm'),
+    msg:document.getElementById('uxMsg').textContent,
+    gloss:document.querySelector('.ch[data-t="かたまり"] .words').innerText
   }));
   const spent=after.alice.find(c=>c.s==='spent'&&c.a==='2.5');
   const keep1=after.alice.find(c=>c.s==='live'&&c.a==='1');
@@ -99,13 +125,16 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   const change=after.alice.find(c=>c.s==='live'&&c.a==='1.5');
   const got=after.bob.find(c=>c.s==='live'&&c.a==='1');
   if(!spent||!keep1||!keep05||!change||!got||after.bob.length!==1)note(lang+' send result '+JSON.stringify(after));
-  if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/お釣り/.test(after.tx)))note('ja strip '+after.tx);
-  if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/change/i.test(after.tx)))note('en strip '+after.tx);
-  if(!/UTXO/.test(after.term)||!/Unspent Transaction Output/.test(after.term))note(lang+' term '+after.term);
+  if(lang==='ja'&&(!/2\.5コイン玉/.test(after.tx)||!/1コイン玉/.test(after.tx)||!/1\.5コイン玉/.test(after.tx)||!/おつりとしてアリスへ/.test(after.tx)))note('ja strip '+after.tx);
+  if(lang==='en'&&(!/2\.5-coin piece/.test(after.tx)||!/1-coin piece/.test(after.tx)||!/1\.5-coin piece/.test(after.tx)||!/back to Alice as change/i.test(after.tx)))note('en strip '+after.tx);
+  if(after.term)note(lang+' utxo box still in the result');
+  if(!/UTXO/.test(after.gloss)||!/Unspent Transaction Output/.test(after.gloss))note(lang+' glossary after send '+after.gloss);
+  if(lang==='ja'&&(!/まるごと使います/.test(after.msg)||!/おつりとして新しいコイン玉/.test(after.msg)||!/戻ります/.test(after.msg)))note('ja result '+after.msg);
+  if(lang==='en'&&(!/whole/.test(after.msg)||!/leftover/i.test(after.msg)||!/as change/i.test(after.msg)))note('en result '+after.msg);
   if(/取引の出力|will be rejected|拒否されます/.test(after.msg))note(lang+' result previews rejection '+after.msg);
   const footOrder=await p.evaluate(()=>{const f=document.getElementById('uxFoot');return [...f.children].map(e=>e.id).filter(Boolean)});
-  const mi=footOrder.indexOf('uxMsg'),ti=footOrder.indexOf('uxTerm'),xi=footOrder.indexOf('uxTx');
-  if(!(xi<mi&&mi<ti))note(lang+' result order '+footOrder.join(','));
+  const mi=footOrder.indexOf('uxMsg'),xi=footOrder.indexOf('uxTx');
+  if(!(xi>=0&&mi>xi)||footOrder.includes('uxTerm'))note(lang+' result order '+footOrder.join(','));
   await p.locator('#uxA .tama[data-state="spent"]').click();
   await p.click('#uxGo');
   await p.waitForSelector('#uxMsg.ng');
@@ -134,10 +163,18 @@ for(const [h,lang] of [[812,'ja'],[667,'ja'],[812,'en'],[667,'en']]){
   if(!still)note(lang+' quiz retap');
   const uxOver=await p.evaluate(()=>{const foot=document.querySelector('#app footer').getBoundingClientRect();
     const over=sel=>{const e=document.querySelector(sel);if(!e||getComputedStyle(e).display==='none')return false;const r=e.getBoundingClientRect();const x=Math.min(r.right,foot.right)-Math.max(r.left,foot.left),y=Math.min(r.bottom,foot.bottom)-Math.max(r.top,foot.top);return x>0.5&&y>0.5};
-    return ['#uxGo','#uxMsg','#uxTerm'].filter(over)});
+    return ['#uxGo','#uxMsg','#uxTx'].filter(over)});
   if(uxOver.length)note(lang+' h'+h+' 1-4 footer overlap '+uxOver.join(','));
   // 1-3: Dave sends 1, then the double-spend control must clear つぎへ
   await go('台帳');
+  const amt13=await p.evaluate(()=>{
+    const btns=[...document.querySelectorAll('#tAmtC button')];
+    const bg=b=>getComputedStyle(b).backgroundColor;
+    const on=btns.filter(b=>b.classList.contains('on'));
+    const off=btns.filter(b=>!b.classList.contains('on'));
+    return {on:on.length,same:!!(on[0]&&off.some(b=>bg(b)===bg(on[0])))};
+  });
+  if(amt13.on!==1||amt13.same)note(lang+' 1-3 amount highlight '+JSON.stringify(amt13));
   const hidden=await p.locator('#tDouble').isHidden();
   if(!hidden)note(lang+' tDouble visible while idle');
   await p.locator('#tL button.p').nth(3).click();

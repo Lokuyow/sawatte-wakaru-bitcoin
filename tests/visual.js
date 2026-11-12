@@ -25,7 +25,15 @@ for(const [w,h,lang,theme,tag] of [[375,812,'ja','light','375-ja-light'],[375,81
   await go(p,'かたまり');
   await frame(p,'.ch[data-t="かたまり"] h2');
   await shot(p,'14-idle-'+tag);
-  await p.locator('#uxA .tama[data-amt="2.5"]').click();
+  if(lang==='ja'&&w===375){
+    await frame(p,'#uxAmt');
+    await shot(p,'14-amt-default-'+tag);
+    await p.locator('#uxA .tama[data-amt="2.5"]').click();
+    await p.locator('#uxAmt button[data-u="3"]').click();
+    await frame(p,'#uxAmt');
+    await shot(p,'14-amt-15-'+tag);
+    await p.locator('#uxAmt button[data-u="2"]').click();
+  }else await p.locator('#uxA .tama[data-amt="2.5"]').click();
   await frame(p,'#uxA');
   await shot(p,'14-select-'+tag);
   await p.click('#uxGo');

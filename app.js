@@ -184,16 +184,16 @@ const t3=setTimeout(()=>{tBusy=0;tF=-1;tT=-1;tA=1;$('tAmtC').querySelectorAll('b
 onLeave(()=>{ldG++;ldClr();const box=$('ldPkts');if(box)box.innerHTML='';tBusy=0;document.querySelectorAll('.tFly').forEach(e=>e.remove());ldNodes().forEach(n=>n.className='ldN');ldPins().forEach(p=>p.className='ldPin');ldPaint(bal);ldPrev={...bal};ldMsg('');ldHold(false);tDbl()});
 onEnter(()=>{if(chs[cur].dataset.t=='台帳'){const d=$('tDouble');if(d&&!d.hidden)requestAnimationFrame(()=>keepClear(d))}});
 (()=>{const root=$('ux');if(!root)return;
-let seq=3,sel=null,sendU=2,busy=false,told=false,lastTx=null;
+let seq=3,sel=null,sendU=2,busy=false,lastTx=null;
 let coins=[{id:1,u:5,who:'アリス',state:'live'},{id:2,u:2,who:'アリス',state:'live'},{id:3,u:1,who:'アリス',state:'live'}];
 const face=u=>{const n=u/2;return n.toLocaleString(LOC,{maximumFractionDigits:1,minimumFractionDigits:Number.isInteger(n)?0:1})};
 const canon=u=>{const n=u/2;return Number.isInteger(n)?String(n):n.toFixed(1)};
 const pj=u=>`${face(u)}コイン玉`,pe=u=>`${face(u)}-coin piece`,piece=u=>EN?pe(u):pj(u);
 const wj=w=>w,we=w=>w==='アリス'?'Alice':w==='ボブ'?'Bob':w;
 const mint=id=>{let s='';const n=(id%4)+2;for(let i=0;i<n;i++){const a=((id*53+i*70)%360)*Math.PI/180;s+=`<circle class="dot" cx="${(50+Math.cos(a)*30).toFixed(1)}" cy="${(50+Math.sin(a)*30).toFixed(1)}" r="3.2"/>`}return `<svg class="mint" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3" opacity=".45"/><circle cx="50" cy="50" r="36" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".6"/>${s}</svg>`};
-const fit=()=>requestAnimationFrame(()=>{['uxTerm','uxMsg','uxTx','uxGo'].some(id=>{const e=$(id);if(!e||e.hidden||!e.getClientRects().length)return false;const foot=document.querySelector('#app footer');if(!foot)return false;if(e.getBoundingClientRect().bottom>foot.getBoundingClientRect().top-12){keepClear(e);return true}return false})});
-function line(u,who,change){const nm=EN?pe(u):pj(u),whoT=EN?(change?` (${we(who)}, change)`:` (${we(who)})`):(change?`（${wj(who)}、お釣り）`:`（${wj(who)}）`);return `<span class="line"><span class="nm">${nm}</span><span class="who">${whoT}</span></span>`}
-function paintTx(){const box=$('uxTx');if(!lastTx){box.hidden=true;$('uxTxB').innerHTML='';return}box.hidden=false;const t=lastTx;let outs=line(t.give,t.to,false);if(t.change)outs+=line(t.change,t.from,true);$('uxTxB').innerHTML=`<span class="nm">${piece(t.spent)}</span><span class="uxArr" aria-hidden="true">→</span>${outs}`}
+const fit=()=>requestAnimationFrame(()=>{['uxMsg','uxTx','uxGo'].some(id=>{const e=$(id);if(!e||e.hidden||!e.getClientRects().length)return false;const foot=document.querySelector('#app footer');if(!foot)return false;if(e.getBoundingClientRect().bottom>foot.getBoundingClientRect().top-12){keepClear(e);return true}return false})});
+function line(u,who,change){const nm=EN?pe(u):pj(u),pn=EN?we(who):wj(who),whoT=EN?(change?` (back to <span class="pn">${pn}</span> as change)`:` (<span class="pn">${pn}</span>)`):(change?`（おつりとして<span class="pn">${pn}</span>へ）`:`（<span class="pn">${pn}</span>）`);return `<span class="line"><span class="nm">${nm}</span><span class="who">${whoT}</span></span>`}
+function paintTx(){const box=$('uxTx');if(!lastTx){box.hidden=true;$('uxTxB').innerHTML='';return}box.hidden=false;const t=lastTx;let outs=line(t.give,t.to,false);if(t.change)outs+=line(t.change,t.from,true);$('uxTxB').innerHTML=`<span class="nm">${piece(t.spent)}</span><span class="uxArr" aria-hidden="true">→</span><div class="uxOut">${outs}</div>`}
 function paint(){
   const pile=who=>{const list=coins.filter(c=>c.who===who),el=$(who==='アリス'?'uxA':'uxB');
     el.innerHTML=list.length?list.map(c=>{const spent=c.state==='spent',label=spent?L(`${pj(c.u)}、使い済み`,`${pe(c.u)}, spent`):piece(c.u);return `<button type="button" class="tama${sel===c.id?' on':''}${spent?' spent':''}" style="--u:${c.u}" data-id="${c.id}" data-u="${c.u}" data-amt="${canon(c.u)}" data-state="${c.state}" data-who="${c.who}" aria-pressed="${sel===c.id}" aria-label="${label}"><span class="disc">${mint(c.id)}<b>${face(c.u)}</b></span>${spent?`<em class="use">${L('使い済み','Spent')}</em>`:''}</button>`}).join(''):`<div class="uxEmpty">${L('まだありません','None yet')}</div>`};
@@ -210,7 +210,6 @@ function paint(){
   paintTx();
 }
 function say(kind,text){const m=$('uxMsg');m.className='uxMsg hold '+kind;m.textContent=text}
-function term(){if(told)return;told=true;const t=$('uxTerm');t.classList.add('on');t.textContent=L('取引で新しくできた、まだ使われていないコインを UTXO と呼びます（Unspent Transaction Output）。','A coin newly made by a transaction, and not yet spent, is called a UTXO (Unspent Transaction Output).')}
 function act(){
   const c=coins.find(x=>x.id===sel);if(!c||busy)return;
   if(c.state==='spent'){say('ng',L(`この${pj(c.u)}は使い済みです。同じ玉は二度使えません。`,`This ${pe(c.u)} is already spent. The same piece cannot be used twice.`));fit();return}
@@ -222,9 +221,9 @@ function act(){
   lastTx={spent:whole,from,to,give,change};
   sel=null;
   say('ok',change>0
-    ?L(`${pj(whole)}を使いました。${wj(to)}に${pj(give)}、${wj(from)}におつりの${pj(change)}ができました。`,`The ${pe(whole)} was used up. ${we(to)} got a new ${pe(give)}, and ${we(from)} got a new ${pe(change)} as change.`)
-    :L(`${pj(whole)}を使いました。${wj(to)}に新しい${pj(give)}ができました。`,`The ${pe(whole)} was used up. ${we(to)} got a new ${pe(give)}.`));
-  term();paint();fit();
+    ?L(`${pj(whole)}は、${face(give)}だけ送るときもまるごと使います。余った${face(change)}は、おつりとして新しいコイン玉になり、${wj(from)}のところに戻ります。`,`You spend the whole ${pe(whole)} even when you send only ${face(give)}. The leftover ${face(change)} comes back to ${we(from)} as a new coin, as change.`)
+    :L(`${pj(whole)}はまるごと使われ、${wj(to)}の新しいコイン玉になります。`,`The whole ${pe(whole)} is spent, and it becomes ${we(to)}’s new coin.`));
+  paint();fit();
 }
 $('uxAmt').setAttribute('aria-label',L('送る額','Amount to send'));
 $('uxAmt').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled||busy)return;sendU=+b.dataset.u;paint()};
