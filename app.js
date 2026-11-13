@@ -44,7 +44,7 @@ const QD=[
 ];
 QD.forEach(({t,q:[q,o,k,e]})=>{const i=chs.findIndex(c=>c.dataset.t==t);if(i<0){console.warn('quiz skipped (chapter not found):',t);return}
 try{const d=document.createElement('div');d.className='quiz';d.innerHTML=`<h3>💡 1問クイズ</h3><p>${q}</p><div class="opts">${o.map((x,j)=>`<button data-j="${j}">${x}</button>`).join('')}</div><div class="ans" hidden></div>`;chs[i].append(d);
-d.querySelectorAll('button').forEach(b=>b.onclick=()=>{if(d.dataset.done)return;d.dataset.done='1';const ok=+b.dataset.j==k;d.querySelectorAll('button').forEach(x=>{x.disabled=true;if(+x.dataset.j==k)x.classList.add('right')});if(!ok)b.classList.add('wrong','shake');else if(window.bStack&&!b.querySelector('.bst'))b.appendChild(bStack('mini'));const a=d.querySelector('.ans');a.hidden=false;a.textContent=(ok?L('⭕ せいかい! ','⭕ Correct! '):L('❌ ざんねん! ','❌ Wrong! '))+(window.T?T(e):e);requestAnimationFrame(()=>keepClear(a))})}catch(err){console.warn('quiz attach failed:',t,err)}});
+d.querySelectorAll('button').forEach(b=>b.onclick=()=>{if(d.dataset.done)return;d.dataset.done='1';const ok=+b.dataset.j==k;d.querySelectorAll('button').forEach(x=>{x.disabled=true;if(+x.dataset.j==k)x.classList.add('right')});if(!ok)b.classList.add('wrong','shake');else if(window.bStack&&!b.querySelector('.bst'))b.appendChild(bStack('mini'));const a=d.querySelector('.ans');a.hidden=false;a.innerHTML='<span class="wic" aria-hidden="true">'+(ok?'⭕':'❌')+'</span>';a.append(document.createTextNode((ok?L('せいかい! ','Correct! '):L('ざんねん! ','Wrong! '))+(window.T?T(e):e)));requestAnimationFrame(()=>keepClear(a))})}catch(err){console.warn('quiz attach failed:',t,err)}});
 // 1 hash
 (()=>{const R=$('brg');if(!R)return;const who=[L('アリス','Alice'),L('ボブ','Bob'),L('キャロル','Carol')],tx=a=>L(`アリス → ボブ ${a} BTC`,`Alice → Bob ${a} BTC`);
 R.innerHTML=`<div class="brL">${who.map((w,i)=>`<div class="brC" id="brC${i}"><small>${w}</small><span class="brT">${tx(1)}</span><code class="brF"></code></div>`).join('')}</div><button class="ghost" id="brB"></button><div class="brR" id="brR" aria-live="polite"></div>`;
@@ -154,15 +154,14 @@ const ldWait=ms=>new Promise(r=>{ldTm.push({t:setTimeout(r,rmNow()?0:ms),r})});
 const ldClr=()=>{ldTm.forEach(e=>{clearTimeout(e.t);e.r()});ldTm=[];tSendT.forEach(clearTimeout);tSendT=[]};
 const ldNodes=()=>[...document.querySelectorAll('#ldNs .ldN')];
 const ldPins=()=>[...document.querySelectorAll('#ldPins .ldPin')];
-const ldIni=n=>EN?{アリス:'A',ボブ:'B',キャロル:'C',デイブ:'D'}[n]:{アリス:'ア',ボブ:'ボ',キャロル:'キ',デイブ:'デ'}[n];
-const ldBook=(b,hi)=>ppl.map(([n])=>`<li data-n="${n}"${hi&&hi.has(n)?' class="hi"':''}><span class="ldPe" aria-hidden="true">${ldIni(n)}</span><span class="ldNm">${nm(n)}</span><b>${b[n]}</b></li>`).join('');
+const ldBook=(b,hi)=>ppl.map(([n])=>`<li data-n="${n}"${hi&&hi.has(n)?' class="hi"':''}><span class="ldNm">${nm(n)}</span><b>${b[n]}</b></li>`).join('');
 const ldPaint=(b,el,hi)=>{const list=el?[el]:ldNodes();list.forEach(n=>{const book=n.querySelector('.ldBook');if(book)book.innerHTML=ldBook(b,hi)})};
 const ldHold=on=>{const s=$('ldSt');if(s)s.classList.toggle('hold',!!on)};
 const ldMsg=(t,ok)=>{const s=$('ldSt');if(!s)return;s.classList.remove('ok','ng');if(!t){s.innerHTML='';return}let br=t;for(const k of (EN?['work, so','spent, so']:['ので、'])){const i=t.indexOf(k);if(i>=0){br=t.slice(0,i+k.length)+'<br class="ldBr"> '+t.slice(i+k.length).trim();break}}s.innerHTML=`<span class="ldSm"><i class="ldSi">${ok?'✓':'✕'}</i><span>${br}</span></span>`;s.classList.add(ok?'ok':'ng');ldHold(true)};
 (()=>{const pins=$('ldPins'),ns=$('ldNs');if(!pins||!ns)return;
 const POS=[[22,46],[40,26],[72,30],[58,72]];
 pins.innerHTML=POS.map(([x,y],i)=>`<span class="ldPin" style="left:${x}%;top:${y}%" data-i="${i}"><i class="ldPd">${ND()}</i><b>${'ABCD'[i]}</b></span>`).join('');
-ns.innerHTML=[0,1,2,3].map(i=>`<div class="ldN" data-i="${i}"><span class="ldHd">${ND()}<b>${L('ノード','Node')} ${'ABCD'[i]}</b><i class="ldMk" aria-hidden="true"></i></span><ul class="ldBook"></ul></div>`).join('');
+ns.innerHTML=[0,1,2,3].map(i=>`<div class="ldN" data-i="${i}"><span class="ldHd"><b>${L('ノード','Node')} ${'ABCD'[i]}</b><i class="ldMk" aria-hidden="true"></i></span><ul class="ldBook"></ul></div>`).join('');
 ldPaint(bal);
 const cap=$('ldCap');if(cap)cap.innerHTML=L('世界中のノードが、','Nodes worldwide each hold ')+'<br class="ldBr">'+L('同じ台帳のコピーを持っています','the same copy of the ledger');
 })();
@@ -317,7 +316,7 @@ function next(){if(chs[cur].dataset.t!='ニセ取引')return;if(k>=PER){lv++;ret
 const amt=lv>=2?`<div class="tx-c">${q.coins.map(c=>`<i class="cn big">${c}</i>`).join('')}</div>`:`<div class="tx-a"><span class="tc">🪙</span><span class="tq">× ${q.a}</span></div>`;
 $('gStage').innerHTML=`<div class="ghud"><span>${v.i} Lv${lv+1}</span><span>${k+1} / ${PER}</span><span id="gCombo" class="gcombo">${combo>1?'🔥'+combo:''}</span><span class="gpt">${score}<small>pt</small></span></div><div class="timer"><div id="gT"></div></div>
 <div class="tx2" id="gCard"><div class="tx-who">${E[q.f]} ${nm(q.f)} <span class="arr">→</span> ${E[q.to]} ${nm(q.to)}</div>${amt}<div class="tx-memo"><span class="tmi">📝</span><span>${q.memo}</span></div>${lv>=1?`<div class="tx-seal">${L('ハンコ','Seal')} <span class="hk">${q.seal}</span></div>`:''}<div id="gFx" class="gfx"></div></div>
-<div class="gbtn"><button id="gNo" class="no">❌ ${L('ニセモノ','Fake')}</button><button id="gYes" class="yes">⭕ ${L('OK','OK')}</button></div><div id="gMsg" class="gmsg"><span class="mut">${L('← → キーやスワイプでも答えられます','You can also use ← → keys or swipe')}</span></div>`;
+<div class="gbtn"><button id="gNo" class="no"><span class="wic" aria-hidden="true">❌</span>${L('ニセモノ','Fake')}</button><button id="gYes" class="yes"><span class="wic" aria-hidden="true">⭕</span>${L('OK','OK')}</button></div><div id="gMsg" class="gmsg"><span class="mut">${L('← → キーやスワイプでも答えられます','You can also use ← → keys or swipe')}</span></div>`;
 $('gYes').onclick=()=>ans(true);$('gNo').onclick=()=>ans(false);swipe($('gCard'));
 t=setInterval(()=>{tl-=.1;const g=$('gT');if(g)g.style.width=Math.max(0,tl/v.s*100)+'%';if(tl<=0)ans(null)},100)}
 function swipe(el){let x0=null;el.onpointerdown=e=>{x0=e.clientX;el.setPointerCapture(e.pointerId)};el.onpointermove=e=>{if(x0!=null&&!busy)el.style.transform=`translateX(${(e.clientX-x0)*.6}px) rotate(${(e.clientX-x0)/40}deg)`};

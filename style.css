@@ -228,7 +228,8 @@ nav .ph{all:unset;box-sizing:border-box;cursor:pointer}nav .ph:focus-visible,nav
 .hk{display:inline-grid;place-items:center;width:46px;height:46px;border:3px solid var(--ng);border-radius:50%;font-size:1.5rem;transform:rotate(-8deg)}.hk.mini{width:24px;height:24px;border-width:2px;font-size:.8rem}
 .ghud{display:flex;gap:10px;align-items:center;font-weight:700;font-size:.9rem}.ghud .gpt{margin-left:auto;font-family:var(--m);font-size:1.1rem}.gcombo{color:var(--o)}.gcombo.pop{animation:gpop .4s}
 @keyframes gpop{50%{transform:scale(1.5)}}
-.tx2{position:relative;border:2px solid var(--line);border-radius:var(--r);padding:16px;margin:10px 0;text-align:center;touch-action:pan-y;user-select:none;cursor:grab;transition:border-color .3s,background .3s,transform .2s}
+.tx2{position:relative;border:2px solid var(--line);border-radius:var(--r);padding:16px;margin:10px 0;text-align:center;touch-action:pan-y;user-select:none;transition:border-color .3s,background .3s,transform .2s}
+#gCard{cursor:grab}#gCard:active{cursor:grabbing}
 .tx2.pass{border-color:var(--okline);background:var(--okbg)}.tx2.shake{border-color:var(--ng)}
 .tx-who{font-weight:700;font-size:1.1rem}.tx-who .arr{color:var(--o)}.tx-a{font-size:2.2rem;font-weight:700;font-family:var(--m);color:var(--od);margin:6px 0}
 .tx-c{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}.tx-memo{color:var(--mut);font-size:.9rem}
@@ -1064,7 +1065,6 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .ldCards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0}
 .ldN{position:relative;display:flex;flex-direction:column;gap:0;padding:10px 12px 11px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;box-shadow:var(--bsh);color:var(--mut);min-width:0}
 .ldHd{display:flex;align-items:center;gap:8px;margin:0 0 8px;min-height:1.4em}
-.ldHd .nd{width:24px;height:20px;display:block;flex:none;color:var(--mut)}
 .ldHd b{flex:1;font-size:.95rem;font-weight:800;line-height:1.2;margin:0;color:var(--ink);white-space:nowrap}
 .ldMk{flex:none;width:1.15em;height:1.15em;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:1rem;line-height:1;visibility:hidden}
 .ldN.ok .ldMk,.ldN.ng .ldMk{visibility:visible}
@@ -1072,24 +1072,20 @@ input[type=range]::-moz-range-progress{background:var(--o)}
 .ldN.ng .ldMk::before{content:"✕";color:var(--ng)}
 .ldBook{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:3px;width:100%}
 .ldBook li{display:flex;align-items:center;gap:6px;font-size:1rem;font-weight:700;line-height:1.45;font-variant-numeric:tabular-nums;color:var(--ink);padding:2px 0;border-radius:6px;min-height:1.45em}
-.ldPe{flex:none;display:grid;place-items:center;width:1.4em;height:1.4em;border-radius:50%;background:var(--soft);border:1.5px solid var(--line2);font-size:.72rem;font-weight:800;line-height:1;color:var(--ink)}
 .ldNm{flex:1;min-width:0;font-weight:700;white-space:nowrap}
 .ldBook b{flex:none;min-width:1.1em;text-align:right;font-weight:800}
 .ldBook li.hi{background:color-mix(in srgb,var(--ok) 20%,var(--card));animation:ldHi .75s ease}
 @keyframes ldHi{0%{background:color-mix(in srgb,var(--o) 42%,var(--card))}100%{background:color-mix(in srgb,var(--ok) 20%,var(--card))}}
 .ldN.chk{border-color:var(--o);box-shadow:0 0 0 3px var(--glow,color-mix(in srgb,var(--accent) 22%,transparent))}
-.ldN.chk .ldHd .nd{color:var(--o)}
 .ldN.ok{border-color:var(--ok)}
-.ldN.ok .ldHd .nd{color:var(--ok)}
 .ldN.ng{border-color:var(--ng);background:var(--ngbg)}
-.ldN.ng .ldHd .nd{color:var(--ng)}
 .ldN.sync{box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 28%,transparent)}
 .ldSt{min-height:0;margin:0;padding:0;display:none;text-align:center;font-size:.95rem;font-weight:800;line-height:1.45}
 .ldSt.hold{display:flex;align-items:center;justify-content:center;min-height:2.8em;margin:10px 0 0;padding:8px 12px;border-radius:10px;visibility:visible}
 .ldSt.hold:empty{visibility:hidden}
 .ldSt.ok{background:var(--okbg);color:var(--ok)}
 .ldSt.ng{background:var(--ngbg);color:var(--ng)}
-.ldSt .ldSm{display:inline-flex;align-items:baseline;gap:.35em;max-width:100%;text-align:left;line-height:1.45}
+.ldSt .ldSm{display:inline-flex;align-items:baseline;gap:.45em;max-width:100%;text-align:left;line-height:1.45}
 .ldSt .ldSi{flex:none;font-style:normal}
 @media(min-width:720px){
   .ldWorld{max-width:520px;aspect-ratio:320/180}
