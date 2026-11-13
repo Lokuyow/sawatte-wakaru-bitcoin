@@ -290,6 +290,7 @@ details.more>.cap{margin:6px 14px 10px}
 main{box-sizing:border-box}
 .ch>.cap,.ch .cap{font-size:.78rem;color:var(--mut);margin:6px 0 14px;line-height:1.6}
 .wic{display:inline-block;margin-right:.45em}
+.quiz .ans .wic{vertical-align:-.45em}
 .ecap{margin:0;padding:10px 12px;font-weight:700;font-size:.88rem;color:var(--od);background:var(--soft);border-top:1px solid var(--line);text-align:center}
 @media(min-width:1024px){.chain2 .blk{display:block}}
 @media(min-width:1200px){.chain2 .blk{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,200px)}}
