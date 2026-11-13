@@ -288,6 +288,7 @@ details.more>.cap{margin:6px 14px 10px}
 @media(max-width:420px){.sec3{grid-template-columns:1fr;gap:4px}.sec3 i{text-align:center;transform:rotate(90deg)}.sec3 div{display:flex;align-items:center;gap:10px;text-align:left;padding:8px 12px}.sec3 span{font-size:1.3rem}}
 main{box-sizing:border-box}
 .ch>.cap,.ch .cap{font-size:.78rem;color:var(--mut);margin:6px 0 14px;line-height:1.6}
+.wic{display:inline-block;margin-right:.45em}
 .ecap{margin:0;padding:10px 12px;font-weight:700;font-size:.88rem;color:var(--od);background:var(--soft);border-top:1px solid var(--line);text-align:center}
 @media(min-width:1024px){.chain2 .blk{display:block}}
 @media(min-width:1200px){.chain2 .blk{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,200px)}}
